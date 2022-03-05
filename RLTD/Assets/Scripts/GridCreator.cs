@@ -9,7 +9,7 @@ public class GridCreator : MonoBehaviour
     public GameObject cube;
     void Start()
     {
-        gameGrid = new GameObject[ChunkX,ChunkZ];
+        gameGrid = new GameObject[ChunkX ,ChunkZ];
     }
 
  
