@@ -4,99 +4,100 @@ using UnityEngine;
 
 public class GameGridGeneration : MonoBehaviour
 {
-    [Header("Full Grid Dimensions - MUST BE ODD")]
+    [Header("Full Grid Dimensions")] //As dimensoes finais da grid devem ser impar e equilaterais para que a base fique exatamente no meio (ex: 15 x 15 ou 13*13 ou 29 *29)
     public int GridX;
     public int GridZ;
-    [SerializeField] private int chunkSize;
-    public GameObject prefab;
-    [Header("Placement check")]
-    public bool placeN; //0
-    public bool placeS; //1
-    public bool placeE; //2
-    public bool placeW; //3
-    [Header("Create the grid")]
-    public int currentWave = 0;
+    public int chunkSize; //tamanho de cada chunk
+    public GameObject prefab; //prefab do tile default
 
+    public int posMaxX;
+    public int posMaxZ;
+
+    public int holdPosMinX;
+    public int holdPosMinZ;
+
+    public Vector3[] placementPositions;
+    public List<GameObject> placedChunks = new List<GameObject>();
+
+
+    private void Awake()
+    {
+        placementPositions = new Vector3[GridX * GridZ];
+        DefinePositions();
+    }
     private void Start()
-    {
-    }
-
-    private void Update()
-    {
-        CheckNeighbours();
-
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            AddChunk();
-            currentWave++;
-        }
-    }
-
-    private void CheckNeighbours()
-    {
-        RaycastHit hitN;
-        RaycastHit hitS;
-        RaycastHit hitE;
-        RaycastHit hitW;
-
-        //Norte------------------------------------------------------------------------------------------------
-        if (Physics.Raycast(transform.position, Vector3.forward, out hitN, chunkSize,~gameObject.layer))
-        {
-            Debug.Log("Chunk a norte");
-            Debug.DrawRay(transform.position, Vector3.forward * chunkSize, Color.red);
-            placeN = false;
-        }
-        else if(hitN.collider == null)
-        {
-            Debug.DrawRay(transform.position, Vector3.forward * chunkSize, Color.green); placeN = true;
-        }
-
-        //Sul------------------------------------------------------------------------------------------------
-        if (Physics.Raycast(transform.position, Vector3.back, out hitS, chunkSize, ~gameObject.layer))
-        {
-            Debug.Log("Chunk a sul");
-            Debug.DrawRay(transform.position, Vector3.back * chunkSize, Color.red);
-            placeS = false;
-
-        }
-        else if (hitS.collider == null)
-        {
-            Debug.DrawRay(transform.position, Vector3.back * chunkSize, Color.green); placeS = true;
-        }
-
-        //Este------------------------------------------------------------------------------------------------
-        if (Physics.Raycast(transform.position, Vector3.right, out hitE, chunkSize, ~gameObject.layer))
-        {
-            Debug.Log("Chunk a este");
-            Debug.DrawRay(transform.position, Vector3.right * chunkSize, Color.red);
-            placeE = false;
-        }
-        else if (hitE.collider == null)
-        {
-            Debug.DrawRay(transform.position, Vector3.right * chunkSize, Color.green); placeE = true;
-        }
-
-        //Oeste------------------------------------------------------------------------------------------------
-        if (Physics.Raycast(transform.position, Vector3.left, out hitW, chunkSize, ~gameObject.layer))
-        {
-            Debug.Log("Chunk a oeste");
-            Debug.DrawRay(transform.position, Vector3.left * chunkSize, Color.red);
-            placeW = false;
-        }
-        else if (hitW.collider == null)
-        {
-            Debug.DrawRay(transform.position, Vector3.left * chunkSize, Color.green); placeW = true;
-        }
-    }
-
-    private void AddChunk()
     {
         
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            DefinePositions();
+        }
+
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            int chunk = Random.Range(0,placedChunks.Count-1);
+            for (int i = 0; i < placedChunks.Count; i++)
+            {
+                placedChunks[chunk].GetComponent<PlaceChunk>().canPlace = true;
+            }
+        }
+    }
+
+    private void DefinePositions()
+    {
+        //Define qual a coordenada positiva maxima que o chunk pode ter
+        posMaxX = ((chunkSize * GridX) / 2) - (chunkSize / 2);
+        posMaxZ = ((chunkSize * GridZ) / 2) - (chunkSize / 2);
+        //Define qual a coordenada negativa minima que o chunk pode ter
+        int posMinX = -(((chunkSize * GridX) / 2) - (chunkSize / 2));
+        int posMinZ = -(((chunkSize * GridZ) / 2) - (chunkSize / 2));
+        //serve para segurar a coordenada minima
+        holdPosMinX = posMinX;
+        holdPosMinZ = posMinZ;
+
+        //percorre todas as posicoes possiveis
+        for (int i = 0; i < placementPositions.Length; i++)
+        {
+            //a primeira posicao definida sera a posicao minima
+            placementPositions[i] = new Vector3(posMinX, 0, posMinZ);
+
+            //a cada loop aumenta a coordenada X de acordo com o tamanho de cada chunk
+            posMinX += chunkSize;
+
+            //quando a posicao do X atinge um valor maior que o valor maximo mete-se o valor novamente minimo e aumenta-se o Z por um valor de chunk
+            if (posMinX > posMaxX)
+            {
+                posMinX = holdPosMinX;
+                posMinZ += chunkSize;
+            }
+
+            if (posMinZ > posMaxZ)
+            {
+                posMinZ = holdPosMinZ;
+            }
+        }
+
+
+        //Debug.Log("Min X: " + holdPosMinX + " Min Z: " + holdPosMinZ);
+        //Debug.Log("Pos max = " + new Vector3(posMaxX,0,posMaxZ));
+        //Debug.Log("Pos min = " + new Vector3(posMinX,0,posMinZ));
+    }
+
     private void OnDrawGizmos()
     {
+        //serve para observar as dimnesoes maximas da grid final
         Gizmos.color = Color.green;
         Gizmos.DrawWireCube(gameObject.transform.position, new Vector3(GridX * chunkSize,1,GridZ * chunkSize));
+
+        //serve para observar as posicoes onde se pode dar spawn de um chunk
+        Gizmos.color = Color.blue;
+        for (int i = 0; i < placementPositions.Length; i++)
+        {
+            Gizmos.DrawWireSphere(placementPositions[i],1f);
+        }
     }
 }
