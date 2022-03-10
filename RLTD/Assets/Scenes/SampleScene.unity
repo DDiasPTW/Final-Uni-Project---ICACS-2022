@@ -233,7 +233,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b260cbd44e4433e4ba03d5ecef531d52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keepChecking: 1
   placeN: 0
   placeS: 0
   placeE: 0
@@ -349,7 +348,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b260cbd44e4433e4ba03d5ecef531d52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keepChecking: 1
   placeN: 0
   placeS: 0
   placeE: 0
@@ -698,7 +696,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b260cbd44e4433e4ba03d5ecef531d52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keepChecking: 1
   placeN: 0
   placeS: 0
   placeE: 0
@@ -902,7 +899,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b260cbd44e4433e4ba03d5ecef531d52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keepChecking: 1
   placeN: 0
   placeS: 0
   placeE: 0
@@ -1018,7 +1014,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b260cbd44e4433e4ba03d5ecef531d52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keepChecking: 1
   placeN: 0
   placeS: 0
   placeE: 0
@@ -1134,7 +1129,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b260cbd44e4433e4ba03d5ecef531d52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keepChecking: 1
   placeN: 0
   placeS: 0
   placeE: 0
@@ -1250,7 +1244,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b260cbd44e4433e4ba03d5ecef531d52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keepChecking: 1
   placeN: 0
   placeS: 0
   placeE: 0
@@ -1366,7 +1359,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b260cbd44e4433e4ba03d5ecef531d52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keepChecking: 1
   placeN: 0
   placeS: 0
   placeE: 0
@@ -1404,13 +1396,13 @@ MonoBehaviour:
   GridX: 15
   GridZ: 15
   chunkSize: 10
-  prefab: {fileID: 6536464595396229580, guid: fb78f3f41eeb3534aa3cfccf4cd2fbe7, type: 3}
   posMaxX: 0
   posMaxZ: 0
   holdPosMinX: 0
   holdPosMinZ: 0
   placementPositions: []
-  placedChunks: []
+  availablePositions: 
+  checkRadius: 1.5
 --- !u!4 &1928352530
 Transform:
   m_ObjectHideFlags: 0
@@ -1536,7 +1528,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b260cbd44e4433e4ba03d5ecef531d52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keepChecking: 1
   placeN: 0
   placeS: 0
   placeE: 0
