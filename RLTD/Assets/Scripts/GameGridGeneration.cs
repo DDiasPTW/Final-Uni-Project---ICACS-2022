@@ -4,47 +4,43 @@ using UnityEngine;
 
 public class GameGridGeneration : MonoBehaviour
 {
-    [Header("Full Grid Dimensions")] //As dimensoes finais da grid devem ser impar e equilaterais para que a base fique exatamente no meio (ex: 15 x 15 ou 13*13 ou 29 *29)
+    [Header("Full Grid Dimensions")] //As dimensoes finais da grid devem ser impar e equilaterais para que a base fique exatamente no meio (ex: 15*15 ou 13*13 ou 29*29)
+                                     //Caso nao sejam, os chunks devem ter dimensoes impar. Ex: grid impar (15*15) -> chunk (10*10), grid par (10*10) -> chunk (5*5)
     public int GridX;
     public int GridZ;
     public int chunkSize; //tamanho de cada chunk
-    public GameObject prefab; //prefab do tile default
 
+    [Header("Check grid coords")]
     public int posMaxX;
     public int posMaxZ;
-
     public int holdPosMinX;
     public int holdPosMinZ;
 
+    [Header("Check Placements")]
     public Vector3[] placementPositions;
-    public List<GameObject> placedChunks = new List<GameObject>();
+    public bool[] availablePositions;
+    public float checkRadius;
+
 
 
     private void Awake()
     {
         placementPositions = new Vector3[GridX * GridZ];
+        availablePositions = new bool[placementPositions.Length];
         DefinePositions();
-    }
-    private void Start()
-    {
-        
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.V))
+        if (Input.GetKeyDown(KeyCode.P))
         {
-            DefinePositions();
+            PlaceChunk(); //TO DO
         }
+    }
 
-        if (Input.GetKeyDown(KeyCode.N))
-        {
-            int chunk = Random.Range(0,placedChunks.Count-1);
-            for (int i = 0; i < placedChunks.Count; i++)
-            {
-                placedChunks[chunk].GetComponent<PlaceChunk>().canPlace = true;
-            }
-        }
+    private void FixedUpdate()
+    {
+        DetectPlacedChunks();
     }
 
     private void DefinePositions()
@@ -87,17 +83,49 @@ public class GameGridGeneration : MonoBehaviour
         //Debug.Log("Pos min = " + new Vector3(posMinX,0,posMinZ));
     }
 
+    private void DetectPlacedChunks()
+    {
+        //Em cada posicao no array mete uma pequena esfera, se detetar alguma colisao
+        //mete essa posicao das availablePositions[] como falsa
+
+        
+        //Detetar colisao
+        for (int i = 0; i < placementPositions.Length; i++)
+        {
+            Collider[] hitColl = Physics.OverlapSphere(placementPositions[i],checkRadius);
+            if (hitColl.Length != 0)
+            {
+                availablePositions[i] = false;
+            }
+            else if (hitColl.Length == 0) availablePositions[i] = true; //else Debug.Log("Encontrados mais do que 1 collider");
+        }
+    }
+
+    private void PlaceChunk()
+    {
+               
+    }
+
     private void OnDrawGizmos()
     {
-        //serve para observar as dimnesoes maximas da grid final
+        //serve para observar as dimensoes maximas da grid final
         Gizmos.color = Color.green;
         Gizmos.DrawWireCube(gameObject.transform.position, new Vector3(GridX * chunkSize,1,GridZ * chunkSize));
 
         //serve para observar as posicoes onde se pode dar spawn de um chunk
-        Gizmos.color = Color.blue;
+        
         for (int i = 0; i < placementPositions.Length; i++)
         {
-            Gizmos.DrawWireSphere(placementPositions[i],1f);
+            if (availablePositions[i] == true)
+            {
+                Gizmos.color = Color.blue;
+
+            }
+            else Gizmos.color = Color.red;
+
+            Gizmos.DrawWireSphere(placementPositions[i], checkRadius);
         }
+
+
     }
 }

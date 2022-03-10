@@ -2,39 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlaceChunk : MonoBehaviour
+public class CheckChunk : MonoBehaviour
 {
     private GameGridGeneration ggg;
-    [SerializeField] private bool keepChecking = true;
-    public bool canPlace = false;
+    //[SerializeField] private bool keepChecking = true;
+    //public bool canPlace = false;
     [Header("Placement check")]
-    public bool placeN; //0
-    public bool placeS; //1
-    public bool placeE; //2
-    public bool placeW; //3
+    public bool placeN; 
+    public bool placeS; 
+    public bool placeE; 
+    public bool placeW; 
     [SerializeField] private int chunkSize;
+    //[Header("What to place")]
+    //public GameObject prefab; //prefab do tile default
     void Start()
     {
         ggg = GameObject.FindGameObjectWithTag("GridManager").GetComponent<GameGridGeneration>();
         chunkSize = ggg.chunkSize;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        //CheckNeighbours(); //Verifica as boundaries do chunk para ver se tem chunks adjacentes
-        //CheckPlacement();
-
-        if (canPlace)
-        {
-            PlaceNew();
-        }
-    }
-
     private void FixedUpdate()
     {
         CheckNeighbours(); //Verifica as boundaries do chunk para ver se tem chunks adjacentes
-        CheckPlacement();
+        //CheckPlacement();
     }
 
     private void CheckNeighbours()
@@ -115,27 +105,20 @@ public class PlaceChunk : MonoBehaviour
         
     }
 
-    private void CheckPlacement()
-    {
-        if (keepChecking)
-        {
-            for (int i = 0; i < ggg.placementPositions.Length; i++)
-            {
-                if (ggg.placementPositions[i] == transform.position)
-                {
-                    Debug.Log("EXISTE TILE EM: " + transform.position + " - " + gameObject.name);
-                    ggg.placedChunks.Add(gameObject);
-                    keepChecking = false;
-                }
-            }
-        }
+    //private void CheckPlacement()
+    //{
+    //    if (keepChecking)
+    //    {
+    //        for (int i = 0; i < ggg.placementPositions.Length; i++)
+    //        {
+    //            if (ggg.placementPositions[i] == transform.position)
+    //            {
+    //                Debug.Log("EXISTE TILE EM: " + transform.position + " - " + gameObject.name);
+    //                //ggg.placedChunks.Add(gameObject);
+    //                keepChecking = false;
+    //            }
+    //        }
+    //    }
 
-    }
-
-    private void PlaceNew()
-    {
-        //Detetar lados livres, escolher um desses, pegar coordenada desse ponto, colocar novo chunk nesse novo ponto
-
-        canPlace = false;
-    }
+    //}
 }
