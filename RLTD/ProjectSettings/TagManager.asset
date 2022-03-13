@@ -6,6 +6,7 @@ TagManager:
   tags:
   - GridManager
   - BaseTile
+  - Tile
   layers:
   - Default
   - TransparentFX
