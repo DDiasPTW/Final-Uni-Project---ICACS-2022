@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class WorldGeneration : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class WorldGeneration : MonoBehaviour
 
     public int chunkSize;
     public float checkRadius;
+    public float checkRadiusEntradas;
 
     private void Awake()
     {
@@ -36,48 +38,49 @@ public class WorldGeneration : MonoBehaviour
         CheckNeighbours();
     }
 
-    //Verifica lados
-    //Escolhe lado onde vai dar spawn
-    //Escolhe tipo de tile para dar spawn e mete-o na posicao correta
 
-
-    //Verifica entradas desse novo tile e da rotate dele conforme o lado onde deu spawn
-    //volta a verificar entradas e mete ou remove spawnpoints
+    //Verifica lados e entradas
     private void CheckNeighbours()
     {
         bool placeN = true, placeS = true, placeE = true, placeW = true;
         //Ve todos os tiles na lista 'SpawnedTiles' e verifica se podem dar spawn de tiles adjacentes, caso nao possam remove-se esse tile
         for (int i = 0; i < SpawnedTiles.Count; i++)
         {
+            //verifica adjacencia de todos os tiles que podem dar spawn de outros
             Collider[] hitCollN = Physics.OverlapSphere(SpawnedTiles[i].transform.position + new Vector3(0f, 0, chunkSize), checkRadius);
             Collider[] hitCollS = Physics.OverlapSphere(SpawnedTiles[i].transform.position + new Vector3(0f, 0, -chunkSize), checkRadius);
             Collider[] hitCollE = Physics.OverlapSphere(SpawnedTiles[i].transform.position + new Vector3(chunkSize, 0, 0f), checkRadius);
             Collider[] hitCollO = Physics.OverlapSphere(SpawnedTiles[i].transform.position + new Vector3(-chunkSize, 0, 0f), checkRadius);
 
+            //verifica entradas de todos os tiles que podem dar spawn de outros
+            Collider[] entradaN = Physics.OverlapSphere(SpawnedTiles[i].transform.position + new Vector3(0f, .5f, chunkSize / 2), checkRadiusEntradas);
+            Collider[] entradaS = Physics.OverlapSphere(SpawnedTiles[i].transform.position + new Vector3(0f, .5f, -chunkSize / 2), checkRadiusEntradas);
+            Collider[] entradaE = Physics.OverlapSphere(SpawnedTiles[i].transform.position + new Vector3(chunkSize / 2, .5f, 0f), checkRadiusEntradas);
+            Collider[] entradaO = Physics.OverlapSphere(SpawnedTiles[i].transform.position + new Vector3(-chunkSize / 2, .5f, 0f), checkRadiusEntradas);
             //N
-            if (hitCollN.Length != 0)
+            if (hitCollN.Length != 0 || entradaN.Length != 0)
             {
                 placeN = false;
             }
-            else placeN = true;
+            else if(hitCollN.Length == 0 && entradaN.Length == 0) placeN = true;
             //S
-            if (hitCollS.Length != 0)
+            if (hitCollS.Length != 0 || entradaS.Length != 0)
             {
                 placeS = false;
             }
-            else placeS = true;
+            else if (hitCollS.Length == 0 && entradaS.Length == 0) placeS = true;
             //E
-            if (hitCollE.Length != 0)
+            if (hitCollE.Length != 0 || entradaE.Length != 0)
             {
                 placeE = false;
             }
-            else placeE = true;
+            else if(hitCollE.Length == 0 && entradaE.Length == 0) placeE = true;
             //O
-            if (hitCollO.Length != 0)
+            if (hitCollO.Length != 0 || entradaO.Length != 0)
             {
                placeW = false;
             }
-            else placeW = true;
+            else if(hitCollO.Length == 0 && entradaO.Length == 0) placeW = true;
 
             //Caso todas as posicoes de spawn possiveis estejam ocupadas, remove-se esse GO da lista
             if (!placeN && !placeS && !placeE && !placeW)
@@ -88,15 +91,15 @@ public class WorldGeneration : MonoBehaviour
     }
 
 
-
+    //Escolhe lado onde vai dar spawn
+    //Escolhe tipo de tile para dar spawn e mete-o na posicao correta
+    //Verifica entradas desse novo tile e da rotate dele conforme o lado onde deu spawn
+    //volta a verificar entradas e mete ou remove spawnpoints
+    //volta a dar build da navMesh
     private void SpawnTile()
     {
-        //keepChecking = false;
-       
-
         int pickedTile = Random.Range(0,SpawnedTiles.Count); //de todos os tiles ja spawned escolhe um ao random
         posSpawn.Clear();
-        //bool entradaN = true, entradaS = true, entradaE = true, entradaW = true;
 
         #region Verifica adjacentes do tile escolhido
         Collider[] hitCollN = Physics.OverlapSphere(SpawnedTiles[pickedTile].transform.position + new Vector3(0f, 0, chunkSize), checkRadius);
@@ -128,8 +131,36 @@ public class WorldGeneration : MonoBehaviour
              posSpawn.Remove("placeW");
         }
         else if(hitCollO.Length == 0) posSpawn.Add("placeW");
+        
+        #endregion
 
-        Debug.Log(SpawnedTiles[pickedTile].name);
+        # region Verficar onde tile escolhido tem aberturas
+        Collider[] entradaN = Physics.OverlapSphere(SpawnedTiles[pickedTile].transform.position + new Vector3(0f, .5f, chunkSize / 2), checkRadiusEntradas);
+        Collider[] entradaS = Physics.OverlapSphere(SpawnedTiles[pickedTile].transform.position + new Vector3(0f, .5f, -chunkSize / 2), checkRadiusEntradas);
+        Collider[] entradaE = Physics.OverlapSphere(SpawnedTiles[pickedTile].transform.position + new Vector3(chunkSize / 2, .5f, 0f), checkRadiusEntradas);
+        Collider[] entradaO = Physics.OverlapSphere(SpawnedTiles[pickedTile].transform.position + new Vector3(-chunkSize / 2, .5f, 0f), checkRadiusEntradas);
+
+        //N
+        if (entradaN.Length != 0)
+        {
+            Debug.Log("Nao pode N"); posSpawn.Remove("placeN");
+        }
+        //S
+        if (entradaS.Length != 0)
+        {
+            Debug.Log("Nao pode S"); posSpawn.Remove("placeS");
+        }
+        //E
+        if (entradaE.Length != 0)
+        {
+            Debug.Log("Nao pode E"); posSpawn.Remove("placeE");
+        }
+        //O
+        if (entradaO.Length != 0)
+        {
+            Debug.Log("Nao pode O"); posSpawn.Remove("placeW");
+        }
+
         #endregion
 
         #region Escolhe ao random uma das coords, escolhe ao random qual o tipo de tile, e da spawn na pos correta
@@ -225,40 +256,9 @@ public class WorldGeneration : MonoBehaviour
 
         #endregion
 
+        //TO DO: METER SPAWNED TILE NA ROTACAO CERTA, METER SPAWN POINT, DAR RE-BAKE DA NAVMESH
 
 
-
-
-        ////Verficar onde e que o tile escolhido tem aberturas
-        //Collider[] hitCollN = Physics.OverlapSphere(SpawnedTiles[pickedTile].transform.position + new Vector3(0f, .5f, chunkSize / 2), checkRadius);
-        //Collider[] hitCollS = Physics.OverlapSphere(SpawnedTiles[pickedTile].transform.position + new Vector3(0f, .5f, -chunkSize / 2), checkRadius);
-        //Collider[] hitCollE = Physics.OverlapSphere(SpawnedTiles[pickedTile].transform.position + new Vector3(chunkSize / 2, .5f, 0f), checkRadius);
-        //Collider[] hitCollO = Physics.OverlapSphere(SpawnedTiles[pickedTile].transform.position + new Vector3(-chunkSize / 2, .5f, 0f), checkRadius);
-
-        ////N
-        //if (hitCollN.Length != 0)
-        //{
-        //    Debug.Log("Nao pode N"); entradaN = false;
-        //}
-        //else entradaN = true;
-        ////S
-        //if (hitCollS.Length != 0)
-        //{
-        //    Debug.Log("Nao pode S"); entradaS = false;
-        //}
-        //else entradaS = true;
-        ////E
-        //if (hitCollE.Length != 0)
-        //{
-        //    Debug.Log("Nao pode E"); entradaE = false;
-        //}
-        //else entradaE = true;
-        ////O
-        //if (hitCollO.Length != 0)
-        //{
-        //    Debug.Log("Nao pode O"); entradaW = false;
-        //}
-        //else entradaW = true;
     }
 
     private void OnDrawGizmos()
@@ -267,19 +267,22 @@ public class WorldGeneration : MonoBehaviour
         {
             //Este
             Gizmos.color = Color.red;
-            Gizmos.DrawSphere(SpawnedTiles[i].transform.position + new Vector3(chunkSize, 0, 0f), checkRadius);
+            Gizmos.DrawWireSphere(SpawnedTiles[i].transform.position + new Vector3(chunkSize, 0, 0f), checkRadius);
+            Gizmos.DrawWireSphere(SpawnedTiles[i].transform.position + new Vector3(chunkSize/2, .5f, 0f), checkRadiusEntradas);
 
             //Oeste
             Gizmos.color = Color.green;
-            Gizmos.DrawSphere(SpawnedTiles[i].transform.position + new Vector3(-chunkSize, 0, 0f), checkRadius);
-
+            Gizmos.DrawWireSphere(SpawnedTiles[i].transform.position + new Vector3(-chunkSize, 0, 0f), checkRadius);
+            Gizmos.DrawWireSphere(SpawnedTiles[i].transform.position + new Vector3(-chunkSize / 2, .5f, 0f), checkRadiusEntradas);
             //Norte
             Gizmos.color = Color.blue;
-            Gizmos.DrawSphere(SpawnedTiles[i].transform.position + new Vector3(0f, 0, chunkSize), checkRadius);
+            Gizmos.DrawWireSphere(SpawnedTiles[i].transform.position + new Vector3(0f, 0, chunkSize), checkRadius);
+            Gizmos.DrawWireSphere(SpawnedTiles[i].transform.position + new Vector3(0f, .5f, chunkSize/2), checkRadiusEntradas);
 
             //Sul
             Gizmos.color = Color.yellow;
-            Gizmos.DrawSphere(SpawnedTiles[i].transform.position + new Vector3(0, 0, -chunkSize), checkRadius);
+            Gizmos.DrawWireSphere(SpawnedTiles[i].transform.position + new Vector3(0, 0, -chunkSize), checkRadius);
+            Gizmos.DrawWireSphere(SpawnedTiles[i].transform.position + new Vector3(0f, .5f, -chunkSize/2), checkRadiusEntradas);
         }
     }
 
