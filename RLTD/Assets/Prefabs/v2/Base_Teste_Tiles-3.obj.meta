@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 797ac4ede60651d46bf38a86070f7a3e
+guid: ffeca0d9bd48bd34c8d004ac36a6adb5
 ModelImporter:
   serializedVersion: 21202
   internalIDToNameTable: []
@@ -7,7 +7,7 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: palette
+      name: defaultMat
     second: {fileID: 2100000, guid: fc7be5a91f512a64cbb8e77add58e3fa, type: 2}
   materials:
     materialImportMode: 2
