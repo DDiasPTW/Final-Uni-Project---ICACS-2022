@@ -5,7 +5,8 @@ using UnityEngine.AI;
 
 public class WorldGeneration : MonoBehaviour
 {
-    public bool keepChecking = true;
+    [SerializeField] private int CurrentWave = 0;
+    [SerializeField] private int MaxWave;
 
     public List<GameObject> twoWayTilesPref = new List<GameObject>();
     public List<GameObject> threeWayTilesPref = new List<GameObject>();
@@ -22,12 +23,12 @@ public class WorldGeneration : MonoBehaviour
     private void Awake()
     {
         GameObject baseTile = GameObject.FindGameObjectWithTag("BaseTile");
-        SpawnedTiles.Add(baseTile);
+        SpawnedTiles.Add(baseTile); CurrentWave++;
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.C))
+        if (Input.GetKeyDown(KeyCode.C) && CurrentWave < MaxWave)
         {
             SpawnTile();
         }
@@ -35,7 +36,10 @@ public class WorldGeneration : MonoBehaviour
 
     private void FixedUpdate()
     {
-        CheckNeighbours();
+        if (CurrentWave < MaxWave)
+        {
+            CheckNeighbours();
+        }
     }
 
 
@@ -93,11 +97,10 @@ public class WorldGeneration : MonoBehaviour
 
     //Escolhe lado onde vai dar spawn
     //Escolhe tipo de tile para dar spawn e mete-o na posicao correta
-    //Verifica entradas desse novo tile e da rotate dele conforme o lado onde deu spawn
-    //volta a verificar entradas e mete ou remove spawnpoints
-    //volta a dar build da navMesh
+    
     private void SpawnTile()
     {
+        CurrentWave++;
         int pickedTile = Random.Range(0,SpawnedTiles.Count); //de todos os tiles ja spawned escolhe um ao random
         posSpawn.Clear();
 
@@ -171,93 +174,162 @@ public class WorldGeneration : MonoBehaviour
 
         if (posSpawn[coord] == "placeN")
         {
-            if (whatTile < 50) //2 way tile - 50%
+            if (whatTile < 85) //2 way tile
             {
                 int w = Random.Range(0,twoWayTilesPref.Count);
                 newTile = Instantiate(twoWayTilesPref[w],SpawnedTiles[pickedTile].transform.position + new Vector3(0,0,chunkSize),Quaternion.identity);
                 SpawnedTiles.Add(newTile);
+                SetRotation(newTile, posSpawn[coord]);
             }
-            else if (whatTile >= 50 && whatTile < 85) //3 way tile - 35%
+            else if (whatTile >= 85 && whatTile < 95) //3 way tile
             {
                 int w = Random.Range(0, threeWayTilesPref.Count);
                 newTile = Instantiate(threeWayTilesPref[w], SpawnedTiles[pickedTile].transform.position + new Vector3(0, 0, chunkSize), Quaternion.identity);
                 SpawnedTiles.Add(newTile);
+                SetRotation(newTile, posSpawn[coord]);
             }
-            else //4 way tile 15%
+            else //4 way tile
             {
                 int w = Random.Range(0, fourWayTilesPref.Count);
                 newTile = Instantiate(fourWayTilesPref[w], SpawnedTiles[pickedTile].transform.position + new Vector3(0, 0, chunkSize), Quaternion.identity);
                 SpawnedTiles.Add(newTile);
+                SetRotation(newTile, posSpawn[coord]);
             }
+            
         }
         else if (posSpawn[coord] == "placeS")
         {
-            if (whatTile < 50) //2 way tile - 50%
+            if (whatTile < 85) //2 way tile
             {
                 int w = Random.Range(0, twoWayTilesPref.Count);
                 newTile = Instantiate(twoWayTilesPref[w], SpawnedTiles[pickedTile].transform.position + new Vector3(0, 0, -chunkSize), Quaternion.identity);
                 SpawnedTiles.Add(newTile);
+                SetRotation(newTile, posSpawn[coord]);
             }
-            else if (whatTile >= 50 && whatTile < 85) //3 way tile - 35%
+            else if (whatTile >= 85 && whatTile < 95) //3 way tile 
             {
                 int w = Random.Range(0, threeWayTilesPref.Count);
                 newTile = Instantiate(threeWayTilesPref[w], SpawnedTiles[pickedTile].transform.position + new Vector3(0, 0, -chunkSize), Quaternion.identity);
                 SpawnedTiles.Add(newTile);
+                SetRotation(newTile, posSpawn[coord]);
             }
-            else //4 way tile 15%
+            else //4 way tile
             {
                 int w = Random.Range(0, fourWayTilesPref.Count);
                 newTile = Instantiate(fourWayTilesPref[w], SpawnedTiles[pickedTile].transform.position + new Vector3(0, 0, -chunkSize), Quaternion.identity);
                 SpawnedTiles.Add(newTile);
+                SetRotation(newTile, posSpawn[coord]);
             }
         }
         else if (posSpawn[coord] == "placeE")
         {
-            if (whatTile < 50) //2 way tile - 50%
+            if (whatTile < 85) //2 way tile
             {
                 int w = Random.Range(0, twoWayTilesPref.Count);
                 newTile = Instantiate(twoWayTilesPref[w], SpawnedTiles[pickedTile].transform.position + new Vector3(chunkSize, 0, 0), Quaternion.identity);
                 SpawnedTiles.Add(newTile);
+                SetRotation(newTile, posSpawn[coord]);
             }
-            else if (whatTile >= 50 && whatTile < 85) //3 way tile - 35%
+            else if (whatTile >= 85 && whatTile < 95) //3 way tile
             {
                 int w = Random.Range(0, threeWayTilesPref.Count);
                 newTile = Instantiate(threeWayTilesPref[w], SpawnedTiles[pickedTile].transform.position + new Vector3(chunkSize, 0, 0), Quaternion.identity);
                 SpawnedTiles.Add(newTile);
+                SetRotation(newTile, posSpawn[coord]);
             }
-            else //4 way tile 15%
+            else //4 way tile
             {
                 int w = Random.Range(0, fourWayTilesPref.Count);
                 newTile = Instantiate(fourWayTilesPref[w], SpawnedTiles[pickedTile].transform.position + new Vector3(chunkSize, 0, 0), Quaternion.identity);
                 SpawnedTiles.Add(newTile);
+                SetRotation(newTile, posSpawn[coord]);
             }
         }
         else if (posSpawn[coord] == "placeW")
         {
-            if (whatTile < 50) //2 way tile - 50%
+            if (whatTile < 85) //2 way tile
             {
                 int w = Random.Range(0, twoWayTilesPref.Count);
                 newTile = Instantiate(twoWayTilesPref[w], SpawnedTiles[pickedTile].transform.position + new Vector3(-chunkSize, 0, 0), Quaternion.identity);
                 SpawnedTiles.Add(newTile);
             }
-            else if (whatTile >= 50 && whatTile < 85) //3 way tile - 35%
+            else if (whatTile >= 85 && whatTile < 95) //3 way tile
             {
                 int w = Random.Range(0, threeWayTilesPref.Count);
                 newTile = Instantiate(threeWayTilesPref[w], SpawnedTiles[pickedTile].transform.position + new Vector3(-chunkSize, 0, 0), Quaternion.identity);
                 SpawnedTiles.Add(newTile);
             }
-            else //4 way tile 15%
+            else //4 way tile
             {
                 int w = Random.Range(0, fourWayTilesPref.Count);
                 newTile = Instantiate(fourWayTilesPref[w], SpawnedTiles[pickedTile].transform.position + new Vector3(-chunkSize, 0, 0), Quaternion.identity);
                 SpawnedTiles.Add(newTile);
             }
+            SetRotation(newTile, posSpawn[coord]);
         }
 
         #endregion
 
-        //TO DO: METER SPAWNED TILE NA ROTACAO CERTA, METER SPAWN POINT, DAR RE-BAKE DA NAVMESH
+        
+        
+        //TO DO: MELHORAR GERAÇÃO PARA SER MENOS RANDOM, METER SPAWN POINT, DAR RE-BAKE DA NAVMESH
 
+
+    }
+
+
+    //Verifica entradas desse novo tile e da rotate dele conforme o lado onde deu spawn
+    //volta a verificar entradas e mete ou remove spawnpoints
+    //volta a dar build da navMesh
+    private void SetRotation(GameObject tileToRotate, string placement)
+    {
+        //TO DO: Verficiar se os restantes caminhos ficam sem block, ao fim de testar as 4 rotacoes caso nao haja substituir o tile spawnado por um tile 'portal'
+
+        if (placement == "placeN") //novo tile foi spawnado a norte por isso tem q ter uma entrada a sul
+        {
+            Collider[] adjacentCheck = Physics.OverlapSphere(tileToRotate.transform.position + new Vector3(0f, 0, -chunkSize), checkRadius);
+            Collider[] entranceCheck = Physics.OverlapSphere(tileToRotate.transform.position + new Vector3(0f, .5f, -chunkSize / 2), checkRadiusEntradas);
+            if ((entranceCheck.Length != 0 && adjacentCheck.Length != 0))
+            {
+                tileToRotate.transform.rotation *= Quaternion.Euler(0, 90, 0);
+                SetRotation(tileToRotate, placement);
+            }
+
+        }
+        else if (placement == "placeS") //novo tile foi spawnado a sul por isso tem q ter uma entrada a norte
+        {
+            Collider[] adjacentCheck = Physics.OverlapSphere(tileToRotate.transform.position + new Vector3(0f, 0, chunkSize), checkRadius);
+            Collider[] entranceCheck = Physics.OverlapSphere(tileToRotate.transform.position + new Vector3(0f, .5f, chunkSize / 2), checkRadiusEntradas);
+            if ((entranceCheck.Length != 0 && adjacentCheck.Length != 0))
+            {
+                tileToRotate.transform.rotation *= Quaternion.Euler(0, 90, 0);
+                SetRotation(tileToRotate, placement);
+            }
+
+        }
+        else if (placement == "placeE") //novo tile foi spawnado a este por isso tem q ter uma entrada a oeste
+        {
+            Collider[] adjacentCheck = Physics.OverlapSphere(tileToRotate.transform.position + new Vector3(-chunkSize, 0, 0f), checkRadius);
+            Collider[] entranceCheck = Physics.OverlapSphere(tileToRotate.transform.position + new Vector3(-chunkSize / 2, .5f, 0f), checkRadiusEntradas);
+            if ((entranceCheck.Length != 0 && adjacentCheck.Length != 0))
+            {
+                tileToRotate.transform.rotation *= Quaternion.Euler(0, 90, 0);
+                SetRotation(tileToRotate, placement);
+            }
+
+        }
+        else if (placement == "placeW") //novo tile foi spawnado a oeste por isso tem q ter uma entrada a este
+        {
+            Collider[] adjacentCheck = Physics.OverlapSphere(tileToRotate.transform.position + new Vector3(chunkSize, 0, 0f), checkRadius);
+            Collider[] entranceCheck = Physics.OverlapSphere(tileToRotate.transform.position + new Vector3(chunkSize / 2, .5f, 0f), checkRadiusEntradas);
+            if ((entranceCheck.Length != 0 && adjacentCheck.Length != 0))
+            {
+                tileToRotate.transform.rotation *= Quaternion.Euler(0, 90, 0);
+                SetRotation(tileToRotate, placement);
+            }
+        }
+        else return;
+        
 
     }
 
