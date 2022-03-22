@@ -1,38 +1,50 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.AI;
 
 public class WorldGeneration : MonoBehaviour
 {
-    [SerializeField] private int CurrentWave = 0;
-    [SerializeField] private int MaxWave;
+    [SerializeField] private int CurrentWave = 0; //wave atual
+    [SerializeField] private int MaxWave; //wave maxima do jogo
 
-    [SerializeField] private bool showAdjacentGizmo = true;
-    [SerializeField] private bool showPathGizmo = true;
+    [SerializeField] private bool showAdjacentGizmo = true; //apenas serve para debug, para ver os tiles adjacentes dos tiles que podem dar spawn
+    [SerializeField] private bool showPathGizmo = true; //apenas serve para debug, para ver os entradas dos tiles que podem dar spawn
 
     [SerializeField] private bool CheckRotation = false;
+
     private string coordenada;
 
-    public List<GameObject> twoWayTilesPref = new List<GameObject>();
-    public List<GameObject> threeWayTilesPref = new List<GameObject>();
-    public List<GameObject> fourWayTilesPref = new List<GameObject>();
+    [SerializeField] private List<GameObject> twoWayTilesPref = new List<GameObject>(); //prefabs dos tiles com 2 entradas 
+    [SerializeField] private List<GameObject> threeWayTilesPref = new List<GameObject>(); //prefabs dos tiles com 3 entradas
+    [SerializeField] private List<GameObject> fourWayTilesPref = new List<GameObject>(); //prefabs dos tiles com 4 entradas
+    [SerializeField] private GameObject spawnPointPref; //prefab dos spawnPoints de inimigos
 
-    public List<GameObject> spawnableTiles = new List<GameObject>();
-    
-    
-    public List<GameObject> spawnedTile = new List<GameObject>();
 
-    private List<string> posSpawn = new List<string>();
+    [SerializeField] private List<GameObject> allTiles = new List<GameObject>(); //lista de todos os tiles em jogo
+    [SerializeField] private List<GameObject> spawnableTiles = new List<GameObject>(); //lista dos tiles que podem dar spawn de novos tiles
+    [SerializeField] private List<GameObject> spawnPoints = new List<GameObject>(); //lista de todos os spawnPoints no mapa
 
-    public int chunkSize;
-    public float checkRadius;
-    public float checkRadiusEntradas;
+
+    [SerializeField] private List<GameObject> spawnedTile = new List<GameObject>(); //ultimo tile que foi spawnado
+
+    private List<string> posSpawn = new List<string>(); //direcao onde o tile escolhido pode dar spawn
+
+    [SerializeField] private int chunkSize; //tamanho de cada tile
+    [SerializeField] private float checkRadius; //raio de verificacao de tiles adjacentes
+    [SerializeField ]private float checkRadiusEntradas;  //raio de verificacao de entradas
 
     private void Awake()
     {
         GameObject baseTile = GameObject.FindGameObjectWithTag("BaseTile");
-        spawnableTiles.Add(baseTile); CurrentWave++;
+        spawnableTiles.Add(baseTile); allTiles.Add(baseTile);
+    }
+
+    private void Start()
+    {
+        CheckNeighbours();
+        //SetSpawnPos();
     }
 
     private void Update()
@@ -43,17 +55,22 @@ public class WorldGeneration : MonoBehaviour
             CurrentWave++;
         }
 
-        if (CheckRotation)
+        if (Input.GetKeyDown(KeyCode.R))
         {
-            SetRotation(coordenada);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
 
     private void FixedUpdate()
     {
-        if (CurrentWave < MaxWave)
+        //if (CurrentWave <= MaxWave)
+        //{
+        //    CheckNeighbours();
+        //}
+
+        if (CheckRotation)
         {
-            CheckNeighbours();
+            SetRotation(coordenada);
         }
     }
 
@@ -71,35 +88,55 @@ public class WorldGeneration : MonoBehaviour
             Collider[] hitCollE = Physics.OverlapSphere(spawnableTiles[i].transform.position + new Vector3(chunkSize, 0, 0f), checkRadius);
             Collider[] hitCollO = Physics.OverlapSphere(spawnableTiles[i].transform.position + new Vector3(-chunkSize, 0, 0f), checkRadius);
 
+            //ver 2 tiles a frente para evitar dead-ends
+            Collider[] hitCollNN = Physics.OverlapSphere(spawnableTiles[i].transform.position + new Vector3(0f, 0, chunkSize * 2), checkRadius);
+            Collider[] hitCollSS = Physics.OverlapSphere(spawnableTiles[i].transform.position + new Vector3(0f, 0, -chunkSize * 2), checkRadius);
+            Collider[] hitCollEE = Physics.OverlapSphere(spawnableTiles[i].transform.position + new Vector3(chunkSize * 2, 0, 0f), checkRadius);
+            Collider[] hitCollOO = Physics.OverlapSphere(spawnableTiles[i].transform.position + new Vector3(-chunkSize * 2, 0, 0f), checkRadius);
+
+            //ver tiles diagonal
+            Collider[] hitCollNO = Physics.OverlapSphere(spawnableTiles[i].transform.position + new Vector3(-chunkSize, 0, chunkSize), checkRadius);
+            Collider[] hitCollNE = Physics.OverlapSphere(spawnableTiles[i].transform.position + new Vector3(chunkSize, 0, chunkSize), checkRadius);
+            Collider[] hitCollSO = Physics.OverlapSphere(spawnableTiles[i].transform.position + new Vector3(-chunkSize , 0, -chunkSize), checkRadius);
+            Collider[] hitCollSE = Physics.OverlapSphere(spawnableTiles[i].transform.position + new Vector3(chunkSize, 0, -chunkSize), checkRadius);
+
             //verifica entradas de todos os tiles que podem dar spawn de outros
             Collider[] entradaN = Physics.OverlapSphere(spawnableTiles[i].transform.position + new Vector3(0f, .5f, chunkSize / 2), checkRadiusEntradas);
             Collider[] entradaS = Physics.OverlapSphere(spawnableTiles[i].transform.position + new Vector3(0f, .5f, -chunkSize / 2), checkRadiusEntradas);
             Collider[] entradaE = Physics.OverlapSphere(spawnableTiles[i].transform.position + new Vector3(chunkSize / 2, .5f, 0f), checkRadiusEntradas);
             Collider[] entradaO = Physics.OverlapSphere(spawnableTiles[i].transform.position + new Vector3(-chunkSize / 2, .5f, 0f), checkRadiusEntradas);
+            
+            
             //N
-            if (hitCollN.Length != 0 || entradaN.Length != 0)
+            if (hitCollN.Length != 0 || entradaN.Length != 0 || hitCollNN.Length != 0 || hitCollNO.Length != 0 || hitCollNE.Length != 0)
             {
                 placeN = false;
             }
-            else if(hitCollN.Length == 0 && entradaN.Length == 0) placeN = true;
+            else if(hitCollN.Length == 0 && entradaN.Length == 0 && hitCollNN.Length == 0 && hitCollNO.Length == 0 && hitCollNE.Length == 0) placeN = true;
+
+
             //S
-            if (hitCollS.Length != 0 || entradaS.Length != 0)
+            if (hitCollS.Length != 0 || entradaS.Length != 0 || hitCollSS.Length != 0 || hitCollSO.Length != 0 || hitCollSE.Length != 0)
             {
                 placeS = false;
             }
-            else if (hitCollS.Length == 0 && entradaS.Length == 0) placeS = true;
+            else if (hitCollS.Length == 0 && entradaS.Length == 0 && hitCollSS.Length == 0 && hitCollSO.Length == 0 && hitCollSE.Length == 0) placeS = true; 
+
+
             //E
-            if (hitCollE.Length != 0 || entradaE.Length != 0)
+            if (hitCollE.Length != 0 || entradaE.Length != 0 || hitCollEE.Length != 0 || hitCollNE.Length != 0 || hitCollSE.Length != 0)
             {
                 placeE = false;
             }
-            else if(hitCollE.Length == 0 && entradaE.Length == 0) placeE = true;
+            else if(hitCollE.Length == 0 && entradaE.Length == 0 && hitCollEE.Length == 0 && hitCollNE.Length == 0 && hitCollSE.Length == 0) placeE = true;
+
+
             //O
-            if (hitCollO.Length != 0 || entradaO.Length != 0)
+            if (hitCollO.Length != 0 || entradaO.Length != 0 || hitCollOO.Length != 0 || hitCollNO.Length != 0 || hitCollSO.Length != 0)
             {
                placeW = false;
             }
-            else if(hitCollO.Length == 0 && entradaO.Length == 0) placeW = true;
+            else if(hitCollO.Length == 0 && entradaO.Length == 0 && hitCollOO.Length == 0 && hitCollNO.Length == 0 && hitCollSO.Length == 0) placeW = true;
 
             //Caso todas as posicoes de spawn possiveis estejam ocupadas, remove-se esse GO da lista
             if (!placeN && !placeS && !placeE && !placeW)
@@ -115,176 +152,268 @@ public class WorldGeneration : MonoBehaviour
     
     private void SpawnTile()
     {
-        int pickedTile = Random.Range(0,spawnableTiles.Count); //de todos os tiles ja spawned escolhe um ao random
-        posSpawn.Clear();
-        spawnedTile.Clear();
+        if (spawnableTiles.Count > 0)
+        {
+            int pickedTile = Random.Range(0, spawnableTiles.Count); //de todos os tiles ja spawned escolhe um ao random
+            posSpawn.Clear();
+            spawnedTile.Clear();
 
-        #region Verifica adjacentes do tile escolhido
-        Collider[] hitCollN = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(0f, 0, chunkSize), checkRadius);
-        Collider[] hitCollS = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(0f, 0, -chunkSize), checkRadius);
-        Collider[] hitCollE = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(chunkSize, 0, 0f), checkRadius);
-        Collider[] hitCollO = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(-chunkSize, 0, 0f), checkRadius);
+            #region Verifica adjacentes do tile escolhido
+            Collider[] hitCollN = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(0f, 0, chunkSize), checkRadius);
+            Collider[] hitCollS = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(0f, 0, -chunkSize), checkRadius);
+            Collider[] hitCollE = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(chunkSize, 0, 0f), checkRadius);
+            Collider[] hitCollO = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(-chunkSize, 0, 0f), checkRadius);
 
-        //N
-        if (hitCollN.Length != 0)
-        {
-            posSpawn.Remove("placeN");
-        }
-        else if(hitCollN.Length == 0) posSpawn.Add("placeN");
-        //S
-        if (hitCollS.Length != 0)
-        {
-            posSpawn.Remove("placeS");
-        }
-        else if(hitCollS.Length == 0) posSpawn.Add("placeS");
-        //E
-        if (hitCollE.Length != 0)
-        {
-            posSpawn.Remove("placeE");
-        }
-        else if(hitCollE.Length == 0) posSpawn.Add("placeE");
-        //O
-        if (hitCollO.Length != 0)
-        {
-             posSpawn.Remove("placeW");
-        }
-        else if(hitCollO.Length == 0) posSpawn.Add("placeW");
-        
-        #endregion
+            //ver tiles diagonal
+            Collider[] hitCollNO = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(-chunkSize, 0, chunkSize), checkRadius);
+            Collider[] hitCollNE = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(chunkSize, 0, chunkSize), checkRadius);
+            Collider[] hitCollSO = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(-chunkSize, 0, -chunkSize), checkRadius);
+            Collider[] hitCollSE = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(chunkSize, 0, -chunkSize), checkRadius);
 
-        # region Verficar onde tile escolhido tem aberturas
-        Collider[] entradaN = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(0f, .5f, chunkSize / 2), checkRadiusEntradas);
-        Collider[] entradaS = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(0f, .5f, -chunkSize / 2), checkRadiusEntradas);
-        Collider[] entradaE = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(chunkSize / 2, .5f, 0f), checkRadiusEntradas);
-        Collider[] entradaO = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(-chunkSize / 2, .5f, 0f), checkRadiusEntradas);
+            //ver 2 tiles a frente para evitar dead-ends
+            Collider[] hitCollNN = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(0f, 0, chunkSize * 2), checkRadius);
+            Collider[] hitCollSS = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(0f, 0, -chunkSize * 2), checkRadius);
+            Collider[] hitCollEE = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(chunkSize * 2, 0, 0f), checkRadius);
+            Collider[] hitCollOO = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(-chunkSize * 2, 0, 0f), checkRadius);
 
-        //N
-        if (entradaN.Length != 0)
-        {
-            posSpawn.Remove("placeN");
-        }
-        //S
-        if (entradaS.Length != 0)
-        {
-            posSpawn.Remove("placeS");
-        }
-        //E
-        if (entradaE.Length != 0)
-        {
-            posSpawn.Remove("placeE");
-        }
-        //O
-        if (entradaO.Length != 0)
-        {
-            posSpawn.Remove("placeW");
-        }
+            //N
+            if (hitCollN.Length != 0 || hitCollNN.Length != 0 || hitCollNO.Length != 0 || hitCollNE.Length != 0)
+            {
+                posSpawn.Remove("placeN");
+            }
+            else if (hitCollN.Length == 0 && hitCollNN.Length == 0 && hitCollNO.Length == 0 && hitCollNE.Length == 0) posSpawn.Add("placeN");
+            
+            
+            //S
+            if (hitCollS.Length != 0 || hitCollSS.Length != 0 || hitCollSO.Length != 0 || hitCollSE.Length != 0)
+            {
+                posSpawn.Remove("placeS");
+            }
+            else if (hitCollS.Length == 0 && hitCollSS.Length == 0 && hitCollSO.Length == 0 && hitCollSE.Length == 0) posSpawn.Add("placeS");
+            
+            
+            //E
+            if (hitCollE.Length != 0 || hitCollEE.Length != 0 || hitCollNE.Length != 0 || hitCollSE.Length != 0)
+            {
+                posSpawn.Remove("placeE");
+            }
+            else if (hitCollE.Length == 0 && hitCollEE.Length == 0 && hitCollNE.Length == 0 && hitCollSE.Length == 0) posSpawn.Add("placeE");
+            
+            
+            //O
+            if (hitCollO.Length != 0 || hitCollOO.Length != 0 || hitCollNO.Length != 0 || hitCollSO.Length != 0)
+            {
+                posSpawn.Remove("placeW");
+            }
+            else if (hitCollO.Length == 0 && hitCollOO.Length == 0 && hitCollNO.Length == 0 && hitCollSO.Length == 0) posSpawn.Add("placeW");
 
-        #endregion
+            #endregion
 
-        #region Escolhe ao random uma das coords, escolhe ao random qual o tipo de tile, e da spawn na pos correta
+            #region Verficar onde tile escolhido tem aberturas
+            Collider[] entradaN = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(0f, .5f, chunkSize / 2), checkRadiusEntradas);
+            Collider[] entradaS = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(0f, .5f, -chunkSize / 2), checkRadiusEntradas);
+            Collider[] entradaE = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(chunkSize / 2, .5f, 0f), checkRadiusEntradas);
+            Collider[] entradaO = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(-chunkSize / 2, .5f, 0f), checkRadiusEntradas);
 
-        int coord = Random.Range(0,posSpawn.Count);
-        int whatTile = Random.Range(0,100); //0-99
-        GameObject newTile;
+            //N
+            if (entradaN.Length != 0)
+            {
+                posSpawn.Remove("placeN");
+            }
+            //S
+            if (entradaS.Length != 0)
+            {
+                posSpawn.Remove("placeS");
+            }
+            //E
+            if (entradaE.Length != 0)
+            {
+                posSpawn.Remove("placeE");
+            }
+            //O
+            if (entradaO.Length != 0)
+            {
+                posSpawn.Remove("placeW");
+            }
 
-        if (posSpawn[coord] == "placeN")
-        {
-            if (whatTile < 85) //2 way tile
+            #endregion
+
+            #region Escolhe ao random uma das coords, escolhe ao random qual o tipo de tile, e da spawn na pos correta
+
+            int coord = Random.Range(0, posSpawn.Count);
+            int whatTile = Random.Range(0, 100); //0-99
+            GameObject newTile;
+            if (CurrentWave != 0)
             {
-                int w = Random.Range(0,twoWayTilesPref.Count);
-                newTile = Instantiate(twoWayTilesPref[w],spawnableTiles[pickedTile].transform.position + new Vector3(0,0,chunkSize),Quaternion.identity);
-                spawnableTiles.Add(newTile);
+                if (posSpawn[coord] == "placeN")
+                {
+                    if (whatTile < 75) //2 way tile
+                    {
+                        int w = Random.Range(0, twoWayTilesPref.Count);
+                        newTile = Instantiate(twoWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(0, 0, chunkSize), Quaternion.identity);
+                        spawnableTiles.Add(newTile); allTiles.Add(newTile);
+                    }
+                    else if (whatTile >= 75 && whatTile < 90) //3 way tile
+                    {
+                        int w = Random.Range(0, threeWayTilesPref.Count);
+                        newTile = Instantiate(threeWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(0, 0, chunkSize), Quaternion.identity);
+                        spawnableTiles.Add(newTile); allTiles.Add(newTile);
+                    }
+                    else //4 way tile
+                    {
+                        int w = Random.Range(0, fourWayTilesPref.Count);
+                        newTile = Instantiate(fourWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(0, 0, chunkSize), Quaternion.identity);
+                        spawnableTiles.Add(newTile); allTiles.Add(newTile);
+                    }
+                    spawnedTile.Add(newTile);
+                }
+                else if (posSpawn[coord] == "placeS")
+                {
+                    if (whatTile < 75) //2 way tile
+                    {
+                        int w = Random.Range(0, twoWayTilesPref.Count);
+                        newTile = Instantiate(twoWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(0, 0, -chunkSize), Quaternion.identity);
+                        spawnableTiles.Add(newTile); allTiles.Add(newTile);
+                    }
+                    else if (whatTile >= 75 && whatTile < 90) //3 way tile 
+                    {
+                        int w = Random.Range(0, threeWayTilesPref.Count);
+                        newTile = Instantiate(threeWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(0, 0, -chunkSize), Quaternion.identity);
+                        spawnableTiles.Add(newTile); allTiles.Add(newTile);
+                    }
+                    else //4 way tile
+                    {
+                        int w = Random.Range(0, fourWayTilesPref.Count);
+                        newTile = Instantiate(fourWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(0, 0, -chunkSize), Quaternion.identity);
+                        spawnableTiles.Add(newTile); allTiles.Add(newTile);
+                    }
+                    spawnedTile.Add(newTile);
+                }
+                else if (posSpawn[coord] == "placeE")
+                {
+                    if (whatTile < 75) //2 way tile
+                    {
+                        int w = Random.Range(0, twoWayTilesPref.Count);
+                        newTile = Instantiate(twoWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(chunkSize, 0, 0), Quaternion.identity);
+                        spawnableTiles.Add(newTile); allTiles.Add(newTile);
+                    }
+                    else if (whatTile >= 75 && whatTile < 90) //3 way tile
+                    {
+                        int w = Random.Range(0, threeWayTilesPref.Count);
+                        newTile = Instantiate(threeWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(chunkSize, 0, 0), Quaternion.identity);
+                        spawnableTiles.Add(newTile); allTiles.Add(newTile);
+                    }
+                    else //4 way tile
+                    {
+                        int w = Random.Range(0, fourWayTilesPref.Count);
+                        newTile = Instantiate(fourWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(chunkSize, 0, 0), Quaternion.identity);
+                        spawnableTiles.Add(newTile); allTiles.Add(newTile);
+                    }
+                    spawnedTile.Add(newTile);
+                }
+                else if (posSpawn[coord] == "placeW")
+                {
+                    if (whatTile < 75) //2 way tile
+                    {
+                        int w = Random.Range(0, twoWayTilesPref.Count);
+                        newTile = Instantiate(twoWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(-chunkSize, 0, 0), Quaternion.identity);
+                        spawnableTiles.Add(newTile); allTiles.Add(newTile);
+                    }
+                    else if (whatTile >= 75 && whatTile < 90) //3 way tile
+                    {
+                        int w = Random.Range(0, threeWayTilesPref.Count);
+                        newTile = Instantiate(threeWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(-chunkSize, 0, 0), Quaternion.identity);
+                        spawnableTiles.Add(newTile); allTiles.Add(newTile);
+                    }
+                    else //4 way tile
+                    {
+                        int w = Random.Range(0, fourWayTilesPref.Count);
+                        newTile = Instantiate(fourWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(-chunkSize, 0, 0), Quaternion.identity);
+                        spawnableTiles.Add(newTile); allTiles.Add(newTile);
+                    }
+                    spawnedTile.Add(newTile);
+                }
             }
-            else if (whatTile >= 85 && whatTile < 95) //3 way tile
+            //na primeira wave nunca irá dar spawn de um tile com 2 caminhos
+            else
             {
-                int w = Random.Range(0, threeWayTilesPref.Count);
-                newTile = Instantiate(threeWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(0, 0, chunkSize), Quaternion.identity);
-                spawnableTiles.Add(newTile);
+                if (posSpawn[coord] == "placeN")
+                {
+                    if (whatTile < 60) //3 way tile
+                    {
+                        int w = Random.Range(0, threeWayTilesPref.Count);
+                        newTile = Instantiate(threeWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(0, 0, chunkSize), Quaternion.identity);
+                        spawnableTiles.Add(newTile); allTiles.Add(newTile);
+                    }
+                    else //4 way tile
+                    {
+                        int w = Random.Range(0, fourWayTilesPref.Count);
+                        newTile = Instantiate(fourWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(0, 0, chunkSize), Quaternion.identity);
+                        spawnableTiles.Add(newTile); allTiles.Add(newTile);
+                    }
+                    spawnedTile.Add(newTile);
+                }
+                else if (posSpawn[coord] == "placeS")
+                {
+                    if (whatTile <60) //3 way tile 
+                    {
+                        int w = Random.Range(0, threeWayTilesPref.Count);
+                        newTile = Instantiate(threeWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(0, 0, -chunkSize), Quaternion.identity);
+                        spawnableTiles.Add(newTile); allTiles.Add(newTile);
+                    }
+                    else //4 way tile
+                    {
+                        int w = Random.Range(0, fourWayTilesPref.Count);
+                        newTile = Instantiate(fourWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(0, 0, -chunkSize), Quaternion.identity);
+                        spawnableTiles.Add(newTile); allTiles.Add(newTile);
+                    }
+                    spawnedTile.Add(newTile);
+                }
+                else if (posSpawn[coord] == "placeE")
+                {
+                    if (whatTile < 60) //3 way tile
+                    {
+                        int w = Random.Range(0, threeWayTilesPref.Count);
+                        newTile = Instantiate(threeWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(chunkSize, 0, 0), Quaternion.identity);
+                        spawnableTiles.Add(newTile); allTiles.Add(newTile);
+                    }
+                    else //4 way tile
+                    {
+                        int w = Random.Range(0, fourWayTilesPref.Count);
+                        newTile = Instantiate(fourWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(chunkSize, 0, 0), Quaternion.identity);
+                        spawnableTiles.Add(newTile); allTiles.Add(newTile);
+                    }
+                    spawnedTile.Add(newTile);
+                }
+                else if (posSpawn[coord] == "placeW")
+                {
+                    if (whatTile < 60) //3 way tile
+                    {
+                        int w = Random.Range(0, threeWayTilesPref.Count);
+                        newTile = Instantiate(threeWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(-chunkSize, 0, 0), Quaternion.identity);
+                        spawnableTiles.Add(newTile); allTiles.Add(newTile);
+                    }
+                    else //4 way tile
+                    {
+                        int w = Random.Range(0, fourWayTilesPref.Count);
+                        newTile = Instantiate(fourWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(-chunkSize, 0, 0), Quaternion.identity);
+                        spawnableTiles.Add(newTile); allTiles.Add(newTile);
+                    }
+                    spawnedTile.Add(newTile);
+                }
             }
-            else //4 way tile
-            {
-                int w = Random.Range(0, fourWayTilesPref.Count);
-                newTile = Instantiate(fourWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(0, 0, chunkSize), Quaternion.identity);
-                spawnableTiles.Add(newTile);
-            }
-            spawnedTile.Add(newTile);
+
+            
+
+
+            #endregion
+
+            coordenada = posSpawn[coord]; //serve para SetRotation()
+            CheckRotation = true;
         }
-        else if (posSpawn[coord] == "placeS")
-        {
-            if (whatTile < 85) //2 way tile
-            {
-                int w = Random.Range(0, twoWayTilesPref.Count);
-                newTile = Instantiate(twoWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(0, 0, -chunkSize), Quaternion.identity);
-                spawnableTiles.Add(newTile);
-            }
-            else if (whatTile >= 85 && whatTile < 95) //3 way tile 
-            {
-                int w = Random.Range(0, threeWayTilesPref.Count);
-                newTile = Instantiate(threeWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(0, 0, -chunkSize), Quaternion.identity);
-                spawnableTiles.Add(newTile);             
-            }
-            else //4 way tile
-            {
-                int w = Random.Range(0, fourWayTilesPref.Count);
-                newTile = Instantiate(fourWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(0, 0, -chunkSize), Quaternion.identity);
-                spawnableTiles.Add(newTile);
-            }
-            spawnedTile.Add(newTile);
-        }
-        else if (posSpawn[coord] == "placeE")
-        {
-            if (whatTile < 85) //2 way tile
-            {
-                int w = Random.Range(0, twoWayTilesPref.Count);
-                newTile = Instantiate(twoWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(chunkSize, 0, 0), Quaternion.identity);
-                spawnableTiles.Add(newTile);
-            }
-            else if (whatTile >= 85 && whatTile < 95) //3 way tile
-            {
-                int w = Random.Range(0, threeWayTilesPref.Count);
-                newTile = Instantiate(threeWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(chunkSize, 0, 0), Quaternion.identity);
-                spawnableTiles.Add(newTile);
-            }
-            else //4 way tile
-            {
-                int w = Random.Range(0, fourWayTilesPref.Count);
-                newTile = Instantiate(fourWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(chunkSize, 0, 0), Quaternion.identity);
-                spawnableTiles.Add(newTile);
-                
-            }
-            spawnedTile.Add(newTile);
-        }
-        else if (posSpawn[coord] == "placeW")
-        {
-            if (whatTile < 85) //2 way tile
-            {
-                int w = Random.Range(0, twoWayTilesPref.Count);
-                newTile = Instantiate(twoWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(-chunkSize, 0, 0), Quaternion.identity);
-                spawnableTiles.Add(newTile);
-            }
-            else if (whatTile >= 85 && whatTile < 95) //3 way tile
-            {
-                int w = Random.Range(0, threeWayTilesPref.Count);
-                newTile = Instantiate(threeWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(-chunkSize, 0, 0), Quaternion.identity);
-                spawnableTiles.Add(newTile);
-            }
-            else //4 way tile
-            {
-                int w = Random.Range(0, fourWayTilesPref.Count);
-                newTile = Instantiate(fourWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(-chunkSize, 0, 0), Quaternion.identity);
-                spawnableTiles.Add(newTile);
-            }
-            spawnedTile.Add(newTile);
-        }
+        else Debug.Log("No available spawn positions");
 
-
-        #endregion
-
-        coordenada = posSpawn[coord];
-        CheckRotation = true;
-        
-        
-        //TO DO: MELHORAR GERAÇÃO PARA SER MENOS RANDOM, METER SPAWN POINT, DAR RE-BAKE DA NAVMESH
+        CheckNeighbours();
     }
 
 
@@ -308,7 +437,7 @@ public class WorldGeneration : MonoBehaviour
             Collider[] entrada = Physics.OverlapSphere(tileToRotate.transform.position + new Vector3(0f, .5f, chunkSize / 2), checkRadiusEntradas);
             if (entrada.Length != 0)
             {
-                tileToRotate.transform.rotation *= Quaternion.Euler(0, 90, 0);
+                tileToRotate.transform.rotation *= Quaternion.Euler(0, -90, 0);
             }
             else CheckRotation = false;
         }
@@ -317,11 +446,11 @@ public class WorldGeneration : MonoBehaviour
             Collider[] entrada = Physics.OverlapSphere(tileToRotate.transform.position + new Vector3(-chunkSize / 2, .5f, 0f), checkRadiusEntradas);
             if (entrada.Length != 0)
             {
-                tileToRotate.transform.rotation *= Quaternion.Euler(0, 90, 0);
+                tileToRotate.transform.rotation *= Quaternion.Euler(0, -90, 0);
             }
             else CheckRotation = false;
         }
-        else if (placement == "placeW") //foi colocado a noeste por isso tem que ter entrada a este
+        else if (placement == "placeW") //foi colocado a oeste por isso tem que ter entrada a este
         {
             Collider[] entrada = Physics.OverlapSphere(tileToRotate.transform.position + new Vector3(chunkSize / 2, .5f, 0f), checkRadiusEntradas);
             if (entrada.Length != 0)
@@ -331,7 +460,60 @@ public class WorldGeneration : MonoBehaviour
             else CheckRotation = false; 
         }
 
-        
+        CheckNeighbours();
+        SetSpawnPos();
+    }
+
+    //coloca os spawnPoints nos sitios corretos
+    private void SetSpawnPos()
+    {
+        if (spawnPoints.Count > 0)
+        {
+            //limpa os spawnpoints a cada wave
+            for (int s = 0; s < spawnPoints.Count; s++)
+            {
+                Destroy(spawnPoints[s]);
+            }
+            spawnPoints.Clear();
+        }
+
+        //verifica todos os tiles onde pode dar spawn e verifica as entradas
+        for (int i = 0; i < allTiles.Count; i++)
+        {
+            Collider[] hitCollN = Physics.OverlapSphere(allTiles[i].transform.position + new Vector3(0f, 0, chunkSize), checkRadius);
+            Collider[] hitCollS = Physics.OverlapSphere(allTiles[i].transform.position + new Vector3(0f, 0, -chunkSize), checkRadius);
+            Collider[] hitCollE = Physics.OverlapSphere(allTiles[i].transform.position + new Vector3(chunkSize, 0, 0f), checkRadius);
+            Collider[] hitCollO = Physics.OverlapSphere(allTiles[i].transform.position + new Vector3(-chunkSize, 0, 0f), checkRadius);
+
+            Collider[] entradaN = Physics.OverlapSphere(allTiles[i].transform.position + new Vector3(0f, .5f, chunkSize / 2), checkRadiusEntradas);
+            Collider[] entradaS = Physics.OverlapSphere(allTiles[i].transform.position + new Vector3(0f, .5f, -chunkSize / 2), checkRadiusEntradas);
+            Collider[] entradaE = Physics.OverlapSphere(allTiles[i].transform.position + new Vector3(chunkSize / 2, .5f, 0f), checkRadiusEntradas);
+            Collider[] entradaO = Physics.OverlapSphere(allTiles[i].transform.position + new Vector3(-chunkSize / 2, .5f, 0f), checkRadiusEntradas);
+
+            if (hitCollN.Length == 0 && entradaN.Length == 0)
+            {
+                GameObject spawnPos = Instantiate(spawnPointPref, allTiles[i].transform.position + new Vector3(0f, .5f, chunkSize / 2.1f), Quaternion.identity);
+                spawnPoints.Add(spawnPos);
+            }
+
+            if (hitCollS.Length == 0 && entradaS.Length == 0)
+            {
+                GameObject spawnPos = Instantiate(spawnPointPref, allTiles[i].transform.position + new Vector3(0f, .5f, -chunkSize / 2.1f), Quaternion.identity);
+                spawnPoints.Add(spawnPos);
+            }
+
+            if (hitCollE.Length == 0 && entradaE.Length == 0)
+            {
+                GameObject spawnPos = Instantiate(spawnPointPref, allTiles[i].transform.position + new Vector3(chunkSize / 2.1f, .5f, 0f), Quaternion.identity);
+                spawnPoints.Add(spawnPos);
+            }
+
+            if (hitCollO.Length == 0 && entradaO.Length == 0)
+            {
+                GameObject spawnPos = Instantiate(spawnPointPref, allTiles[i].transform.position + new Vector3(-chunkSize / 2.1f, .5f, 0f), Quaternion.identity);
+                spawnPoints.Add(spawnPos);
+            }
+        }
     }
 
     private void OnDrawGizmos()
@@ -340,34 +522,42 @@ public class WorldGeneration : MonoBehaviour
         {
             if (showAdjacentGizmo)
             {
+
                 //Este
                 Gizmos.color = Color.red;
                 Gizmos.DrawWireSphere(spawnableTiles[i].transform.position + new Vector3(chunkSize, 0, 0f), checkRadius);
+                Gizmos.DrawWireSphere(spawnableTiles[i].transform.position + new Vector3(chunkSize * 2, 0, 0f), checkRadius);
+                
                 //Oeste
                 Gizmos.color = Color.green;
                 Gizmos.DrawWireSphere(spawnableTiles[i].transform.position + new Vector3(-chunkSize, 0, 0f), checkRadius);
+                Gizmos.DrawWireSphere(spawnableTiles[i].transform.position + new Vector3(-chunkSize * 2, 0, 0f), checkRadius);
+                
                 //Norte
                 Gizmos.color = Color.blue;
                 Gizmos.DrawWireSphere(spawnableTiles[i].transform.position + new Vector3(0f, 0, chunkSize), checkRadius);
+                Gizmos.DrawWireSphere(spawnableTiles[i].transform.position + new Vector3(0f, 0, chunkSize * 2), checkRadius);
+                
                 //Sul
                 Gizmos.color = Color.yellow;
                 Gizmos.DrawWireSphere(spawnableTiles[i].transform.position + new Vector3(0, 0, -chunkSize), checkRadius);
+                Gizmos.DrawWireSphere(spawnableTiles[i].transform.position + new Vector3(0, 0, -chunkSize * 2), checkRadius);
             }
 
             if (showPathGizmo)
             {
                 //Este
                 Gizmos.color = Color.red;
-                Gizmos.DrawSphere(spawnableTiles[i].transform.position + new Vector3(chunkSize / 2, .5f, 0f), checkRadiusEntradas);
+                Gizmos.DrawWireSphere(spawnableTiles[i].transform.position + new Vector3(chunkSize / 2, .5f, 0f), checkRadiusEntradas);
                 //Oeste
                 Gizmos.color = Color.green;
-                Gizmos.DrawSphere(spawnableTiles[i].transform.position + new Vector3(-chunkSize / 2, .5f, 0f), checkRadiusEntradas);
+                Gizmos.DrawWireSphere(spawnableTiles[i].transform.position + new Vector3(-chunkSize / 2, .5f, 0f), checkRadiusEntradas);
                 //Norte
                 Gizmos.color = Color.blue;
-                Gizmos.DrawSphere(spawnableTiles[i].transform.position + new Vector3(0f, .5f, chunkSize / 2), checkRadiusEntradas);
+                Gizmos.DrawWireSphere(spawnableTiles[i].transform.position + new Vector3(0f, .5f, chunkSize / 2), checkRadiusEntradas);
                 //Sul
                 Gizmos.color = Color.yellow;
-                Gizmos.DrawSphere(spawnableTiles[i].transform.position + new Vector3(0f, .5f, -chunkSize / 2), checkRadiusEntradas);
+                Gizmos.DrawWireSphere(spawnableTiles[i].transform.position + new Vector3(0f, .5f, -chunkSize / 2), checkRadiusEntradas);
             }
             
         }
