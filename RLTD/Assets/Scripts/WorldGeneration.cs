@@ -7,7 +7,7 @@ using UnityEngine.AI;
 public class WorldGeneration : MonoBehaviour
 {
     [SerializeField] private int CurrentWave = 0; //wave atual
-    [SerializeField] private int MaxWave; //wave maxima do jogo
+    public int MaxWave; //wave maxima do jogo
 
     [SerializeField] private bool showAdjacentGizmo = true; //apenas serve para debug, para ver os tiles adjacentes dos tiles que podem dar spawn
     [SerializeField] private bool showPathGizmo = true; //apenas serve para debug, para ver os entradas dos tiles que podem dar spawn
