@@ -466,8 +466,7 @@ public class WorldGeneration : MonoBehaviour
 
         CheckNeighbours();
 
-        nav.BuildNavMesh(); //atualiza navMesh
-
+        UpdateNavMesh();
         SetSpawnPos();
     }
 
@@ -521,6 +520,14 @@ public class WorldGeneration : MonoBehaviour
                 spawnPoints.Add(spawnPos);
             }
         }
+
+        UpdateNavMesh();
+    }
+
+    private void UpdateNavMesh() //TO DO: ATUALIZAR NAVMESH MELHOR
+    {
+        nav.RemoveData();
+        nav.BuildNavMesh(); //atualiza navMesh
     }
 
     private void OnDrawGizmos()
