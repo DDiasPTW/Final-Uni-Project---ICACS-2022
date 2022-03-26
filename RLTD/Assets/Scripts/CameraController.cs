@@ -6,6 +6,10 @@ public class CameraController : MonoBehaviour
 {
     public Transform cameraTransform;
 
+    public float resetTimer;
+    [SerializeField] private float resTime;
+
+    public bool lockCameraRotation = false;
     [Header("Variaveis")]
     public float normalSpeed;
     public float fastSpeed;
@@ -35,21 +39,26 @@ public class CameraController : MonoBehaviour
     private Vector3 rotateCurrentPosition;
     void Start()
     {
+        resTime = 0;
+
         startRotation = transform.rotation;
         startPosition = transform.position;
+
+
+        minZoomZ = -GameObject.FindGameObjectWithTag("GridManager").GetComponent<WorldGeneration>().MaxWave * 5f;
+        maxZoomY = GameObject.FindGameObjectWithTag("GridManager").GetComponent<WorldGeneration>().MaxWave * 5f;
+        maxPos = GameObject.FindGameObjectWithTag("GridManager").GetComponent<WorldGeneration>().MaxWave * 9f;
 
 
         newPosition = transform.position;
         newRotation = transform.rotation;
         newZoom = cameraTransform.localPosition;
-
-
-        maxPos =GameObject.FindGameObjectWithTag("GridManager").GetComponent<WorldGeneration>().MaxWave * 5;
+        
     }
-
 
     private void LateUpdate()
     {
+        resTime -= Time.deltaTime;
         HandleMouseInput();
         HandleMovementInput();
     }
@@ -82,28 +91,32 @@ public class CameraController : MonoBehaviour
 
 
         //rodar camera
-        if (Camera.main.orthographic)
+        if (!lockCameraRotation)
         {
-            if (Input.GetKeyDown(KeyCode.Q))
+            if (Camera.main.orthographic)
             {
-                newRotation *= Quaternion.Euler(Vector3.up * 45f);
+                if (Input.GetKeyDown(KeyCode.Q))
+                {
+                    newRotation *= Quaternion.Euler(Vector3.up * 45f);
+                }
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    newRotation *= Quaternion.Euler(Vector3.up * -45f);
+                }
             }
-            if (Input.GetKeyDown(KeyCode.E))
+            else
             {
-                newRotation *= Quaternion.Euler(Vector3.up * -45f);
+                if (Input.GetKey(KeyCode.Q))
+                {
+                    newRotation *= Quaternion.Euler(Vector3.up * rotationAmount);
+                }
+                if (Input.GetKey(KeyCode.E))
+                {
+                    newRotation *= Quaternion.Euler(Vector3.up * -rotationAmount);
+                }
             }
         }
-        else
-        {
-            if (Input.GetKey(KeyCode.Q))
-            {
-                newRotation *= Quaternion.Euler(Vector3.up * rotationAmount);
-            }
-            if (Input.GetKey(KeyCode.E))
-            {
-                newRotation *= Quaternion.Euler(Vector3.up * -rotationAmount);
-            }
-        }
+        
         
         
 
@@ -164,20 +177,34 @@ public class CameraController : MonoBehaviour
             }
         }
         //rodar a camera
-        if (Input.GetMouseButtonDown(1))
+
+        if (!lockCameraRotation)
         {
-            rotateStartPosition = Input.mousePosition;
-        }
+            if (Input.GetMouseButtonDown(1))
+            {
+                rotateStartPosition = Input.mousePosition;
 
-        if (Input.GetMouseButton(1))
-        {
-            rotateCurrentPosition = Input.mousePosition;
+                if (resTime <= 0)
+                {
+                    resTime = resetTimer;
+                }
+                else
+                {
+                    newRotation = startRotation;
+                    newPosition = startPosition;
+                }
+            }
 
-            Vector3 difference = rotateStartPosition - rotateCurrentPosition;
+            if (Input.GetMouseButton(1))
+            {
+                rotateCurrentPosition = Input.mousePosition;
 
-            rotateStartPosition = rotateCurrentPosition;
+                Vector3 difference = rotateStartPosition - rotateCurrentPosition;
 
-            newRotation *= Quaternion.Euler(Vector3.up * (-difference.x / rotationAmountMouse));          
+                rotateStartPosition = rotateCurrentPosition;
+
+                newRotation *= Quaternion.Euler(Vector3.up * (-difference.x / rotationAmountMouse));
+            }
         }
 
         newZoom.y = Mathf.Clamp(newZoom.y, minZoomY, maxZoomY);

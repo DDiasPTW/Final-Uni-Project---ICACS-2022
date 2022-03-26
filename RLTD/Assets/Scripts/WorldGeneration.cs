@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.AI;
+using Unity.AI.Navigation;
 
 public class WorldGeneration : MonoBehaviour
 {
-    [SerializeField] private int CurrentWave = 0; //wave atual
+    public int CurrentWave = 0; //wave atual
     public int MaxWave; //wave maxima do jogo
 
     [SerializeField] private bool showAdjacentGizmo = true; //apenas serve para debug, para ver os tiles adjacentes dos tiles que podem dar spawn
@@ -24,7 +24,7 @@ public class WorldGeneration : MonoBehaviour
 
     [SerializeField] private List<GameObject> allTiles = new List<GameObject>(); //lista de todos os tiles em jogo
     [SerializeField] private List<GameObject> spawnableTiles = new List<GameObject>(); //lista dos tiles que podem dar spawn de novos tiles
-    [SerializeField] private List<GameObject> spawnPoints = new List<GameObject>(); //lista de todos os spawnPoints no mapa
+    public List<GameObject> spawnPoints = new List<GameObject>(); //lista de todos os spawnPoints no mapa
 
 
     [SerializeField] private List<GameObject> spawnedTile = new List<GameObject>(); //ultimo tile que foi spawnado
@@ -35,16 +35,22 @@ public class WorldGeneration : MonoBehaviour
     [SerializeField] private float checkRadius; //raio de verificacao de tiles adjacentes
     [SerializeField ]private float checkRadiusEntradas;  //raio de verificacao de entradas
 
+
+    private NavMeshSurface nav;
+
+    private EnemyGeneration enemyGen;
+    
     private void Awake()
     {
+        nav = GetComponent<NavMeshSurface>();
         GameObject baseTile = GameObject.FindGameObjectWithTag("BaseTile");
+        enemyGen = GetComponent<EnemyGeneration>();
         spawnableTiles.Add(baseTile); allTiles.Add(baseTile);
     }
 
     private void Start()
     {
         CheckNeighbours();
-        //SetSpawnPos();
     }
 
     private void Update()
@@ -53,6 +59,9 @@ public class WorldGeneration : MonoBehaviour
         {
             SpawnTile();
             CurrentWave++;
+
+            //MUDA NUMERO DE INIMIGOS PARA SPAWNAR NESTA RONDA, VALORES A SEREM DEFINIDOS AINDA
+            enemyGen.howManyEnemies = 10 * CurrentWave * enemyGen.currentDifficulty;
         }
 
         if (Input.GetKeyDown(KeyCode.R))
@@ -63,11 +72,6 @@ public class WorldGeneration : MonoBehaviour
 
     private void FixedUpdate()
     {
-        //if (CurrentWave <= MaxWave)
-        //{
-        //    CheckNeighbours();
-        //}
-
         if (CheckRotation)
         {
             SetRotation(coordenada);
@@ -461,6 +465,9 @@ public class WorldGeneration : MonoBehaviour
         }
 
         CheckNeighbours();
+
+        nav.BuildNavMesh(); //atualiza navMesh
+
         SetSpawnPos();
     }
 
