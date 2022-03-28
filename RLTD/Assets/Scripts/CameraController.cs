@@ -171,9 +171,19 @@ public class CameraController : MonoBehaviour
 
             if (plane.Raycast(ray, out entry))
             {
-                dragCurrentPosition = ray.GetPoint(entry);
+                if (Input.GetKey(KeyCode.LeftShift))
+                {
+                    dragCurrentPosition = ray.GetPoint(entry);
 
-                newPosition = transform.position + dragStartPosition - dragCurrentPosition;
+                    newPosition = transform.position + (dragStartPosition - dragCurrentPosition) * 2;
+                }
+                else
+                {
+                    dragCurrentPosition = ray.GetPoint(entry);
+
+                    newPosition = transform.position + dragStartPosition - dragCurrentPosition;
+                }
+                
             }
         }
         //rodar a camera

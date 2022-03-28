@@ -29,6 +29,7 @@ public class EnemyGeneration : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.O))
         {
+            worldGen.UpdateNavMesh();
             isSpawning = true; 
         }
 
