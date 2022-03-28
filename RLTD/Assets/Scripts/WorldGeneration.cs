@@ -7,6 +7,7 @@ using Unity.AI.Navigation;
 public class WorldGeneration : MonoBehaviour
 {
     public int CurrentWave = 0; //wave atual
+    [Range(1,50)]
     public int MaxWave; //wave maxima do jogo
 
     [SerializeField] private bool showAdjacentGizmo = true; //apenas serve para debug, para ver os tiles adjacentes dos tiles que podem dar spawn
@@ -16,6 +17,9 @@ public class WorldGeneration : MonoBehaviour
 
     private string coordenada;
 
+
+    [SerializeField] private List<GameObject> baseTiles = new List<GameObject>(); //prefabs dos tiles base- TÊM QUE ESTAR POR ORDEM
+    [SerializeField] private List<GameObject> adjacentToBase = new List<GameObject>(); //prefabs dos tiles que podem aparecer adjacentes à base
     [SerializeField] private List<GameObject> twoWayTilesPref = new List<GameObject>(); //prefabs dos tiles com 2 entradas 
     [SerializeField] private List<GameObject> threeWayTilesPref = new List<GameObject>(); //prefabs dos tiles com 3 entradas
     [SerializeField] private List<GameObject> fourWayTilesPref = new List<GameObject>(); //prefabs dos tiles com 4 entradas
@@ -43,9 +47,11 @@ public class WorldGeneration : MonoBehaviour
     private void Awake()
     {
         nav = GetComponent<NavMeshSurface>();
-        GameObject baseTile = GameObject.FindGameObjectWithTag("BaseTile");
         enemyGen = GetComponent<EnemyGeneration>();
+
+        GameObject baseTile = Instantiate(baseTiles[enemyGen.currentDifficulty - 1], Vector3.zero, Quaternion.identity);
         spawnableTiles.Add(baseTile); allTiles.Add(baseTile);
+       
     }
 
     private void Start()
@@ -60,8 +66,10 @@ public class WorldGeneration : MonoBehaviour
             SpawnTile();
             CurrentWave++;
 
-            //MUDA NUMERO DE INIMIGOS PARA SPAWNAR NESTA RONDA, VALORES A SEREM DEFINIDOS AINDA
-            enemyGen.howManyEnemies = 10 * CurrentWave * enemyGen.currentDifficulty;
+
+            //MUDA NUMERO DE INIMIGOS PARA SPAWNAR NESTA RONDA
+            enemyGen.howManyEnemies = enemyGen.enemiesPerWave * CurrentWave * enemyGen.currentDifficulty;
+            //------------------------------------------------------------------------------------------------------------------
         }
 
         if (Input.GetKeyDown(KeyCode.R))
@@ -153,14 +161,24 @@ public class WorldGeneration : MonoBehaviour
 
     //Escolhe lado onde vai dar spawn
     //Escolhe tipo de tile para dar spawn e mete-o na posicao correta
-    
     private void SpawnTile()
     {
         if (spawnableTiles.Count > 0)
         {
-            int pickedTile = Random.Range(0, spawnableTiles.Count); //de todos os tiles ja spawned escolhe um ao random
-            posSpawn.Clear();
-            spawnedTile.Clear();
+            int pickedTile;
+
+            if (spawnableTiles[0].gameObject.tag == "BaseTile") //Se o tileBase ainda tiver nos tiles, então deve sempre preencher primeiro esse tile
+            {
+                pickedTile = 0;
+                posSpawn.Clear();
+                spawnedTile.Clear();
+            }
+            else
+            {
+                pickedTile = Random.Range(0, spawnableTiles.Count); //de todos os tiles ja spawned escolhe um ao random
+                posSpawn.Clear();
+                spawnedTile.Clear();
+            }
 
             #region Verifica adjacentes do tile escolhido
             Collider[] hitCollN = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(0f, 0, chunkSize), checkRadius);
@@ -247,7 +265,9 @@ public class WorldGeneration : MonoBehaviour
             int coord = Random.Range(0, posSpawn.Count);
             int whatTile = Random.Range(0, 100); //0-99
             GameObject newTile;
-            if (CurrentWave != 0)
+
+
+            if (spawnableTiles[pickedTile].gameObject.tag != "BaseTile")
             {
                 if (posSpawn[coord] == "placeN")
                 {
@@ -338,91 +358,48 @@ public class WorldGeneration : MonoBehaviour
                     spawnedTile.Add(newTile);
                 }
             }
-            //na primeira wave nunca irá dar spawn de um tile com 2 caminhos
             else
             {
                 if (posSpawn[coord] == "placeN")
                 {
-                    if (whatTile < 60) //3 way tile
-                    {
-                        int w = Random.Range(0, threeWayTilesPref.Count);
-                        newTile = Instantiate(threeWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(0, 0, chunkSize), Quaternion.identity);
-                        spawnableTiles.Add(newTile); allTiles.Add(newTile);
-                    }
-                    else //4 way tile
-                    {
-                        int w = Random.Range(0, fourWayTilesPref.Count);
-                        newTile = Instantiate(fourWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(0, 0, chunkSize), Quaternion.identity);
-                        spawnableTiles.Add(newTile); allTiles.Add(newTile);
-                    }
+                    int w = Random.Range(0, adjacentToBase.Count);
+                    newTile = Instantiate(adjacentToBase[w], spawnableTiles[pickedTile].transform.position + new Vector3(0, 0, chunkSize), Quaternion.identity);
+                    spawnableTiles.Add(newTile); allTiles.Add(newTile);
+                    spawnedTile.Add(newTile);
                     spawnedTile.Add(newTile);
                 }
                 else if (posSpawn[coord] == "placeS")
                 {
-                    if (whatTile <60) //3 way tile 
-                    {
-                        int w = Random.Range(0, threeWayTilesPref.Count);
-                        newTile = Instantiate(threeWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(0, 0, -chunkSize), Quaternion.identity);
-                        spawnableTiles.Add(newTile); allTiles.Add(newTile);
-                    }
-                    else //4 way tile
-                    {
-                        int w = Random.Range(0, fourWayTilesPref.Count);
-                        newTile = Instantiate(fourWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(0, 0, -chunkSize), Quaternion.identity);
-                        spawnableTiles.Add(newTile); allTiles.Add(newTile);
-                    }
+                    int w = Random.Range(0, adjacentToBase.Count);
+                    newTile = Instantiate(adjacentToBase[w], spawnableTiles[pickedTile].transform.position + new Vector3(0, 0, -chunkSize), Quaternion.identity);
+                    spawnableTiles.Add(newTile); allTiles.Add(newTile);
                     spawnedTile.Add(newTile);
                 }
                 else if (posSpawn[coord] == "placeE")
                 {
-                    if (whatTile < 60) //3 way tile
-                    {
-                        int w = Random.Range(0, threeWayTilesPref.Count);
-                        newTile = Instantiate(threeWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(chunkSize, 0, 0), Quaternion.identity);
-                        spawnableTiles.Add(newTile); allTiles.Add(newTile);
-                    }
-                    else //4 way tile
-                    {
-                        int w = Random.Range(0, fourWayTilesPref.Count);
-                        newTile = Instantiate(fourWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(chunkSize, 0, 0), Quaternion.identity);
-                        spawnableTiles.Add(newTile); allTiles.Add(newTile);
-                    }
+                    int w = Random.Range(0, adjacentToBase.Count);
+                    newTile = Instantiate(adjacentToBase[w], spawnableTiles[pickedTile].transform.position + new Vector3(chunkSize, 0, 0), Quaternion.identity);
+                    spawnableTiles.Add(newTile); allTiles.Add(newTile);
                     spawnedTile.Add(newTile);
                 }
                 else if (posSpawn[coord] == "placeW")
                 {
-                    if (whatTile < 60) //3 way tile
-                    {
-                        int w = Random.Range(0, threeWayTilesPref.Count);
-                        newTile = Instantiate(threeWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(-chunkSize, 0, 0), Quaternion.identity);
-                        spawnableTiles.Add(newTile); allTiles.Add(newTile);
-                    }
-                    else //4 way tile
-                    {
-                        int w = Random.Range(0, fourWayTilesPref.Count);
-                        newTile = Instantiate(fourWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(-chunkSize, 0, 0), Quaternion.identity);
-                        spawnableTiles.Add(newTile); allTiles.Add(newTile);
-                    }
+                    int w = Random.Range(0, adjacentToBase.Count);
+                    newTile = Instantiate(adjacentToBase[w], spawnableTiles[pickedTile].transform.position + new Vector3(-chunkSize, 0, 0), Quaternion.identity);
+                    spawnableTiles.Add(newTile); allTiles.Add(newTile);
                     spawnedTile.Add(newTile);
                 }
             }
 
-            
-
-
-            #endregion
-
             coordenada = posSpawn[coord]; //serve para SetRotation()
             CheckRotation = true;
+            #endregion
         }
         else Debug.Log("No available spawn positions");
-
-        CheckNeighbours();
     }
 
 
     //Verifica entradas desse novo tile e da rotate dele conforme o lado onde deu spawn
-
     private void SetRotation(string placement)
     {
         GameObject tileToRotate = spawnedTile[0];
@@ -483,42 +460,46 @@ public class WorldGeneration : MonoBehaviour
             spawnPoints.Clear();
         }
 
-        //verifica todos os tiles onde pode dar spawn e verifica as entradas
+        //verifica todos os tiles onde pode dar spawn e verifica as entradas, apenas coloca spawnPoints em tiles diferentes do baseTile
         for (int i = 0; i < allTiles.Count; i++)
         {
-            Collider[] hitCollN = Physics.OverlapSphere(allTiles[i].transform.position + new Vector3(0f, 0, chunkSize), checkRadius);
-            Collider[] hitCollS = Physics.OverlapSphere(allTiles[i].transform.position + new Vector3(0f, 0, -chunkSize), checkRadius);
-            Collider[] hitCollE = Physics.OverlapSphere(allTiles[i].transform.position + new Vector3(chunkSize, 0, 0f), checkRadius);
-            Collider[] hitCollO = Physics.OverlapSphere(allTiles[i].transform.position + new Vector3(-chunkSize, 0, 0f), checkRadius);
-
-            Collider[] entradaN = Physics.OverlapSphere(allTiles[i].transform.position + new Vector3(0f, .5f, chunkSize / 2), checkRadiusEntradas);
-            Collider[] entradaS = Physics.OverlapSphere(allTiles[i].transform.position + new Vector3(0f, .5f, -chunkSize / 2), checkRadiusEntradas);
-            Collider[] entradaE = Physics.OverlapSphere(allTiles[i].transform.position + new Vector3(chunkSize / 2, .5f, 0f), checkRadiusEntradas);
-            Collider[] entradaO = Physics.OverlapSphere(allTiles[i].transform.position + new Vector3(-chunkSize / 2, .5f, 0f), checkRadiusEntradas);
-
-            if (hitCollN.Length == 0 && entradaN.Length == 0)
+            if (allTiles[i].gameObject.tag != "BaseTile")
             {
-                GameObject spawnPos = Instantiate(spawnPointPref, allTiles[i].transform.position + new Vector3(0f, .5f, chunkSize / 2.1f), Quaternion.identity);
-                spawnPoints.Add(spawnPos);
-            }
+                Collider[] hitCollN = Physics.OverlapSphere(allTiles[i].transform.position + new Vector3(0f, 0, chunkSize), checkRadius);
+                Collider[] hitCollS = Physics.OverlapSphere(allTiles[i].transform.position + new Vector3(0f, 0, -chunkSize), checkRadius);
+                Collider[] hitCollE = Physics.OverlapSphere(allTiles[i].transform.position + new Vector3(chunkSize, 0, 0f), checkRadius);
+                Collider[] hitCollO = Physics.OverlapSphere(allTiles[i].transform.position + new Vector3(-chunkSize, 0, 0f), checkRadius);
 
-            if (hitCollS.Length == 0 && entradaS.Length == 0)
-            {
-                GameObject spawnPos = Instantiate(spawnPointPref, allTiles[i].transform.position + new Vector3(0f, .5f, -chunkSize / 2.1f), Quaternion.identity);
-                spawnPoints.Add(spawnPos);
-            }
+                Collider[] entradaN = Physics.OverlapSphere(allTiles[i].transform.position + new Vector3(0f, .5f, chunkSize / 2), checkRadiusEntradas);
+                Collider[] entradaS = Physics.OverlapSphere(allTiles[i].transform.position + new Vector3(0f, .5f, -chunkSize / 2), checkRadiusEntradas);
+                Collider[] entradaE = Physics.OverlapSphere(allTiles[i].transform.position + new Vector3(chunkSize / 2, .5f, 0f), checkRadiusEntradas);
+                Collider[] entradaO = Physics.OverlapSphere(allTiles[i].transform.position + new Vector3(-chunkSize / 2, .5f, 0f), checkRadiusEntradas);
 
-            if (hitCollE.Length == 0 && entradaE.Length == 0)
-            {
-                GameObject spawnPos = Instantiate(spawnPointPref, allTiles[i].transform.position + new Vector3(chunkSize / 2.1f, .5f, 0f), Quaternion.identity);
-                spawnPoints.Add(spawnPos);
-            }
+                if (hitCollN.Length == 0 && entradaN.Length == 0)
+                {
+                    GameObject spawnPos = Instantiate(spawnPointPref, allTiles[i].transform.position + new Vector3(0f, .5f, chunkSize / 2.1f), Quaternion.identity);
+                    spawnPoints.Add(spawnPos);
+                }
 
-            if (hitCollO.Length == 0 && entradaO.Length == 0)
-            {
-                GameObject spawnPos = Instantiate(spawnPointPref, allTiles[i].transform.position + new Vector3(-chunkSize / 2.1f, .5f, 0f), Quaternion.identity);
-                spawnPoints.Add(spawnPos);
+                if (hitCollS.Length == 0 && entradaS.Length == 0)
+                {
+                    GameObject spawnPos = Instantiate(spawnPointPref, allTiles[i].transform.position + new Vector3(0f, .5f, -chunkSize / 2.1f), Quaternion.identity);
+                    spawnPoints.Add(spawnPos);
+                }
+
+                if (hitCollE.Length == 0 && entradaE.Length == 0)
+                {
+                    GameObject spawnPos = Instantiate(spawnPointPref, allTiles[i].transform.position + new Vector3(chunkSize / 2.1f, .5f, 0f), Quaternion.identity);
+                    spawnPoints.Add(spawnPos);
+                }
+
+                if (hitCollO.Length == 0 && entradaO.Length == 0)
+                {
+                    GameObject spawnPos = Instantiate(spawnPointPref, allTiles[i].transform.position + new Vector3(-chunkSize / 2.1f, .5f, 0f), Quaternion.identity);
+                    spawnPoints.Add(spawnPos);
+                }
             }
+            
         }
 
         //UpdateNavMesh();

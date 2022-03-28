@@ -45,9 +45,9 @@ public class CameraController : MonoBehaviour
         startPosition = transform.position;
 
 
-        minZoomZ = -GameObject.FindGameObjectWithTag("GridManager").GetComponent<WorldGeneration>().MaxWave * 5f;
-        maxZoomY = GameObject.FindGameObjectWithTag("GridManager").GetComponent<WorldGeneration>().MaxWave * 5f;
-        maxPos = GameObject.FindGameObjectWithTag("GridManager").GetComponent<WorldGeneration>().MaxWave * 9f;
+        minZoomZ = -GameObject.FindGameObjectWithTag("GridManager").GetComponent<WorldGeneration>().MaxWave * 10f;
+        maxZoomY = GameObject.FindGameObjectWithTag("GridManager").GetComponent<WorldGeneration>().MaxWave * 10f;
+        maxPos = GameObject.FindGameObjectWithTag("GridManager").GetComponent<WorldGeneration>().MaxWave * 12f;
 
 
         newPosition = transform.position;
@@ -198,7 +198,7 @@ public class CameraController : MonoBehaviour
                 {
                     resTime = resetTimer;
                 }
-                else
+                else //Reset da camera
                 {
                     newRotation = startRotation;
                     newPosition = startPosition;
