@@ -17,7 +17,7 @@ public class WorldGeneration : MonoBehaviour
 
     private string coordenada;
 
-
+    public GameObject baseTile;
     [SerializeField] private List<GameObject> baseTiles = new List<GameObject>(); //prefabs dos tiles base- TÊM QUE ESTAR POR ORDEM
     [SerializeField] private List<GameObject> adjacentToBase = new List<GameObject>(); //prefabs dos tiles que podem aparecer adjacentes à base
     [SerializeField] private List<GameObject> twoWayTilesPref = new List<GameObject>(); //prefabs dos tiles com 2 entradas 
@@ -49,7 +49,7 @@ public class WorldGeneration : MonoBehaviour
         nav = GetComponent<NavMeshSurface>();
         enemyGen = GetComponent<EnemyGeneration>();
 
-        GameObject baseTile = Instantiate(baseTiles[enemyGen.currentDifficulty - 1], Vector3.zero, Quaternion.identity);
+        baseTile = Instantiate(baseTiles[enemyGen.currentDifficulty - 1], Vector3.zero, Quaternion.identity);
         spawnableTiles.Add(baseTile); allTiles.Add(baseTile);
        
     }
@@ -61,15 +61,36 @@ public class WorldGeneration : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.C) && CurrentWave < MaxWave)
+        if (Input.GetKeyDown(KeyCode.C) && CurrentWave < MaxWave && !enemyGen.isSpawning)
         {
             SpawnTile();
             CurrentWave++;
 
 
             //MUDA NUMERO DE INIMIGOS PARA SPAWNAR NESTA RONDA
-            enemyGen.howManyEnemies = enemyGen.enemiesPerWave * CurrentWave * enemyGen.currentDifficulty;
+            if (CurrentWave < (MaxWave / 6))
+            {
+                enemyGen.howManyEnemies = enemyGen.enemiesPerWave * CurrentWave * enemyGen.currentDifficulty;
+            }else if (CurrentWave >= (MaxWave/6) && CurrentWave <= (MaxWave/2))
+            {
+                enemyGen.howManyEnemies = enemyGen.enemiesPerWave * CurrentWave * enemyGen.currentDifficulty * 2;
+            }else if(CurrentWave > (MaxWave/2) && CurrentWave < (MaxWave / 1.2f))
+            {
+                enemyGen.spawnCooldown = enemyGen.spawnCooldown - .02f;
+                enemyGen.howManyEnemies = enemyGen.enemiesPerWave * CurrentWave * enemyGen.currentDifficulty * 3;
+            }
+            else
+            {
+                enemyGen.spawnCooldown = enemyGen.spawnCooldown - .025f;
+                enemyGen.howManyEnemies = enemyGen.enemiesPerWave * CurrentWave * enemyGen.currentDifficulty * 4;
+            }
+            
             //------------------------------------------------------------------------------------------------------------------
+        }
+
+        if (spawnableTiles.Count > 0)
+        {
+            CheckNeighbours();
         }
 
         if (Input.GetKeyDown(KeyCode.R))
@@ -271,13 +292,13 @@ public class WorldGeneration : MonoBehaviour
             {
                 if (posSpawn[coord] == "placeN")
                 {
-                    if (whatTile < 75) //2 way tile
+                    if (whatTile < 65) //2 way tile
                     {
                         int w = Random.Range(0, twoWayTilesPref.Count);
                         newTile = Instantiate(twoWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(0, 0, chunkSize), Quaternion.identity);
                         spawnableTiles.Add(newTile); allTiles.Add(newTile);
                     }
-                    else if (whatTile >= 75 && whatTile < 90) //3 way tile
+                    else if (whatTile >= 65 && whatTile < 90) //3 way tile
                     {
                         int w = Random.Range(0, threeWayTilesPref.Count);
                         newTile = Instantiate(threeWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(0, 0, chunkSize), Quaternion.identity);
@@ -293,13 +314,13 @@ public class WorldGeneration : MonoBehaviour
                 }
                 else if (posSpawn[coord] == "placeS")
                 {
-                    if (whatTile < 75) //2 way tile
+                    if (whatTile < 65) //2 way tile
                     {
                         int w = Random.Range(0, twoWayTilesPref.Count);
                         newTile = Instantiate(twoWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(0, 0, -chunkSize), Quaternion.identity);
                         spawnableTiles.Add(newTile); allTiles.Add(newTile);
                     }
-                    else if (whatTile >= 75 && whatTile < 90) //3 way tile 
+                    else if (whatTile >= 65 && whatTile < 90) //3 way tile 
                     {
                         int w = Random.Range(0, threeWayTilesPref.Count);
                         newTile = Instantiate(threeWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(0, 0, -chunkSize), Quaternion.identity);
@@ -315,13 +336,13 @@ public class WorldGeneration : MonoBehaviour
                 }
                 else if (posSpawn[coord] == "placeE")
                 {
-                    if (whatTile < 75) //2 way tile
+                    if (whatTile < 65) //2 way tile
                     {
                         int w = Random.Range(0, twoWayTilesPref.Count);
                         newTile = Instantiate(twoWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(chunkSize, 0, 0), Quaternion.identity);
                         spawnableTiles.Add(newTile); allTiles.Add(newTile);
                     }
-                    else if (whatTile >= 75 && whatTile < 90) //3 way tile
+                    else if (whatTile >= 65 && whatTile < 90) //3 way tile
                     {
                         int w = Random.Range(0, threeWayTilesPref.Count);
                         newTile = Instantiate(threeWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(chunkSize, 0, 0), Quaternion.identity);
@@ -337,13 +358,13 @@ public class WorldGeneration : MonoBehaviour
                 }
                 else if (posSpawn[coord] == "placeW")
                 {
-                    if (whatTile < 75) //2 way tile
+                    if (whatTile < 65) //2 way tile
                     {
                         int w = Random.Range(0, twoWayTilesPref.Count);
                         newTile = Instantiate(twoWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(-chunkSize, 0, 0), Quaternion.identity);
                         spawnableTiles.Add(newTile); allTiles.Add(newTile);
                     }
-                    else if (whatTile >= 75 && whatTile < 90) //3 way tile
+                    else if (whatTile >= 65 && whatTile < 90) //3 way tile
                     {
                         int w = Random.Range(0, threeWayTilesPref.Count);
                         newTile = Instantiate(threeWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(-chunkSize, 0, 0), Quaternion.identity);
@@ -440,9 +461,6 @@ public class WorldGeneration : MonoBehaviour
             }
             else CheckRotation = false; 
         }
-
-        CheckNeighbours();
-
         //UpdateNavMesh();
         SetSpawnPos();
     }
@@ -501,7 +519,6 @@ public class WorldGeneration : MonoBehaviour
             }
             
         }
-
         //UpdateNavMesh();
     }
 

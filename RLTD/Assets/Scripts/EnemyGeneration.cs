@@ -5,22 +5,25 @@ using UnityEngine;
 public class EnemyGeneration : MonoBehaviour
 {
     private WorldGeneration worldGen;
+    
     public bool canSpawnBoss;
-    public int enemiesPerWave;
+    
+    [Range(5,30)]
+    public int enemiesPerWave; //Quantos inimigos irao dar spawn por cada wave
     public int howManyEnemies; //Quantos inimigos vao dar spawn nesta wave
     [SerializeField] private int enemiesToSpawn; //Quantos inimigos faltam dar spawn
 
 
-    public List<GameObject> enemies = new List<GameObject>(); //Todos os inimigos do jogo (SEM BOSSES)
-    public List<GameObject> BossList = new List<GameObject>(); //Todos os bosses do jogo
-
+    [SerializeField] private List<GameObject> enemies = new List<GameObject>(); //Todos os inimigos do jogo (SEM BOSSES)
+    [SerializeField] private List<GameObject> BossList = new List<GameObject>(); //Todos os bosses do jogo
     public List<GameObject> spawnedEnemies = new List<GameObject>();
+
 
     [Range(1, 4)]
     public int currentDifficulty;
 
     public bool isSpawning = false;
-    public float spawnCooldown;
+    public float spawnCooldown; //cooldown entre spawn de cada inimigo
     [SerializeField] private float spawnTime;
 
     void Start()
@@ -85,7 +88,6 @@ public class EnemyGeneration : MonoBehaviour
                 if (enemiesToSpawn > 0 && i == worldGen.spawnPoints.Count - 1)
                 {
                     spawnTime = spawnCooldown;
-                    //i = -1;
                 }
                 else if (enemiesToSpawn == 0)
                 {
@@ -97,9 +99,20 @@ public class EnemyGeneration : MonoBehaviour
 
         if (worldGen.CurrentWave == worldGen.MaxWave && canSpawnBoss)
         {
-            int i = Random.Range(0,worldGen.spawnPoints.Count);
+            float distance = 0;
+            int ChosenSpawnPoint = 0;
+            for (int i = 0; i < worldGen.spawnPoints.Count; i++) //Garantir que o boss da spawn sempre no spawnPoint mais longe
+            {
+                if (Vector3.Distance(worldGen.spawnPoints[i].transform.position, worldGen.baseTile.transform.position) > distance)
+                {
+                    distance = Vector3.Distance(worldGen.spawnPoints[i].transform.position, worldGen.baseTile.transform.position);
+                    ChosenSpawnPoint = i;
+                }
+                else continue;
+            }
+
             int randomBoss = Random.Range(0,BossList.Count);
-            Instantiate(BossList[randomBoss], worldGen.spawnPoints[i].transform.position,Quaternion.identity);
+            Instantiate(BossList[randomBoss], worldGen.spawnPoints[ChosenSpawnPoint].transform.position,Quaternion.identity);
             canSpawnBoss = false;
         }
     }

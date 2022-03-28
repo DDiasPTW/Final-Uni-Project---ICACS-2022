@@ -9,7 +9,6 @@ public class CameraController : MonoBehaviour
     public float resetTimer;
     [SerializeField] private float resTime;
 
-    public bool lockCameraRotation = false;
     [Header("Variaveis")]
     public float normalSpeed;
     public float fastSpeed;
@@ -91,39 +90,34 @@ public class CameraController : MonoBehaviour
 
 
         //rodar camera
-        if (!lockCameraRotation)
+        if (Camera.main.orthographic)
         {
-            if (Camera.main.orthographic)
+            if (Input.GetKeyDown(KeyCode.Q))
             {
-                if (Input.GetKeyDown(KeyCode.Q))
-                {
-                    newRotation *= Quaternion.Euler(Vector3.up * 45f);
-                }
-                if (Input.GetKeyDown(KeyCode.E))
-                {
-                    newRotation *= Quaternion.Euler(Vector3.up * -45f);
-                }
+                newRotation *= Quaternion.Euler(Vector3.up * 45f);
             }
-            else
+            if (Input.GetKeyDown(KeyCode.E))
             {
-                if (Input.GetKey(KeyCode.Q))
-                {
-                    newRotation *= Quaternion.Euler(Vector3.up * rotationAmount);
-                }
-                if (Input.GetKey(KeyCode.E))
-                {
-                    newRotation *= Quaternion.Euler(Vector3.up * -rotationAmount);
-                }
+                newRotation *= Quaternion.Euler(Vector3.up * -45f);
             }
         }
-        
-        
-        
+        else
+        {
+            if (Input.GetKey(KeyCode.Q))
+            {
+                newRotation *= Quaternion.Euler(Vector3.up * rotationAmount);
+            }
+            if (Input.GetKey(KeyCode.E))
+            {
+                newRotation *= Quaternion.Euler(Vector3.up * -rotationAmount);
+            }
+        }
+
 
         //reset camera rotation
         if (Input.GetKeyDown(KeyCode.F))
         {
-            newRotation = startRotation;
+            //newRotation = startRotation;
             newPosition = startPosition;
         }
 
@@ -143,7 +137,6 @@ public class CameraController : MonoBehaviour
         if (Input.mouseScrollDelta.y != 0)
         {
             newZoom += Input.mouseScrollDelta.y * zoomAmount;
-
 
             if (Camera.main.orthographic)
             {
@@ -186,35 +179,32 @@ public class CameraController : MonoBehaviour
                 
             }
         }
+        
         //rodar a camera
-
-        if (!lockCameraRotation)
+        if (Input.GetMouseButtonDown(1))
         {
-            if (Input.GetMouseButtonDown(1))
+            rotateStartPosition = Input.mousePosition;
+
+            if (resTime <= 0)
             {
-                rotateStartPosition = Input.mousePosition;
-
-                if (resTime <= 0)
-                {
-                    resTime = resetTimer;
-                }
-                else //Reset da camera
-                {
-                    newRotation = startRotation;
-                    newPosition = startPosition;
-                }
+                resTime = resetTimer;
             }
-
-            if (Input.GetMouseButton(1))
+            else //Reset da camera
             {
-                rotateCurrentPosition = Input.mousePosition;
-
-                Vector3 difference = rotateStartPosition - rotateCurrentPosition;
-
-                rotateStartPosition = rotateCurrentPosition;
-
-                newRotation *= Quaternion.Euler(Vector3.up * (-difference.x / rotationAmountMouse));
+                //newRotation = startRotation;
+                newPosition = startPosition;
             }
+        }
+
+        if (Input.GetMouseButton(1))
+        {
+            rotateCurrentPosition = Input.mousePosition;
+
+            Vector3 difference = rotateStartPosition - rotateCurrentPosition;
+
+            rotateStartPosition = rotateCurrentPosition;
+
+            newRotation *= Quaternion.Euler(Vector3.up * (-difference.x / rotationAmountMouse));
         }
 
         newZoom.y = Mathf.Clamp(newZoom.y, minZoomY, maxZoomY);
