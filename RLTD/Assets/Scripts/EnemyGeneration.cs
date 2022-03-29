@@ -81,7 +81,7 @@ public class EnemyGeneration : MonoBehaviour
             {
                 int whatEnemy = Random.Range(0, enemies.Count);
                 GameObject enemy;
-                enemy = Instantiate(enemies[whatEnemy], worldGen.spawnPoints[i].transform.position, Quaternion.identity);
+                enemy = Instantiate(enemies[whatEnemy], worldGen.spawnPoints[i].transform.position - new Vector3(0, worldGen.spawnPoints[i].transform.localScale.y / 2, 0), Quaternion.identity);
                 spawnedEnemies.Add(enemy);
                 enemiesToSpawn--;
 
@@ -97,7 +97,7 @@ public class EnemyGeneration : MonoBehaviour
             }
         }
 
-        if (worldGen.CurrentWave == worldGen.MaxWave && canSpawnBoss)
+        if (worldGen.CurrentWave == worldGen.MaxWave && canSpawnBoss) //Spawn de boss
         {
             float distance = 0;
             int ChosenSpawnPoint = 0;

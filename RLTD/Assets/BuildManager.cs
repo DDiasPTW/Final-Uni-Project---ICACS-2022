@@ -28,7 +28,7 @@ public class BuildManager : MonoBehaviour
 
     //Indicadores de onde pode colocar torre
 
-    //FAZER COLOCAR TORRE APENAS NOS SITIOS CERTOS (NAO PODE SER EM CAMINHOS) + Colocar apenas de 2 em 2 (vector3.distance?), NAO PODE COLOCAR NO MESMO SITIO
+    //FAZER COLOCAR TORRE APENAS NOS SITIOS CERTOS (NAO PODE SER EM CAMINHOS) + NAO PODE COLOCAR NO MESMO SITIO + APENAS PODEM TER X TORRES POR CERTA AREA
 
     //CLEAN UP CODIGO
 
@@ -67,14 +67,16 @@ public class BuildManager : MonoBehaviour
         if (Physics.Raycast(ray, out hit))
         {
             //x
+            buildPos.y = hit.point.y;
+
             if (Mathf.Round(hit.point.x) <= (-(worldGen.chunkSize / 2) + hit.transform.position.x + 1)) //min x
             {
-                buildPos.x = (-(worldGen.chunkSize / 2) + hit.transform.position.x + 1) + 1f;
+                buildPos.x = (-(worldGen.chunkSize / 2) + hit.transform.position.x + 1);
             }
 
             else if (Mathf.Round(hit.point.x) >= ((worldGen.chunkSize / 2) + hit.transform.position.x - 1)) //max x
             {
-                buildPos.x = ((worldGen.chunkSize / 2) + hit.transform.position.x - 1) - 1f;
+                buildPos.x = ((worldGen.chunkSize / 2) + hit.transform.position.x - 1);
             }
 
             else if (Mathf.Round(hit.point.x) < 0 && hit.point.x > (-(worldGen.chunkSize / 2) + hit.transform.position.x + 1)) //x neg
@@ -90,15 +92,15 @@ public class BuildManager : MonoBehaviour
             //z
             if (Mathf.Round(hit.point.z) <= (-(worldGen.chunkSize / 2) + hit.transform.position.z + 1)) //min z
             {
-                buildPos.z = (-(worldGen.chunkSize / 2) + hit.transform.position.z + 1) + 1f;
+                buildPos.z = (-(worldGen.chunkSize / 2) + hit.transform.position.z + 1);
             }
 
             else if (Mathf.Round(hit.point.z) >= ((worldGen.chunkSize / 2) + hit.transform.position.z - 1)) //max z
             {
-                buildPos.z = ((worldGen.chunkSize / 2) + hit.transform.position.z - 1) - 1f;
+                buildPos.z = ((worldGen.chunkSize / 2) + hit.transform.position.z - 1);
             }
 
-            else if (hit.point.z < 0 && hit.point.z > (-(worldGen.chunkSize / 2) + hit.transform.position.z + 1)) //z neg
+            else if (Mathf.Round(hit.point.z) < 0 && Mathf.Round(hit.point.z) > (-(worldGen.chunkSize / 2) + hit.transform.position.z + 1)) //z neg
             {
                 buildPos.z = Mathf.Round(hit.point.z);
             }
@@ -114,16 +116,17 @@ public class BuildManager : MonoBehaviour
             //Debug.Log("Min z: " + (-(worldGen.chunkSize / 2) + hit.transform.position.z + 1));
 
             Debug.Log("Clicado em: " + hit.point);
-            Debug.Log("Colocado em: " + new Vector3(buildPos.x, (transform.localScale.y / 2) + 2, buildPos.z));
+            Debug.Log("Colocado em: " + new Vector3(buildPos.x, buildPos.y + (transform.localScale.y / 2), buildPos.z));
 
-            Tower.transform.position = new Vector3(buildPos.x, (transform.localScale.y / 2) + 2, buildPos.z);
+            Tower = Instantiate(TowerToBuild,mousePos,Quaternion.identity);
+            Tower.transform.position = new Vector3(buildPos.x, buildPos.y + (transform.localScale.y / 2), buildPos.z);
         }
     }
     private void ResetPurchase()
     {
         TowerToBuild = null;
         CurrentTowerCost = 0;
-        Destroy(Tower);
+        //Destroy(Tower);
         Tower = null;
     }
 

@@ -495,25 +495,25 @@ public class WorldGeneration : MonoBehaviour
 
                 if (hitCollN.Length == 0 && entradaN.Length == 0)
                 {
-                    GameObject spawnPos = Instantiate(spawnPointPref, allTiles[i].transform.position + new Vector3(0f, .5f, chunkSize / 2.1f), Quaternion.identity);
+                    GameObject spawnPos = Instantiate(spawnPointPref, allTiles[i].transform.position + new Vector3(0f, spawnPointPref.transform.localScale.y / 2, chunkSize / 2.1f), Quaternion.identity);
                     spawnPoints.Add(spawnPos);
                 }
 
                 if (hitCollS.Length == 0 && entradaS.Length == 0)
                 {
-                    GameObject spawnPos = Instantiate(spawnPointPref, allTiles[i].transform.position + new Vector3(0f, .5f, -chunkSize / 2.1f), Quaternion.identity);
+                    GameObject spawnPos = Instantiate(spawnPointPref, allTiles[i].transform.position + new Vector3(0f, spawnPointPref.transform.localScale.y / 2, -chunkSize / 2.1f), Quaternion.identity);
                     spawnPoints.Add(spawnPos);
                 }
 
                 if (hitCollE.Length == 0 && entradaE.Length == 0)
                 {
-                    GameObject spawnPos = Instantiate(spawnPointPref, allTiles[i].transform.position + new Vector3(chunkSize / 2.1f, .5f, 0f), Quaternion.identity);
+                    GameObject spawnPos = Instantiate(spawnPointPref, allTiles[i].transform.position + new Vector3(chunkSize / 2.1f, spawnPointPref.transform.localScale.y / 2, 0f), Quaternion.identity);
                     spawnPoints.Add(spawnPos);
                 }
 
                 if (hitCollO.Length == 0 && entradaO.Length == 0)
                 {
-                    GameObject spawnPos = Instantiate(spawnPointPref, allTiles[i].transform.position + new Vector3(-chunkSize / 2.1f, .5f, 0f), Quaternion.identity);
+                    GameObject spawnPos = Instantiate(spawnPointPref, allTiles[i].transform.position + new Vector3(-chunkSize / 2.1f, spawnPointPref.transform.localScale.y / 2, 0f), Quaternion.identity);
                     spawnPoints.Add(spawnPos);
                 }
             }
