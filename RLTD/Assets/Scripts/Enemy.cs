@@ -7,6 +7,7 @@ public class Enemy : MonoBehaviour
 {
     private NavMeshAgent navAgent;
     public float Health;
+    public int Value;
     public float speed;
 
     private void Awake()

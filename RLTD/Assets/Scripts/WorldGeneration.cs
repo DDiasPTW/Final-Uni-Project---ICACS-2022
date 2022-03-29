@@ -35,7 +35,7 @@ public class WorldGeneration : MonoBehaviour
 
     private List<string> posSpawn = new List<string>(); //direcao onde o tile escolhido pode dar spawn
 
-    [SerializeField] private int chunkSize; //tamanho de cada tile
+    public int chunkSize; //tamanho de cada tile
     [SerializeField] private float checkRadius; //raio de verificacao de tiles adjacentes
     [SerializeField ]private float checkRadiusEntradas;  //raio de verificacao de entradas
 
