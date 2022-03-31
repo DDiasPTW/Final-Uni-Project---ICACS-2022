@@ -7,11 +7,11 @@ public class EnemyGeneration : MonoBehaviour
     private WorldGeneration worldGen;
     
     public bool canSpawnBoss;
-    
-    [Range(5,30)]
+    public bool hasStartedSpawning = false;
+    [Range(1,30)]
     public int enemiesPerWave; //Quantos inimigos irao dar spawn por cada wave
     public int howManyEnemies; //Quantos inimigos vao dar spawn nesta wave
-    [SerializeField] private int enemiesToSpawn; //Quantos inimigos faltam dar spawn
+    public int enemiesToSpawn; //Quantos inimigos faltam dar spawn
 
 
     [SerializeField] private List<GameObject> enemies = new List<GameObject>(); //Todos os inimigos do jogo (SEM BOSSES)
@@ -34,24 +34,14 @@ public class EnemyGeneration : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.O) && !isSpawning) //Da spawn da wave
-        {
-            worldGen.UpdateNavMesh();
-            if (worldGen.CurrentWave > 0)
-            {
-                isSpawning = true;
-            }             
-        }
+        //if (Input.GetKeyDown(KeyCode.O) && !isSpawning) //Da spawn da wave
+        //{
+        //    StartWave();
+        //}
 
         if (Input.GetKeyDown(KeyCode.K)) //"Mata" a current wave
         {
-            for (int i = 0; i < spawnedEnemies.Count; i++)
-            {
-                Destroy(spawnedEnemies[i]);
-            }
-            enemiesToSpawn = 0;
-            isSpawning = false;
-            spawnedEnemies.Clear();
+            ClearWave();
         }
 
         if (worldGen.CurrentWave != worldGen.MaxWave) //Para garantir que boss so da spawn na ultima ronda
@@ -63,7 +53,7 @@ public class EnemyGeneration : MonoBehaviour
         {
             SpawnEnemies();
         }
-        if (!isSpawning)
+        if (!isSpawning && !hasStartedSpawning)
         {
             enemiesToSpawn = howManyEnemies;
         }
@@ -71,6 +61,31 @@ public class EnemyGeneration : MonoBehaviour
         spawnTime -= Time.deltaTime;
     }
 
+    public void StartWave()
+    {
+        worldGen.UpdateNavMesh();
+        if (worldGen.CurrentWave > 0)
+        {
+            isSpawning = true;
+            hasStartedSpawning = true;
+        }
+    }
+
+    private void ClearWave()
+    {
+        for (int i = 0; i < spawnedEnemies.Count; i++)
+        {
+            Destroy(spawnedEnemies[i]);
+        }
+        enemiesToSpawn = 0;
+        isSpawning = false;
+        spawnedEnemies.Clear();
+        if (worldGen.CurrentWave < worldGen.MaxWave)
+        {
+            howManyEnemies = 0;
+        }
+        
+    }
 
     void SpawnEnemies() //da loop por todos os spawnpoints de modo a que haja um numero igual de inimigos por spawnPoint.
         //TO DO: Definir percentagem de chance de cada inimigo, tendo em conta as waves e a dificuldade
@@ -112,7 +127,8 @@ public class EnemyGeneration : MonoBehaviour
             }
 
             int randomBoss = Random.Range(0,BossList.Count);
-            Instantiate(BossList[randomBoss], worldGen.spawnPoints[ChosenSpawnPoint].transform.position,Quaternion.identity);
+            GameObject boss = Instantiate(BossList[randomBoss], worldGen.spawnPoints[ChosenSpawnPoint].transform.position,Quaternion.identity);
+            spawnedEnemies.Add(boss);
             canSpawnBoss = false;
         }
     }

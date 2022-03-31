@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7512021377137080940}
   - component: {fileID: 6441754426868129528}
   - component: {fileID: 4476876574386901020}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: default
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -107,7 +107,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5253190350529000062}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: 2_Tile-3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -123,7 +123,7 @@ Transform:
   m_GameObject: {fileID: 4876488439278217412}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.050650742, y: 0, z: 4.5474735e-13}
-  m_LocalScale: {x: 2, y: 1.5, z: 2}
+  m_LocalScale: {x: 1, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4654224990412423974}

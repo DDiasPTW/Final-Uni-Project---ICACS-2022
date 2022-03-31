@@ -1,16 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class TowerPurchase : MonoBehaviour
 {
     [SerializeField] private GameObject towerToPurchase;
-    [SerializeField] private int price;
+    private int price;
     private BuildManager bM;
+    public TextMeshProUGUI textoPreco;
 
     private void Awake()
     {
         bM = GameObject.FindGameObjectWithTag("GridManager").GetComponent<BuildManager>();
+        price = towerToPurchase.GetComponent<Tower>().Price;
+        textoPreco.text = price.ToString();
     }
 
     public void PurchaseTower()

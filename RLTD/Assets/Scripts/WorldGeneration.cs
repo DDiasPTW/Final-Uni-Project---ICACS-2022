@@ -6,6 +6,8 @@ using Unity.AI.Navigation;
 
 public class WorldGeneration : MonoBehaviour
 {
+    private BuildManager bM;
+    public LayerMask TileLayer;
     public int CurrentWave = 0; //wave atual
     [Range(1,50)]
     public int MaxWave; //wave maxima do jogo
@@ -48,7 +50,7 @@ public class WorldGeneration : MonoBehaviour
     {
         nav = GetComponent<NavMeshSurface>();
         enemyGen = GetComponent<EnemyGeneration>();
-
+        bM = GetComponent<BuildManager>();
         baseTile = Instantiate(baseTiles[enemyGen.currentDifficulty - 1], Vector3.zero, Quaternion.identity);
         spawnableTiles.Add(baseTile); allTiles.Add(baseTile);
        
@@ -61,41 +63,41 @@ public class WorldGeneration : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.C) && CurrentWave < MaxWave && !enemyGen.isSpawning)
-        {
-            SpawnTile();
-            CurrentWave++;
-
-
-            //MUDA NUMERO DE INIMIGOS PARA SPAWNAR NESTA RONDA
-            if (CurrentWave < (MaxWave / 6))
-            {
-                enemyGen.howManyEnemies = enemyGen.enemiesPerWave * CurrentWave * enemyGen.currentDifficulty;
-            }else if (CurrentWave >= (MaxWave/6) && CurrentWave <= (MaxWave/2))
-            {
-                enemyGen.howManyEnemies = enemyGen.enemiesPerWave * CurrentWave * enemyGen.currentDifficulty * 2;
-            }else if(CurrentWave > (MaxWave/2) && CurrentWave < (MaxWave / 1.2f))
-            {
-                enemyGen.spawnCooldown = enemyGen.spawnCooldown - .02f;
-                enemyGen.howManyEnemies = enemyGen.enemiesPerWave * CurrentWave * enemyGen.currentDifficulty * 3;
-            }
-            else
-            {
-                enemyGen.spawnCooldown = enemyGen.spawnCooldown - .025f;
-                enemyGen.howManyEnemies = enemyGen.enemiesPerWave * CurrentWave * enemyGen.currentDifficulty * 4;
-            }
-            
-            //------------------------------------------------------------------------------------------------------------------
-        }
+        //if (Input.GetKeyDown(KeyCode.C) && CurrentWave < MaxWave && !enemyGen.isSpawning)
+        //{
+        //    NextWave();
+        //}
 
         if (spawnableTiles.Count > 0)
         {
             CheckNeighbours();
         }
+    }
 
-        if (Input.GetKeyDown(KeyCode.R))
+    public void NextWave()
+    {
+        SpawnTile();
+        CurrentWave++;
+
+
+        //MUDA NUMERO DE INIMIGOS PARA SPAWNAR NESTA RONDA
+        if (CurrentWave < (MaxWave / 6))
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            enemyGen.howManyEnemies = enemyGen.enemiesPerWave * CurrentWave * enemyGen.currentDifficulty;
+        }
+        else if (CurrentWave >= (MaxWave / 6) && CurrentWave <= (MaxWave / 2))
+        {
+            enemyGen.howManyEnemies = enemyGen.enemiesPerWave * CurrentWave * enemyGen.currentDifficulty * 2;
+        }
+        else if (CurrentWave > (MaxWave / 2) && CurrentWave < (MaxWave / 1.2f))
+        {
+            enemyGen.spawnCooldown = enemyGen.spawnCooldown - .02f;
+            enemyGen.howManyEnemies = enemyGen.enemiesPerWave * CurrentWave * enemyGen.currentDifficulty * 3;
+        }
+        else
+        {
+            enemyGen.spawnCooldown = enemyGen.spawnCooldown - .025f;
+            enemyGen.howManyEnemies = enemyGen.enemiesPerWave * CurrentWave * enemyGen.currentDifficulty * 4;
         }
     }
 
@@ -116,28 +118,28 @@ public class WorldGeneration : MonoBehaviour
         for (int i = 0; i < spawnableTiles.Count; i++)
         {
             //verifica adjacencia de todos os tiles que podem dar spawn de outros
-            Collider[] hitCollN = Physics.OverlapSphere(spawnableTiles[i].transform.position + new Vector3(0f, 0, chunkSize), checkRadius);
-            Collider[] hitCollS = Physics.OverlapSphere(spawnableTiles[i].transform.position + new Vector3(0f, 0, -chunkSize), checkRadius);
-            Collider[] hitCollE = Physics.OverlapSphere(spawnableTiles[i].transform.position + new Vector3(chunkSize, 0, 0f), checkRadius);
-            Collider[] hitCollO = Physics.OverlapSphere(spawnableTiles[i].transform.position + new Vector3(-chunkSize, 0, 0f), checkRadius);
+            Collider[] hitCollN = Physics.OverlapSphere(spawnableTiles[i].transform.position + new Vector3(0f, 0, chunkSize), checkRadius, TileLayer);
+            Collider[] hitCollS = Physics.OverlapSphere(spawnableTiles[i].transform.position + new Vector3(0f, 0, -chunkSize), checkRadius, TileLayer);
+            Collider[] hitCollE = Physics.OverlapSphere(spawnableTiles[i].transform.position + new Vector3(chunkSize, 0, 0f), checkRadius, TileLayer);
+            Collider[] hitCollO = Physics.OverlapSphere(spawnableTiles[i].transform.position + new Vector3(-chunkSize, 0, 0f), checkRadius, TileLayer);
 
             //ver 2 tiles a frente para evitar dead-ends
-            Collider[] hitCollNN = Physics.OverlapSphere(spawnableTiles[i].transform.position + new Vector3(0f, 0, chunkSize * 2), checkRadius);
-            Collider[] hitCollSS = Physics.OverlapSphere(spawnableTiles[i].transform.position + new Vector3(0f, 0, -chunkSize * 2), checkRadius);
-            Collider[] hitCollEE = Physics.OverlapSphere(spawnableTiles[i].transform.position + new Vector3(chunkSize * 2, 0, 0f), checkRadius);
-            Collider[] hitCollOO = Physics.OverlapSphere(spawnableTiles[i].transform.position + new Vector3(-chunkSize * 2, 0, 0f), checkRadius);
+            Collider[] hitCollNN = Physics.OverlapSphere(spawnableTiles[i].transform.position + new Vector3(0f, 0, chunkSize * 2), checkRadius, TileLayer);
+            Collider[] hitCollSS = Physics.OverlapSphere(spawnableTiles[i].transform.position + new Vector3(0f, 0, -chunkSize * 2), checkRadius, TileLayer);
+            Collider[] hitCollEE = Physics.OverlapSphere(spawnableTiles[i].transform.position + new Vector3(chunkSize * 2, 0, 0f), checkRadius, TileLayer);
+            Collider[] hitCollOO = Physics.OverlapSphere(spawnableTiles[i].transform.position + new Vector3(-chunkSize * 2, 0, 0f), checkRadius, TileLayer);
 
             //ver tiles diagonal
-            Collider[] hitCollNO = Physics.OverlapSphere(spawnableTiles[i].transform.position + new Vector3(-chunkSize, 0, chunkSize), checkRadius);
-            Collider[] hitCollNE = Physics.OverlapSphere(spawnableTiles[i].transform.position + new Vector3(chunkSize, 0, chunkSize), checkRadius);
-            Collider[] hitCollSO = Physics.OverlapSphere(spawnableTiles[i].transform.position + new Vector3(-chunkSize , 0, -chunkSize), checkRadius);
-            Collider[] hitCollSE = Physics.OverlapSphere(spawnableTiles[i].transform.position + new Vector3(chunkSize, 0, -chunkSize), checkRadius);
+            Collider[] hitCollNO = Physics.OverlapSphere(spawnableTiles[i].transform.position + new Vector3(-chunkSize, 0, chunkSize), checkRadius, TileLayer);
+            Collider[] hitCollNE = Physics.OverlapSphere(spawnableTiles[i].transform.position + new Vector3(chunkSize, 0, chunkSize), checkRadius, TileLayer);
+            Collider[] hitCollSO = Physics.OverlapSphere(spawnableTiles[i].transform.position + new Vector3(-chunkSize , 0, -chunkSize), checkRadius, TileLayer);
+            Collider[] hitCollSE = Physics.OverlapSphere(spawnableTiles[i].transform.position + new Vector3(chunkSize, 0, -chunkSize), checkRadius, TileLayer);
 
             //verifica entradas de todos os tiles que podem dar spawn de outros
-            Collider[] entradaN = Physics.OverlapSphere(spawnableTiles[i].transform.position + new Vector3(0f, .5f, chunkSize / 2), checkRadiusEntradas);
-            Collider[] entradaS = Physics.OverlapSphere(spawnableTiles[i].transform.position + new Vector3(0f, .5f, -chunkSize / 2), checkRadiusEntradas);
-            Collider[] entradaE = Physics.OverlapSphere(spawnableTiles[i].transform.position + new Vector3(chunkSize / 2, .5f, 0f), checkRadiusEntradas);
-            Collider[] entradaO = Physics.OverlapSphere(spawnableTiles[i].transform.position + new Vector3(-chunkSize / 2, .5f, 0f), checkRadiusEntradas);
+            Collider[] entradaN = Physics.OverlapSphere(spawnableTiles[i].transform.position + new Vector3(0f, .5f, chunkSize / 2), checkRadiusEntradas, TileLayer);
+            Collider[] entradaS = Physics.OverlapSphere(spawnableTiles[i].transform.position + new Vector3(0f, .5f, -chunkSize / 2), checkRadiusEntradas, TileLayer);
+            Collider[] entradaE = Physics.OverlapSphere(spawnableTiles[i].transform.position + new Vector3(chunkSize / 2, .5f, 0f), checkRadiusEntradas, TileLayer);
+            Collider[] entradaO = Physics.OverlapSphere(spawnableTiles[i].transform.position + new Vector3(-chunkSize / 2, .5f, 0f), checkRadiusEntradas, TileLayer);
             
             
             //N
@@ -202,22 +204,22 @@ public class WorldGeneration : MonoBehaviour
             }
 
             #region Verifica adjacentes do tile escolhido
-            Collider[] hitCollN = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(0f, 0, chunkSize), checkRadius);
-            Collider[] hitCollS = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(0f, 0, -chunkSize), checkRadius);
-            Collider[] hitCollE = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(chunkSize, 0, 0f), checkRadius);
-            Collider[] hitCollO = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(-chunkSize, 0, 0f), checkRadius);
+            Collider[] hitCollN = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(0f, 0, chunkSize), checkRadius, TileLayer);
+            Collider[] hitCollS = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(0f, 0, -chunkSize), checkRadius, TileLayer);
+            Collider[] hitCollE = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(chunkSize, 0, 0f), checkRadius, TileLayer);
+            Collider[] hitCollO = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(-chunkSize, 0, 0f), checkRadius, TileLayer);
 
             //ver tiles diagonal
-            Collider[] hitCollNO = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(-chunkSize, 0, chunkSize), checkRadius);
-            Collider[] hitCollNE = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(chunkSize, 0, chunkSize), checkRadius);
-            Collider[] hitCollSO = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(-chunkSize, 0, -chunkSize), checkRadius);
-            Collider[] hitCollSE = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(chunkSize, 0, -chunkSize), checkRadius);
+            Collider[] hitCollNO = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(-chunkSize, 0, chunkSize), checkRadius, TileLayer);
+            Collider[] hitCollNE = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(chunkSize, 0, chunkSize), checkRadius, TileLayer);
+            Collider[] hitCollSO = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(-chunkSize, 0, -chunkSize), checkRadius, TileLayer);
+            Collider[] hitCollSE = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(chunkSize, 0, -chunkSize), checkRadius, TileLayer);
 
             //ver 2 tiles a frente para evitar dead-ends
-            Collider[] hitCollNN = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(0f, 0, chunkSize * 2), checkRadius);
-            Collider[] hitCollSS = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(0f, 0, -chunkSize * 2), checkRadius);
-            Collider[] hitCollEE = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(chunkSize * 2, 0, 0f), checkRadius);
-            Collider[] hitCollOO = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(-chunkSize * 2, 0, 0f), checkRadius);
+            Collider[] hitCollNN = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(0f, 0, chunkSize * 2), checkRadius, TileLayer);
+            Collider[] hitCollSS = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(0f, 0, -chunkSize * 2), checkRadius, TileLayer);
+            Collider[] hitCollEE = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(chunkSize * 2, 0, 0f), checkRadius, TileLayer);
+            Collider[] hitCollOO = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(-chunkSize * 2, 0, 0f), checkRadius, TileLayer);
 
             //N
             if (hitCollN.Length != 0 || hitCollNN.Length != 0 || hitCollNO.Length != 0 || hitCollNE.Length != 0)
@@ -253,10 +255,10 @@ public class WorldGeneration : MonoBehaviour
             #endregion
 
             #region Verficar onde tile escolhido tem aberturas
-            Collider[] entradaN = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(0f, .5f, chunkSize / 2), checkRadiusEntradas);
-            Collider[] entradaS = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(0f, .5f, -chunkSize / 2), checkRadiusEntradas);
-            Collider[] entradaE = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(chunkSize / 2, .5f, 0f), checkRadiusEntradas);
-            Collider[] entradaO = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(-chunkSize / 2, .5f, 0f), checkRadiusEntradas);
+            Collider[] entradaN = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(0f, .5f, chunkSize / 2), checkRadiusEntradas, TileLayer);
+            Collider[] entradaS = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(0f, .5f, -chunkSize / 2), checkRadiusEntradas, TileLayer);
+            Collider[] entradaE = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(chunkSize / 2, .5f, 0f), checkRadiusEntradas, TileLayer);
+            Collider[] entradaO = Physics.OverlapSphere(spawnableTiles[pickedTile].transform.position + new Vector3(-chunkSize / 2, .5f, 0f), checkRadiusEntradas, TileLayer);
 
             //N
             if (entradaN.Length != 0)
@@ -292,13 +294,13 @@ public class WorldGeneration : MonoBehaviour
             {
                 if (posSpawn[coord] == "placeN")
                 {
-                    if (whatTile < 65) //2 way tile
+                    if (whatTile < 50) //2 way tile
                     {
                         int w = Random.Range(0, twoWayTilesPref.Count);
                         newTile = Instantiate(twoWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(0, 0, chunkSize), Quaternion.identity);
                         spawnableTiles.Add(newTile); allTiles.Add(newTile);
                     }
-                    else if (whatTile >= 65 && whatTile < 90) //3 way tile
+                    else if (whatTile >= 50 && whatTile < 80) //3 way tile
                     {
                         int w = Random.Range(0, threeWayTilesPref.Count);
                         newTile = Instantiate(threeWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(0, 0, chunkSize), Quaternion.identity);
@@ -314,13 +316,13 @@ public class WorldGeneration : MonoBehaviour
                 }
                 else if (posSpawn[coord] == "placeS")
                 {
-                    if (whatTile < 65) //2 way tile
+                    if (whatTile < 50) //2 way tile
                     {
                         int w = Random.Range(0, twoWayTilesPref.Count);
                         newTile = Instantiate(twoWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(0, 0, -chunkSize), Quaternion.identity);
                         spawnableTiles.Add(newTile); allTiles.Add(newTile);
                     }
-                    else if (whatTile >= 65 && whatTile < 90) //3 way tile 
+                    else if (whatTile >= 50 && whatTile < 80) //3 way tile 
                     {
                         int w = Random.Range(0, threeWayTilesPref.Count);
                         newTile = Instantiate(threeWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(0, 0, -chunkSize), Quaternion.identity);
@@ -336,13 +338,13 @@ public class WorldGeneration : MonoBehaviour
                 }
                 else if (posSpawn[coord] == "placeE")
                 {
-                    if (whatTile < 65) //2 way tile
+                    if (whatTile < 50) //2 way tile
                     {
                         int w = Random.Range(0, twoWayTilesPref.Count);
                         newTile = Instantiate(twoWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(chunkSize, 0, 0), Quaternion.identity);
                         spawnableTiles.Add(newTile); allTiles.Add(newTile);
                     }
-                    else if (whatTile >= 65 && whatTile < 90) //3 way tile
+                    else if (whatTile >= 50 && whatTile < 80) //3 way tile
                     {
                         int w = Random.Range(0, threeWayTilesPref.Count);
                         newTile = Instantiate(threeWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(chunkSize, 0, 0), Quaternion.identity);
@@ -358,13 +360,13 @@ public class WorldGeneration : MonoBehaviour
                 }
                 else if (posSpawn[coord] == "placeW")
                 {
-                    if (whatTile < 65) //2 way tile
+                    if (whatTile < 50) //2 way tile
                     {
                         int w = Random.Range(0, twoWayTilesPref.Count);
                         newTile = Instantiate(twoWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(-chunkSize, 0, 0), Quaternion.identity);
                         spawnableTiles.Add(newTile); allTiles.Add(newTile);
                     }
-                    else if (whatTile >= 65 && whatTile < 90) //3 way tile
+                    else if (whatTile >= 50 && whatTile < 80) //3 way tile
                     {
                         int w = Random.Range(0, threeWayTilesPref.Count);
                         newTile = Instantiate(threeWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(-chunkSize, 0, 0), Quaternion.identity);
@@ -427,7 +429,7 @@ public class WorldGeneration : MonoBehaviour
 
         if (placement == "placeN") //foi colocado a norte por isso tem que ter entrada a sul
         {
-            Collider[] entrada = Physics.OverlapSphere(tileToRotate.transform.position + new Vector3(0f, .5f, -chunkSize / 2), checkRadiusEntradas);
+            Collider[] entrada = Physics.OverlapSphere(tileToRotate.transform.position + new Vector3(0f, .5f, -chunkSize / 2), checkRadiusEntradas, TileLayer);
             if (entrada.Length != 0)
             {
                 tileToRotate.transform.rotation *= Quaternion.Euler(0,90,0);
@@ -436,7 +438,7 @@ public class WorldGeneration : MonoBehaviour
         }
         else if (placement == "placeS") //foi colocado a sul por isso tem que ter entrada a norte
         {
-            Collider[] entrada = Physics.OverlapSphere(tileToRotate.transform.position + new Vector3(0f, .5f, chunkSize / 2), checkRadiusEntradas);
+            Collider[] entrada = Physics.OverlapSphere(tileToRotate.transform.position + new Vector3(0f, .5f, chunkSize / 2), checkRadiusEntradas, TileLayer);
             if (entrada.Length != 0)
             {
                 tileToRotate.transform.rotation *= Quaternion.Euler(0, -90, 0);
@@ -445,7 +447,7 @@ public class WorldGeneration : MonoBehaviour
         }
         else if (placement == "placeE") //foi colocado a este por isso tem que ter entrada a oeste
         {
-            Collider[] entrada = Physics.OverlapSphere(tileToRotate.transform.position + new Vector3(-chunkSize / 2, .5f, 0f), checkRadiusEntradas);
+            Collider[] entrada = Physics.OverlapSphere(tileToRotate.transform.position + new Vector3(-chunkSize / 2, .5f, 0f), checkRadiusEntradas, TileLayer);
             if (entrada.Length != 0)
             {
                 tileToRotate.transform.rotation *= Quaternion.Euler(0, -90, 0);
@@ -454,7 +456,7 @@ public class WorldGeneration : MonoBehaviour
         }
         else if (placement == "placeW") //foi colocado a oeste por isso tem que ter entrada a este
         {
-            Collider[] entrada = Physics.OverlapSphere(tileToRotate.transform.position + new Vector3(chunkSize / 2, .5f, 0f), checkRadiusEntradas);
+            Collider[] entrada = Physics.OverlapSphere(tileToRotate.transform.position + new Vector3(chunkSize / 2, .5f, 0f), checkRadiusEntradas, TileLayer);
             if (entrada.Length != 0)
             {
                 tileToRotate.transform.rotation *= Quaternion.Euler(0, 90, 0);
@@ -483,15 +485,15 @@ public class WorldGeneration : MonoBehaviour
         {
             if (allTiles[i].gameObject.tag != "BaseTile")
             {
-                Collider[] hitCollN = Physics.OverlapSphere(allTiles[i].transform.position + new Vector3(0f, 0, chunkSize), checkRadius);
-                Collider[] hitCollS = Physics.OverlapSphere(allTiles[i].transform.position + new Vector3(0f, 0, -chunkSize), checkRadius);
-                Collider[] hitCollE = Physics.OverlapSphere(allTiles[i].transform.position + new Vector3(chunkSize, 0, 0f), checkRadius);
-                Collider[] hitCollO = Physics.OverlapSphere(allTiles[i].transform.position + new Vector3(-chunkSize, 0, 0f), checkRadius);
+                Collider[] hitCollN = Physics.OverlapSphere(allTiles[i].transform.position + new Vector3(0f, 0, chunkSize), checkRadius, TileLayer);
+                Collider[] hitCollS = Physics.OverlapSphere(allTiles[i].transform.position + new Vector3(0f, 0, -chunkSize), checkRadius, TileLayer);
+                Collider[] hitCollE = Physics.OverlapSphere(allTiles[i].transform.position + new Vector3(chunkSize, 0, 0f), checkRadius, TileLayer);
+                Collider[] hitCollO = Physics.OverlapSphere(allTiles[i].transform.position + new Vector3(-chunkSize, 0, 0f), checkRadius, TileLayer);
 
-                Collider[] entradaN = Physics.OverlapSphere(allTiles[i].transform.position + new Vector3(0f, .5f, chunkSize / 2), checkRadiusEntradas);
-                Collider[] entradaS = Physics.OverlapSphere(allTiles[i].transform.position + new Vector3(0f, .5f, -chunkSize / 2), checkRadiusEntradas);
-                Collider[] entradaE = Physics.OverlapSphere(allTiles[i].transform.position + new Vector3(chunkSize / 2, .5f, 0f), checkRadiusEntradas);
-                Collider[] entradaO = Physics.OverlapSphere(allTiles[i].transform.position + new Vector3(-chunkSize / 2, .5f, 0f), checkRadiusEntradas);
+                Collider[] entradaN = Physics.OverlapSphere(allTiles[i].transform.position + new Vector3(0f, .5f, chunkSize / 2), checkRadiusEntradas, TileLayer);
+                Collider[] entradaS = Physics.OverlapSphere(allTiles[i].transform.position + new Vector3(0f, .5f, -chunkSize / 2), checkRadiusEntradas, TileLayer);
+                Collider[] entradaE = Physics.OverlapSphere(allTiles[i].transform.position + new Vector3(chunkSize / 2, .5f, 0f), checkRadiusEntradas, TileLayer);
+                Collider[] entradaO = Physics.OverlapSphere(allTiles[i].transform.position + new Vector3(-chunkSize / 2, .5f, 0f), checkRadiusEntradas, TileLayer);
 
                 if (hitCollN.Length == 0 && entradaN.Length == 0)
                 {
@@ -526,6 +528,26 @@ public class WorldGeneration : MonoBehaviour
     {
         nav.RemoveData();
         nav.BuildNavMesh(); //atualiza navMesh
+    }
+
+    public void UpdateBaseTile() //chamado no mainMenu
+    {
+        if (baseTile == null)
+        {
+            baseTile = Instantiate(baseTiles[enemyGen.currentDifficulty - 1], Vector3.zero, Quaternion.identity);
+            spawnableTiles.Add(baseTile); allTiles.Add(baseTile);
+        }
+
+        else if (baseTile != null)
+        {
+            spawnableTiles.Remove(baseTile); allTiles.Remove(baseTile);
+            Destroy(baseTile);
+            baseTile = null;
+            baseTile = Instantiate(baseTiles[enemyGen.currentDifficulty - 1], Vector3.zero, Quaternion.identity);
+            spawnableTiles.Add(baseTile); allTiles.Add(baseTile);
+        }
+
+        CheckNeighbours();
     }
 
     private void OnDrawGizmos()
