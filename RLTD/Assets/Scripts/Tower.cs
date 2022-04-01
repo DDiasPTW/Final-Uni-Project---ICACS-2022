@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Tower : MonoBehaviour
 {
+    private GameObject cameraPivot;
+
+    public float damage;
     public float range;
     public int Price;
     public LayerMask EnemyLayer;
@@ -25,7 +28,12 @@ public class Tower : MonoBehaviour
     [SerializeField] private GameObject CurrentTarget;
     public float fireRate;
     [SerializeField]private float startFireRate;
-    public float damage;
+
+    private void Awake()
+    {
+        cameraPivot = GameObject.FindGameObjectWithTag("Pivot");
+    }
+
 
     private void Start()
     {
@@ -35,6 +43,8 @@ public class Tower : MonoBehaviour
 
     private void Update()
     {
+        UpdateRotation();
+
         if (CurrentTarget == null)
         {
             GetTarget();
@@ -92,7 +102,7 @@ public class Tower : MonoBehaviour
             for (int i = 0; i < allTargets.Length; i++)
             {
                 allTargets[i].GetComponent<Enemy>().LoseHealth(damage, 0, 0);
-                Debug.Log(allTargets[i].name + "Damage");
+                //Debug.Log(allTargets[i].name + "Damage");
             }
             
         }
@@ -101,7 +111,7 @@ public class Tower : MonoBehaviour
             for (int i = 0; i < allTargets.Length; i++)
             {
                 allTargets[i].GetComponent<Enemy>().LoseHealth(damage, poisonMultiplier, poisonTime);
-                Debug.Log(allTargets[i].name + " Poison");
+                //Debug.Log(allTargets[i].name + " Poison");
             }
             
         }
@@ -111,7 +121,7 @@ public class Tower : MonoBehaviour
             for (int i = 0; i < allTargets.Length; i++)
             {
                 allTargets[i].GetComponent<Enemy>().ChangeSpeed(slowMultiplier, slowTime);
-                Debug.Log(allTargets[i].name + " Slow");
+                //Debug.Log(allTargets[i].name + " Slow");
             }
             
         }
@@ -120,6 +130,10 @@ public class Tower : MonoBehaviour
 
     }
 
+    private void UpdateRotation()
+    {
+        gameObject.transform.localEulerAngles = new Vector3(0,cameraPivot.transform.localEulerAngles.y,0);
+    }
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireSphere(CurrentTarget.transform.position,AOERange);

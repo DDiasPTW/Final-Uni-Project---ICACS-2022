@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
@@ -15,6 +16,12 @@ public class Enemy : MonoBehaviour
     public float speed;
     [SerializeField]private bool isPoison = false;
     [SerializeField]private bool isSlow = false;
+
+
+    [Header("Resistencias")]
+    public bool resSlow;
+    public bool resPoison;
+
 
     private float slowTimeElapsed;
     private float poisonTimeElapsed;
@@ -36,6 +43,7 @@ public class Enemy : MonoBehaviour
     {
         //Debug.Log(Vector3.Distance(gameObject.transform.position,navAgent.destination));
 
+
         if (Vector3.Distance(gameObject.transform.position, navAgent.destination) < .8f)
         {
             gM.LoseHealth(Damage);
@@ -53,33 +61,40 @@ public class Enemy : MonoBehaviour
         if (isPoison)
         {
             poisonTimeElapsed -= Time.deltaTime;
-
             if (poisonTimeElapsed <= 0)
             {
                 isPoison = false;
+                
             }
         }
 
         if (isSlow)
         {
             slowTimeElapsed -= Time.deltaTime;
-
             if (slowTimeElapsed <= 0)
             {
                 isSlow = false;
+                
             }
         }
-        else navAgent.speed = speed;
+        else if (!isSlow)
+        {
+            navAgent.speed = speed;
+        }
 
     }
 
     public void LoseHealth(float damage, float multiplier, float poisonTime)
     {
-        poisonTimeElapsed = poisonTime;
-        if (poisonTime > 0)
+        if (!resPoison) //apenas é afetado caso não tenha resistência a esse elemento
         {
-            isPoison = true;
+            poisonTimeElapsed = poisonTime;
+            if (poisonTime > 0)
+            {
+                isPoison = true;
+            }
         }
+        
 
         if (!isPoison)
         {
@@ -93,9 +108,12 @@ public class Enemy : MonoBehaviour
 
     public void ChangeSpeed(float slowMultiplier, float slowTime)
     {
-        navAgent.speed = speed - (speed * slowMultiplier);
-        slowTimeElapsed = slowTime;
-        isSlow = true;
+        if (!resSlow)//apenas é afetado caso não tenha resistência a esse elemento
+        {
+            navAgent.speed = speed - (speed * slowMultiplier);
+            slowTimeElapsed = slowTime;
+            isSlow = true;
+        }         
     }
     
 }

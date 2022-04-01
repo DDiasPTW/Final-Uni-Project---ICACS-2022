@@ -140,7 +140,7 @@ public class BuildManager : MonoBehaviour
             }
 
             //garantir que não coloca por cima de outras torres
-            Collider[] checkTower = Physics.OverlapSphere(new Vector3(seePos.x,hit.point.y,seePos.z), .5f, towerLayer);
+            Collider[] checkTower = Physics.OverlapSphere(new Vector3(seePos.x,hit.point.y,seePos.z), .3f, towerLayer);
             
             
             //Verificar onde pode colocar

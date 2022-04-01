@@ -9,6 +9,7 @@ TagManager:
   - Tile
   - Inimigo
   - TARGET
+  - Pivot
   layers:
   - Default
   - TransparentFX

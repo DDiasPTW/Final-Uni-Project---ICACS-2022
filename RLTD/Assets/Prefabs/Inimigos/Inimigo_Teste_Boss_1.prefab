@@ -120,10 +120,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 061ed561f82be2848a9acc6a5d5415be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Health: 1000
+  Health: 5000
   Value: 0
   Damage: 1000
   speed: 0.5
+  isPoison: 0
+  isSlow: 0
+  resSlow: 1
+  resPoison: 1
 --- !u!65 &-1391096875322373449
 BoxCollider:
   m_ObjectHideFlags: 0
