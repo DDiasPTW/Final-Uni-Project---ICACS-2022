@@ -13,7 +13,7 @@ public class TowerPurchase : MonoBehaviour
     private void Awake()
     {
         bM = GameObject.FindGameObjectWithTag("GridManager").GetComponent<BuildManager>();
-        price = towerToPurchase.GetComponent<Tower>().Price;
+        price = towerToPurchase.GetComponent<Tower>().Price[towerToPurchase.GetComponent<Tower>().currentEvolution - 1];
         textoPreco.text = price.ToString();
     }
 

@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour
     public GameObject spawnButton;
     public GameObject mainMenuUI;
 
+    public int coinsPerWave;
+
     public int Health = 100;
     public List<TextMeshProUGUI> healthText;
 
@@ -62,7 +64,9 @@ public class GameManager : MonoBehaviour
     {
         worldGen.NextWave();
         enemyGen.hasStartedSpawning = false;
-        bM.CurrentCoins += (worldGen.CurrentWave - 1) * 50 * enemyGen.currentDifficulty;
+        bM.CurrentCoins += (worldGen.CurrentWave - 1) * coinsPerWave;
+        bM.SellTowers();
+        enemyGen.checkEnemiesToSpawn = true;
         canSpawn = true;
     }
 

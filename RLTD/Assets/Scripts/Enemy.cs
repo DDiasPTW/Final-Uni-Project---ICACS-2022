@@ -6,6 +6,7 @@ using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
+    private GameObject cameraPivot;
     private NavMeshAgent navAgent;
     private BuildManager bM;
     private EnemyGeneration enemyGen;
@@ -26,6 +27,9 @@ public class Enemy : MonoBehaviour
     private float slowTimeElapsed;
     private float poisonTimeElapsed;
 
+    private Vector3 startScale;
+    private float startHealth;
+
     private void Awake()
     {
         navAgent = GetComponent<NavMeshAgent>();
@@ -33,6 +37,10 @@ public class Enemy : MonoBehaviour
         bM = GameObject.FindGameObjectWithTag("GridManager").GetComponent<BuildManager>();
         enemyGen = GameObject.FindGameObjectWithTag("GridManager").GetComponent<EnemyGeneration>();
         gM = GameObject.FindGameObjectWithTag("GridManager").GetComponent<GameManager>();
+        cameraPivot = GameObject.FindGameObjectWithTag("Pivot");
+
+        startScale = transform.localScale;
+        startHealth = Health;
     }
     void Start()
     {
@@ -42,7 +50,7 @@ public class Enemy : MonoBehaviour
     private void Update()
     {
         //Debug.Log(Vector3.Distance(gameObject.transform.position,navAgent.destination));
-
+        //UpdateRotation();
 
         if (Vector3.Distance(gameObject.transform.position, navAgent.destination) < .8f)
         {
@@ -57,6 +65,7 @@ public class Enemy : MonoBehaviour
             Destroy(gameObject);
         }
 
+        transform.localScale = startScale * (Health/startHealth);
 
         if (isPoison)
         {
@@ -82,6 +91,11 @@ public class Enemy : MonoBehaviour
             navAgent.speed = speed;
         }
 
+    }
+
+    private void UpdateRotation()
+    {
+        gameObject.transform.localEulerAngles = new Vector3(0, cameraPivot.transform.localEulerAngles.y, 0);
     }
 
     public void LoseHealth(float damage, float multiplier, float poisonTime)

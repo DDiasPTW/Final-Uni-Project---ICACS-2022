@@ -207,6 +207,7 @@ public class CameraController : MonoBehaviour
             newRotation *= Quaternion.Euler(Vector3.up * (-difference.x / rotationAmountMouse));
         }
 
+        Camera.main.orthographicSize = Mathf.Clamp(newZoom.y,minZoomY,maxZoomY);
         newZoom.y = Mathf.Clamp(newZoom.y, minZoomY, maxZoomY);
         newZoom.z = Mathf.Clamp(newZoom.z, minZoomZ, maxZoomZ);
     }

@@ -6,6 +6,7 @@ using TMPro;
 
 public class BuildManager : MonoBehaviour
 {
+    public List<GameObject> allTowers = new List<GameObject>();
     private WorldGeneration worldGen;
     private EnemyGeneration enemyGen;
     public LayerMask layerToBuild;
@@ -28,6 +29,9 @@ public class BuildManager : MonoBehaviour
     public GameObject cameraPivot;
     public float movementTime;
 
+    
+
+
     private GameObject placedTower;
 
     [SerializeField] private bool canBuild;
@@ -39,8 +43,6 @@ public class BuildManager : MonoBehaviour
         enemyGen = GetComponent<EnemyGeneration>();
         rangeSprite = Instantiate(rangeSprite);
         towerVisualizer = Instantiate(towerVisualizer);
-
-        
     }
 
     public void SetStartCoins() //chamado no mainMenu
@@ -156,7 +158,7 @@ public class BuildManager : MonoBehaviour
             towerVisualizer.transform.localScale = TowerToBuild.transform.localScale;
             towerVisualizer.transform.position = new Vector3(seePos.x, hit.point.y + (TowerToBuild.transform.localScale.y / 2), seePos.z);
 
-            rangeSprite.transform.localScale = new Vector3(TowerToBuild.GetComponent<Tower>().range, TowerToBuild.GetComponent<Tower>().range, 0);
+            rangeSprite.transform.localScale = new Vector3(TowerToBuild.GetComponent<Tower>().range[0], TowerToBuild.GetComponent<Tower>().range[0], 0);
             rangeSprite.transform.position = new Vector3(seePos.x, hit.point.y + .1f, seePos.z);
         }
         else
@@ -236,7 +238,7 @@ public class BuildManager : MonoBehaviour
                 placedTower = Instantiate(TowerToBuild, mousePos, Quaternion.identity);
                 placedTower.transform.position = new Vector3(buildPos.x, buildPos.y + (placedTower.transform.localScale.y / 2), buildPos.z);
                 CurrentCoins -= CurrentTowerCost;
-
+                allTowers.Add(placedTower);
 
                 //Debug.Log(worldGen.chunkSize + " | " + Mathf.Round(hit.point.x) + " | " + buildPos.x);
                 //Debug.Log("Clicado em: " + hit.point);
@@ -253,5 +255,16 @@ public class BuildManager : MonoBehaviour
         placedTower = null;
     }
 
+    public void SellTowers()
+    {
+        for (int i = 0; i < allTowers.Count; i++)
+        {
+            CurrentCoins += allTowers[i].GetComponent<Tower>().Price[allTowers[i].GetComponent<Tower>().currentEvolution - 1];
+            Destroy(allTowers[i]);
+            Destroy(allTowers[i].GetComponent<Tower>().rangeVisualizer);
+        }
+
+        allTowers.Clear();
+    }
 
 }

@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
 
 public class EnemyGeneration : MonoBehaviour
 {
     private WorldGeneration worldGen;
-    
+
+    public bool checkEnemiesToSpawn = false;
     public bool canSpawnBoss;
     public bool hasStartedSpawning = false;
     [Range(1,30)]
@@ -13,6 +16,7 @@ public class EnemyGeneration : MonoBehaviour
     public int howManyEnemies; //Quantos inimigos vao dar spawn nesta wave
     public int enemiesToSpawn; //Quantos inimigos faltam dar spawn
 
+    public List<GameObject> enemiesThatWillSpawn = new List<GameObject>();
 
     [SerializeField] private List<GameObject> enemies = new List<GameObject>(); //Todos os inimigos do jogo (SEM BOSSES)
     [SerializeField] private List<GameObject> BossList = new List<GameObject>(); //Todos os bosses do jogo
@@ -26,6 +30,27 @@ public class EnemyGeneration : MonoBehaviour
     public float spawnCooldown; //cooldown entre spawn de cada inimigo
     [SerializeField] private float spawnTime;
 
+
+    [Header("UI Stuff")]
+    public GameObject EnemyContainer;
+    public TextMeshProUGUI defaultNumber, assassinNumber, healerNumber, tankNumber;
+
+
+    private string EnemyDefault = "Default";
+    [SerializeField] private int howManyDefaults = 0;
+    private string EnemyAssassin = "Assassin";
+    [SerializeField] private int howManyAssassins = 0;
+    private string EnemyHealer = "Healer";
+    [SerializeField]private int howManyHealers = 0;
+    private string EnemyTank = "Tank";
+    [SerializeField]private int howManyTanks = 0;
+
+    private void Awake()
+    {
+        enemiesPerWave = enemiesPerWave * currentDifficulty;
+        EnemyContainer.SetActive(false);
+    }
+
     void Start()
     {
         worldGen = GameObject.FindGameObjectWithTag("GridManager").GetComponent<WorldGeneration>();
@@ -34,10 +59,6 @@ public class EnemyGeneration : MonoBehaviour
 
     void Update()
     {
-        //if (Input.GetKeyDown(KeyCode.O) && !isSpawning) //Da spawn da wave
-        //{
-        //    StartWave();
-        //}
 
         if (Input.GetKeyDown(KeyCode.K)) //"Mata" a current wave
         {
@@ -58,12 +79,19 @@ public class EnemyGeneration : MonoBehaviour
             enemiesToSpawn = howManyEnemies;
         }
 
+        if (checkEnemiesToSpawn)
+        {
+            DefineEnemies();
+        }
+
+
         spawnTime -= Time.deltaTime;
     }
 
     public void StartWave()
     {
         worldGen.UpdateNavMesh();
+        EnemyContainer.SetActive(false);
         if (worldGen.CurrentWave > 0)
         {
             isSpawning = true;
@@ -87,6 +115,42 @@ public class EnemyGeneration : MonoBehaviour
         
     }
 
+    public void DefineEnemies()
+    {
+        howManyHealers = 0; howManyDefaults = 0; howManyAssassins = 0; howManyTanks = 0;
+
+        for (int i = 0; i < howManyEnemies; i++)
+        {
+            int whatEnemy = Random.Range(0, enemies.Count);
+            enemiesThatWillSpawn.Add(enemies[whatEnemy]);
+        }
+
+        for (int i = 0; i < enemiesThatWillSpawn.Count; i++)
+        {
+            if (enemiesThatWillSpawn[i].tag == EnemyDefault)
+            {
+                howManyDefaults++;
+            }else if (enemiesThatWillSpawn[i].tag == EnemyAssassin)
+            {
+                howManyAssassins++;
+            }else if (enemiesThatWillSpawn[i].tag == EnemyHealer)
+            {
+                howManyHealers++;
+            }else if (enemiesThatWillSpawn[i].tag == EnemyTank)
+            {
+                howManyTanks++;
+            }
+        }
+
+        EnemyContainer.SetActive(true);
+        defaultNumber.text = "x" + howManyDefaults.ToString();
+        assassinNumber.text = "x" + howManyAssassins.ToString();
+        healerNumber.text = "x" + howManyHealers.ToString();
+        tankNumber.text = "x" + howManyTanks.ToString();
+
+        checkEnemiesToSpawn = false;
+    }
+
     void SpawnEnemies() //da loop por todos os spawnpoints de modo a que haja um numero igual de inimigos por spawnPoint.
         //TO DO: Definir percentagem de chance de cada inimigo, tendo em conta as waves e a dificuldade
     {
@@ -94,9 +158,14 @@ public class EnemyGeneration : MonoBehaviour
         {
             for (int i = 0; i < worldGen.spawnPoints.Count; i++)
             {
-                int whatEnemy = Random.Range(0, enemies.Count);
+                int whatEnemy = Random.Range(0, enemiesThatWillSpawn.Count);
                 GameObject enemy;
-                enemy = Instantiate(enemies[whatEnemy], worldGen.spawnPoints[i].transform.position - new Vector3(0, worldGen.spawnPoints[i].transform.localScale.y / 2, 0), Quaternion.identity);
+
+                //enemy = Instantiate(enemies[whatEnemy], worldGen.spawnPoints[i].transform.position - new Vector3(0, worldGen.spawnPoints[i].transform.localScale.y / 2, 0), Quaternion.identity);
+                enemy = Instantiate(enemiesThatWillSpawn[whatEnemy], worldGen.spawnPoints[i].transform.position - new Vector3(0, worldGen.spawnPoints[i].transform.localScale.y / 2, 0), Quaternion.identity);
+                enemiesThatWillSpawn.RemoveAt(whatEnemy);
+
+
                 spawnedEnemies.Add(enemy);
                 enemiesToSpawn--;
 
