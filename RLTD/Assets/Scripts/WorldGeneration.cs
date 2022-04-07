@@ -72,6 +72,9 @@ public class WorldGeneration : MonoBehaviour
         {
             CheckNeighbours();
         }
+        //CheckNeighbours();
+
+        
     }
 
     public void NextWave()
@@ -498,28 +501,39 @@ public class WorldGeneration : MonoBehaviour
                 if (hitCollN.Length == 0 && entradaN.Length == 0)
                 {
                     GameObject spawnPos = Instantiate(spawnPointPref, allTiles[i].transform.position + new Vector3(0f, spawnPointPref.transform.localScale.y / 2, chunkSize / 2.1f), Quaternion.identity);
+                   
                     spawnPoints.Add(spawnPos);
                 }
 
                 if (hitCollS.Length == 0 && entradaS.Length == 0)
                 {
                     GameObject spawnPos = Instantiate(spawnPointPref, allTiles[i].transform.position + new Vector3(0f, spawnPointPref.transform.localScale.y / 2, -chunkSize / 2.1f), Quaternion.identity);
+                    
                     spawnPoints.Add(spawnPos);
                 }
 
                 if (hitCollE.Length == 0 && entradaE.Length == 0)
                 {
                     GameObject spawnPos = Instantiate(spawnPointPref, allTiles[i].transform.position + new Vector3(chunkSize / 2.1f, spawnPointPref.transform.localScale.y / 2, 0f), Quaternion.identity);
+                    
                     spawnPoints.Add(spawnPos);
                 }
 
                 if (hitCollO.Length == 0 && entradaO.Length == 0)
                 {
                     GameObject spawnPos = Instantiate(spawnPointPref, allTiles[i].transform.position + new Vector3(-chunkSize / 2.1f, spawnPointPref.transform.localScale.y / 2, 0f), Quaternion.identity);
+                    
                     spawnPoints.Add(spawnPos);
                 }
+
+                
             }
             
+        }
+
+        for (int i = 0; i < spawnPoints.Count; i++)
+        {
+            spawnPoints[i].GetComponent<MeshRenderer>().enabled = false;
         }
         //UpdateNavMesh();
     }
@@ -528,6 +542,14 @@ public class WorldGeneration : MonoBehaviour
     {
         nav.RemoveData();
         nav.BuildNavMesh(); //atualiza navMesh
+    }
+
+    public void ShowSpawnPos()
+    {
+        for (int i = 0; i < spawnPoints.Count; i++)
+        {
+            spawnPoints[i].GetComponent<MeshRenderer>().enabled = true;
+        }
     }
 
     public void UpdateBaseTile() //chamado no mainMenu

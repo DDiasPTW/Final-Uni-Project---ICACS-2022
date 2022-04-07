@@ -157,6 +157,7 @@ public class BuildManager : MonoBehaviour
             //Seguir cursor
             towerVisualizer.transform.localScale = TowerToBuild.transform.localScale;
             towerVisualizer.transform.position = new Vector3(seePos.x, hit.point.y + (TowerToBuild.transform.localScale.y / 2), seePos.z);
+            //towerVisualizer.transform.position = new Vector3(seePos.x, .5f + (TowerToBuild.transform.localScale.y / 2), seePos.z);
 
             rangeSprite.transform.localScale = new Vector3(TowerToBuild.GetComponent<Tower>().range[0], TowerToBuild.GetComponent<Tower>().range[0], 0);
             rangeSprite.transform.position = new Vector3(seePos.x, hit.point.y + .1f, seePos.z);
@@ -186,8 +187,9 @@ public class BuildManager : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerToBuild))
         {
-            //x
+            
             buildPos.y = hit.point.y;
+            //buildPos.y = .5f;
 
             if (canPlace)
             {
@@ -259,7 +261,7 @@ public class BuildManager : MonoBehaviour
     {
         for (int i = 0; i < allTowers.Count; i++)
         {
-            CurrentCoins += allTowers[i].GetComponent<Tower>().Price[allTowers[i].GetComponent<Tower>().currentEvolution - 1];
+            CurrentCoins += allTowers[i].GetComponent<Tower>().sellPrice[allTowers[i].GetComponent<Tower>().currentEvolution - 1];
             Destroy(allTowers[i]);
             Destroy(allTowers[i].GetComponent<Tower>().rangeVisualizer);
         }

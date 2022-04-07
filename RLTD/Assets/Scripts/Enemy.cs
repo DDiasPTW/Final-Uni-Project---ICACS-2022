@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.AI;
+using TMPro;
 
 public class Enemy : MonoBehaviour
 {
@@ -15,6 +16,11 @@ public class Enemy : MonoBehaviour
     public int Value;
     public int Damage;
     public float speed;
+
+    public GameObject damageIndicatorText;
+    public Color NormalTextColor, PoisonTextColor, SlowTextColor;
+    public Color currentColor;
+
     [SerializeField]private bool isPoison = false;
     [SerializeField]private bool isSlow = false;
 
@@ -23,6 +29,8 @@ public class Enemy : MonoBehaviour
     public bool resSlow;
     public bool resPoison;
 
+
+    public float poisonTime, poisonMultiplier;
 
     private float slowTimeElapsed;
     private float poisonTimeElapsed;
@@ -41,6 +49,7 @@ public class Enemy : MonoBehaviour
 
         startScale = transform.localScale;
         startHealth = Health;
+        currentColor = NormalTextColor;
     }
     void Start()
     {
@@ -49,9 +58,6 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
-        //Debug.Log(Vector3.Distance(gameObject.transform.position,navAgent.destination));
-        //UpdateRotation();
-
         if (Vector3.Distance(gameObject.transform.position, navAgent.destination) < .8f)
         {
             gM.LoseHealth(Damage);
@@ -69,37 +75,45 @@ public class Enemy : MonoBehaviour
 
         if (isPoison)
         {
+            currentColor = PoisonTextColor;
             poisonTimeElapsed -= Time.deltaTime;
             if (poisonTimeElapsed <= 0)
             {
                 isPoison = false;
-                
+                currentColor = NormalTextColor;
             }
         }
 
         if (isSlow)
         {
             slowTimeElapsed -= Time.deltaTime;
+            currentColor = SlowTextColor;
             if (slowTimeElapsed <= 0)
             {
                 isSlow = false;
+                
                 
             }
         }
         else if (!isSlow)
         {
             navAgent.speed = speed;
+            currentColor = NormalTextColor;
         }
 
     }
 
-    private void UpdateRotation()
+    private void ShowDamage(float value)
     {
-        gameObject.transform.localEulerAngles = new Vector3(0, cameraPivot.transform.localEulerAngles.y, 0);
+        GameObject text;
+        text = Instantiate(damageIndicatorText, transform.position + new Vector3(0, 2f, 0), Quaternion.identity);
+        text.transform.localEulerAngles = new Vector3(45f, cameraPivot.transform.localEulerAngles.y, text.transform.localEulerAngles.z);
+        text.GetComponent<TextMeshPro>().text = value.ToString();   
+        text.GetComponent<TextMeshPro>().color = currentColor;
     }
 
-    public void LoseHealth(float damage, float multiplier, float poisonTime)
-    {
+    public void LoseHealth(float damage)
+    {     
         if (!resPoison) //apenas é afetado caso não tenha resistência a esse elemento
         {
             poisonTimeElapsed = poisonTime;
@@ -109,14 +123,17 @@ public class Enemy : MonoBehaviour
             }
         }
         
-
         if (!isPoison)
-        {
+        {            
+            ShowDamage(damage);
             Health -= damage;
         }
         else if(isPoison)
-        {
-            Health -= damage + (damage * multiplier);
+        {            
+            currentColor = PoisonTextColor;
+
+            ShowDamage(damage + (damage * poisonMultiplier));
+            Health -= damage + (damage * poisonMultiplier);
         }    
     }
 
@@ -124,6 +141,7 @@ public class Enemy : MonoBehaviour
     {
         if (!resSlow)//apenas é afetado caso não tenha resistência a esse elemento
         {
+            currentColor = SlowTextColor;
             navAgent.speed = speed - (speed * slowMultiplier);
             slowTimeElapsed = slowTime;
             isSlow = true;

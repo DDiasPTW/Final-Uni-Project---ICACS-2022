@@ -1,25 +1,40 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using TMPro;
 
 public class Tower : MonoBehaviour
 {
+    private BuildManager bM;
+    private MeshFilter mF;
     private GameObject cameraPivot;
+
+    [Header("Evolution Stuff")]
     public int currentEvolution = 1;
     public int numberOfEvolutions;
+    public int xp = 0;
+    public List<Mesh> evolutionLooks = new List<Mesh>();
     public List<float> damage = new List<float>();
     public List<float> fireRate = new List<float>();
     [SerializeField]private float startFireRate;
     public List<float> range = new List<float>();
-    public List<int> Price = new List<int>();
+    public List<int> evolvePrice = new List<int>();
+    public List<int> sellPrice = new List<int>();
 
+    [Header("UI Elements")]
     public GameObject rangeVisualizer;
+    public GameObject evoMenu;   
+    public TextMeshProUGUI evoPriceText;
+    public GameObject evoButton;
     public Color rangeVisualizerColor;
     [Header("Damage Stuff")]
     public LayerMask EnemyLayer;
     public LayerMask TowerLayer;
     public float AOERange;
     public bool isAOE;
+
+    
     [Header("Slow")]
     public bool isSlow;
     [Range(0,1)]
@@ -35,9 +50,12 @@ public class Tower : MonoBehaviour
     
     private void Awake()
     {
+        mF = GetComponentInChildren<MeshFilter>();
+        bM = GameObject.FindGameObjectWithTag("GridManager").GetComponent<BuildManager>();
         cameraPivot = GameObject.FindGameObjectWithTag("Pivot");
         rangeVisualizer = Instantiate(rangeVisualizer);
         currentEvolution = 1;
+        evoMenu.SetActive(false);
     }
 
 
@@ -50,6 +68,8 @@ public class Tower : MonoBehaviour
 
     private void Update()
     {
+        UpdateUIElements();
+
         //fazer mais smooth
         if (CurrentTarget == null)
         {
@@ -62,6 +82,8 @@ public class Tower : MonoBehaviour
             transform.LookAt(new Vector3(CurrentTarget.transform.position.x, transform.position.y, CurrentTarget.transform.position.z));
 
             startFireRate -= Time.deltaTime;
+
+
             if (isAOE && startFireRate <= 0)
             {
                 AttackTargetAOE();
@@ -73,17 +95,39 @@ public class Tower : MonoBehaviour
         }
 
         CheckRange();
+
+        if (currentEvolution < numberOfEvolutions)
+        {
+            CheckEvolutionMenu();
+        }
+        
     }
-    
+
+    private void UpdateUIElements()
+    {
+        evoMenu.transform.eulerAngles = new Vector3(45f, cameraPivot.transform.localEulerAngles.y, evoMenu.transform.eulerAngles.z);
+       
+
+        if (currentEvolution == numberOfEvolutions)
+        {
+            evoButton.SetActive(false);
+            evoPriceText.text = "";
+            evoMenu.SetActive(false);
+        }
+        else
+        {
+            evoPriceText.text = evolvePrice[currentEvolution-1].ToString();
+            evoButton.SetActive(true);
+        }
+    }
+
+
     private void CheckRange()
     {
         rangeVisualizer.transform.position = new Vector3(transform.position.x,transform.position.y / 1.9f,transform.position.z);
-        
-
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        
-        
+               
         if (Physics.Raycast(ray, out hit, Mathf.Infinity,TowerLayer))
         {
             if (hit.collider.gameObject == gameObject)
@@ -97,9 +141,47 @@ public class Tower : MonoBehaviour
             rangeVisualizer.transform.localScale *= 0;
         }
 
+    }
+
+    private void CheckEvolutionMenu()
+    {      
+        if (Input.GetMouseButtonDown(0))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, TowerLayer))
+            {
+                if (hit.collider.gameObject == gameObject)
+                {
+                    evoMenu.SetActive(true);
+                    //Debug.Log("Abrir menu evolução");
+                }
+            }
+            else
+            {
+
+            }
+        }
+        if (Input.GetMouseButtonDown(1))
+        {
+            evoMenu.SetActive(false);
+        }
+    }
+
+    //Chamar quando evoluir torre
+    public void EvolveTower()
+    {
+        if (bM.CurrentCoins >= evolvePrice[currentEvolution - 1] && currentEvolution < numberOfEvolutions)
+        {
+            bM.CurrentCoins -= evolvePrice[currentEvolution - 1];
+            currentEvolution++;
+            mF.mesh = evolutionLooks[currentEvolution - 1];
+        }
 
     }
 
+    #region Tower AI
     private void GetTarget()
     {
         Collider[] allTargets = Physics.OverlapSphere(transform.position, range[currentEvolution-1] / 11, EnemyLayer);
@@ -114,11 +196,14 @@ public class Tower : MonoBehaviour
     {
         if (!isPoison)
         {
-            CurrentTarget.GetComponent<Enemy>().LoseHealth(damage[currentEvolution-1], 0, 0);
+            CurrentTarget.GetComponent<Enemy>().LoseHealth(damage[currentEvolution-1]);
         }
         else if (isPoison)
         {
-            CurrentTarget.GetComponent<Enemy>().LoseHealth(damage[currentEvolution - 1], poisonMultiplier[currentEvolution-1], poisonTime[currentEvolution - 1]);
+            CurrentTarget.GetComponent<Enemy>().LoseHealth(damage[currentEvolution - 1]);
+            CurrentTarget.GetComponent<Enemy>().currentColor = CurrentTarget.GetComponent<Enemy>().PoisonTextColor;
+            CurrentTarget.GetComponent<Enemy>().poisonTime = poisonTime[currentEvolution - 1];
+            CurrentTarget.GetComponent<Enemy>().poisonMultiplier = poisonMultiplier[currentEvolution - 1];
         }
 
         if (isSlow)
@@ -137,7 +222,7 @@ public class Tower : MonoBehaviour
         {
             for (int i = 0; i < allTargets.Length; i++)
             {
-                allTargets[i].GetComponent<Enemy>().LoseHealth(damage[currentEvolution-1], 0, 0);
+                allTargets[i].GetComponent<Enemy>().LoseHealth(damage[currentEvolution-1]);
                 //Debug.Log(allTargets[i].name + "Damage");
             }
             
@@ -146,7 +231,10 @@ public class Tower : MonoBehaviour
         {
             for (int i = 0; i < allTargets.Length; i++)
             {
-                allTargets[i].GetComponent<Enemy>().LoseHealth(damage[currentEvolution-1], poisonMultiplier[currentEvolution - 1], poisonTime[currentEvolution - 1]);
+                allTargets[i].GetComponent<Enemy>().poisonTime = poisonTime[currentEvolution - 1];
+                allTargets[i].GetComponent<Enemy>().currentColor = allTargets[i].GetComponent<Enemy>().PoisonTextColor;
+                allTargets[i].GetComponent<Enemy>().poisonMultiplier = poisonMultiplier[currentEvolution - 1];
+                allTargets[i].GetComponent<Enemy>().LoseHealth(damage[currentEvolution-1]);
                 //Debug.Log(allTargets[i].name + " Poison");
             }
             
@@ -166,12 +254,7 @@ public class Tower : MonoBehaviour
 
     }
 
-    //Chamar quando evoluir torre
-    public void EvolveTower()
-    {
-        currentEvolution++;
-    }
-
+    #endregion
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireSphere(transform.position,range[currentEvolution-1]/11);

@@ -124,6 +124,12 @@ MonoBehaviour:
   Value: 3
   Damage: 35
   speed: 0.7
+  damageIndicatorText: {fileID: 5026368744546682038, guid: 26ff450893a807b47ba655908bb07a44,
+    type: 3}
+  NormalTextColor: {r: 1, g: 1, b: 1, a: 1}
+  PoisonTextColor: {r: 0.15808116, g: 0.7830189, b: 0.17030858, a: 1}
+  SlowTextColor: {r: 0.46963328, g: 0.9150943, b: 0.8968876, a: 1}
+  currentColor: {r: 0, g: 0, b: 0, a: 0}
   isPoison: 0
   isSlow: 0
   resSlow: 0

@@ -52,6 +52,11 @@ public class GameManager : MonoBehaviour
         }
         else spawnButton.SetActive(false);
 
+        if (Health <= 0)
+        {
+            LoseGame();
+        }
+
         waveText.text = worldGen.CurrentWave.ToString() + " / " + worldGen.MaxWave.ToString();
 
         if (Input.GetKeyDown(KeyCode.R))
@@ -64,10 +69,15 @@ public class GameManager : MonoBehaviour
     {
         worldGen.NextWave();
         enemyGen.hasStartedSpawning = false;
-        bM.CurrentCoins += (worldGen.CurrentWave - 1) * coinsPerWave;
+        bM.CurrentCoins += (worldGen.CurrentWave - 1) * coinsPerWave /** enemyGen.currentDifficulty*/;
         bM.SellTowers();
         enemyGen.checkEnemiesToSpawn = true;
         canSpawn = true;
+    }
+
+    private void LoseGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void LoseHealth(int damage)
@@ -78,6 +88,7 @@ public class GameManager : MonoBehaviour
     public void SpawnNextWave()
     {
         enemyGen.StartWave();
+        worldGen.ShowSpawnPos();
         canSpawn = false;
     }
 }
