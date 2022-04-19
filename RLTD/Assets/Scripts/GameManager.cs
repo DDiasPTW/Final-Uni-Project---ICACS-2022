@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     private EnemyGeneration enemyGen;
     private BuildManager bM;
     public TextMeshProUGUI waveText;
+    public ShopManager shopM;
 
     public bool canSpawn = false;
     public GameObject nextPositionButton;
@@ -27,6 +28,7 @@ public class GameManager : MonoBehaviour
         worldGen = GetComponent<WorldGeneration>();
         enemyGen = GetComponent<EnemyGeneration>();
         bM = GetComponent<BuildManager>();
+        //shopM = GameObject.FindGameObjectWithTag("ShopM").GetComponent<ShopManager>();
 
         nextPositionButton.SetActive(false);
         spawnButton.SetActive(false);
@@ -87,6 +89,8 @@ public class GameManager : MonoBehaviour
 
     public void SpawnNextWave()
     {
+        shopM.canOpen = false;
+        shopM.anim.Play("CloseShop_Anim");
         enemyGen.StartWave();
         worldGen.ShowSpawnPos();
         canSpawn = false;

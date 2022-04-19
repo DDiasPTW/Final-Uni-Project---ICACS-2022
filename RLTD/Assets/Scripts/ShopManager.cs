@@ -6,31 +6,34 @@ public class ShopManager : MonoBehaviour
 { 
     //----
     public bool canOpen = false;
-    private Animator anim;
+    public Animator anim;
     private string closeShopAnimation = "CloseShop_Anim";
     private string openShopAnimation = "OpenShop_Anim";
+    private EnemyGeneration enemyGen;
     //----
     private void Awake()
     {
         anim = GetComponent<Animator>();
+        enemyGen = GameObject.FindGameObjectWithTag("GridManager").GetComponent<EnemyGeneration>();
     }
 
-
-
-
-    #region Abrir UI
+    #region Abrir/Fechar UI
     public void ShopButton()
     {
-        if (!canOpen)
+        if (!enemyGen.isSpawning)
         {
-            anim.Play(closeShopAnimation);
-            canOpen = true;
+            if (!canOpen)
+            {
+                anim.Play(closeShopAnimation);
+                canOpen = true;
+            }
+            if (canOpen)
+            {
+                anim.Play(openShopAnimation);
+                canOpen = false;
+            }
         }
-        if (canOpen)
-        {
-            anim.Play(openShopAnimation);
-            canOpen = false;
-        }
+      
     }
     #endregion
 }

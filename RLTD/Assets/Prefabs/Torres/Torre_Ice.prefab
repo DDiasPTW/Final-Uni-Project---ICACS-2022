@@ -804,8 +804,8 @@ MonoBehaviour:
   - {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
   - {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
   damage:
-  - 10
-  - 20
+  - 15
+  - 25
   fireRate:
   - 2
   - 1.5
@@ -821,8 +821,6 @@ MonoBehaviour:
   evoPriceText: {fileID: 757218911}
   evoButton: {fileID: 1881076009}
   rangeVisualizerColor: {r: 0.8301887, g: 0.8301887, b: 0.8301887, a: 0.20392157}
-  damageText: {fileID: 8265495089140619393, guid: e0c3ebde66b01274fbccf9f42c4e1302,
-    type: 3}
   EnemyLayer:
     serializedVersion: 2
     m_Bits: 64

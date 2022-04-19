@@ -12,6 +12,7 @@ public class Enemy : MonoBehaviour
     private BuildManager bM;
     private EnemyGeneration enemyGen;
     private GameManager gM;
+    private ItemManager iM;
     public float Health;
     public int Value;
     public int Damage;
@@ -24,6 +25,9 @@ public class Enemy : MonoBehaviour
     [SerializeField]private bool isPoison = false;
     [SerializeField]private bool isSlow = false;
 
+    [Header("Itens")]
+    public float itemDropChance;
+    [SerializeField] private bool willDropItem;
 
     [Header("Resistencias")]
     public bool resSlow;
@@ -45,6 +49,7 @@ public class Enemy : MonoBehaviour
         bM = GameObject.FindGameObjectWithTag("GridManager").GetComponent<BuildManager>();
         enemyGen = GameObject.FindGameObjectWithTag("GridManager").GetComponent<EnemyGeneration>();
         gM = GameObject.FindGameObjectWithTag("GridManager").GetComponent<GameManager>();
+        iM = GameObject.FindGameObjectWithTag("GridManager").GetComponent<ItemManager>();
         cameraPivot = GameObject.FindGameObjectWithTag("Pivot");
 
         startScale = transform.localScale;
@@ -54,6 +59,13 @@ public class Enemy : MonoBehaviour
     void Start()
     {
         navAgent.SetDestination(GameObject.FindGameObjectWithTag("TARGET").transform.position);
+
+        float itemDrop = Random.Range(0f,100f);
+        if (itemDrop <= itemDropChance)
+        {
+            willDropItem = true;
+        }
+        else willDropItem = false;
     }
 
     private void Update()
@@ -66,6 +78,12 @@ public class Enemy : MonoBehaviour
         }
         if (Health <= 0)
         {
+            if (willDropItem) //DROP DE ITENS
+            {
+                DropItem();
+            }
+
+
             bM.CurrentCoins += Value;
             enemyGen.spawnedEnemies.Remove(gameObject);
             Destroy(gameObject);
@@ -80,11 +98,10 @@ public class Enemy : MonoBehaviour
             if (poisonTimeElapsed <= 0)
             {
                 isPoison = false;
-                currentColor = NormalTextColor;
+                //currentColor = NormalTextColor;
             }
         }
-
-        if (isSlow)
+        else if (isSlow)
         {
             slowTimeElapsed -= Time.deltaTime;
             currentColor = SlowTextColor;
@@ -95,12 +112,18 @@ public class Enemy : MonoBehaviour
                 
             }
         }
-        else if (!isSlow)
+        else if (!isSlow && !isPoison)
         {
             navAgent.speed = speed;
             currentColor = NormalTextColor;
         }
 
+    }
+
+    private void DropItem()
+    {
+        int whatItem = Random.Range(0,iM.allItems.Count);
+        Debug.Log("Item chosen is: " + iM.allItems[whatItem].name);
     }
 
     private void ShowDamage(float value)

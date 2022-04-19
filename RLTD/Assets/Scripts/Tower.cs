@@ -45,7 +45,7 @@ public class Tower : MonoBehaviour
     [Range(0,1)]
     public List<float> poisonMultiplier = new List<float>();
     public List<float> poisonTime = new List<float>();
-    private GameObject CurrentTarget;
+    [SerializeField] private GameObject CurrentTarget;
     
     
     private void Awake()
@@ -83,6 +83,12 @@ public class Tower : MonoBehaviour
 
             startFireRate -= Time.deltaTime;
 
+            //limpa o target caso saia da range
+            Debug.Log( "Distance: " + Vector3.Distance(transform.position, CurrentTarget.transform.position)*11 + ", Range: " + range[currentEvolution-1]);
+            if ((Vector3.Distance(transform.position, CurrentTarget.transform.position) * 11f) > range[currentEvolution - 1])
+            {
+                CurrentTarget = null;
+            }
 
             if (isAOE && startFireRate <= 0)
             {
@@ -188,7 +194,7 @@ public class Tower : MonoBehaviour
 
         if (allTargets.Length != 0)
         {
-            CurrentTarget = allTargets[0].gameObject;
+            CurrentTarget = allTargets[0].gameObject;            
         }
     }
 
