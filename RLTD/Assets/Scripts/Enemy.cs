@@ -26,6 +26,7 @@ public class Enemy : MonoBehaviour
     [SerializeField]private bool isSlow = false;
 
     [Header("Itens")]
+    [Range(0,100)]
     public float itemDropChance;
     [SerializeField] private bool willDropItem;
 
@@ -90,10 +91,11 @@ public class Enemy : MonoBehaviour
         }
 
         transform.localScale = startScale * (Health/startHealth);
+        UpdateTextColor();
 
         if (isPoison)
         {
-            currentColor = PoisonTextColor;
+            //currentColor = PoisonTextColor;
             poisonTimeElapsed -= Time.deltaTime;
             if (poisonTimeElapsed <= 0)
             {
@@ -101,10 +103,11 @@ public class Enemy : MonoBehaviour
                 //currentColor = NormalTextColor;
             }
         }
-        else if (isSlow)
+        
+        if (isSlow)
         {
             slowTimeElapsed -= Time.deltaTime;
-            currentColor = SlowTextColor;
+            //currentColor = SlowTextColor;
             if (slowTimeElapsed <= 0)
             {
                 isSlow = false;
@@ -112,18 +115,32 @@ public class Enemy : MonoBehaviour
                 
             }
         }
-        else if (!isSlow && !isPoison)
+        else if (!isSlow)
         {
             navAgent.speed = speed;
-            currentColor = NormalTextColor;
+            //currentColor = NormalTextColor;
         }
 
+    }
+
+    private void UpdateTextColor()
+    {
+        if (isPoison)
+        {
+            currentColor = PoisonTextColor;
+        }
+        else if (isSlow)
+        {
+            currentColor = SlowTextColor;
+        }
+        else currentColor = NormalTextColor;
     }
 
     private void DropItem()
     {
         int whatItem = Random.Range(0,iM.allItems.Count);
-        Debug.Log("Item chosen is: " + iM.allItems[whatItem].name);
+        Instantiate(iM.allItems[whatItem],transform.position + Vector3.up,Quaternion.identity);
+        //Debug.Log("Item chosen is: " + iM.allItems[whatItem].name);
     }
 
     private void ShowDamage(float value)

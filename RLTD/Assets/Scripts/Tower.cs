@@ -73,22 +73,17 @@ public class Tower : MonoBehaviour
         //fazer mais smooth
         if (CurrentTarget == null)
         {
-            transform.LookAt(new Vector3(Camera.main.transform.position.x, transform.position.y, Camera.main.transform.position.z));
+            //transform.LookAt(new Vector3(Camera.main.transform.position.x, transform.position.y, Camera.main.transform.position.z));
 
             GetTarget();
         }
         else
         {
-            transform.LookAt(new Vector3(CurrentTarget.transform.position.x, transform.position.y, CurrentTarget.transform.position.z));
+            //transform.LookAt(new Vector3(CurrentTarget.transform.position.x, transform.position.y, CurrentTarget.transform.position.z));
 
             startFireRate -= Time.deltaTime;
+            float distanceToTarget = Vector3.Distance(transform.position, CurrentTarget.transform.position);          
 
-            //limpa o target caso saia da range
-            Debug.Log( "Distance: " + Vector3.Distance(transform.position, CurrentTarget.transform.position)*11 + ", Range: " + range[currentEvolution-1]);
-            if ((Vector3.Distance(transform.position, CurrentTarget.transform.position) * 11f) > range[currentEvolution - 1])
-            {
-                CurrentTarget = null;
-            }
 
             if (isAOE && startFireRate <= 0)
             {
@@ -97,6 +92,12 @@ public class Tower : MonoBehaviour
             else if (!isAOE && startFireRate <= 0)
             {
                 AttackTarget();
+            }
+
+            //limpa o target caso saia da range
+            if ((distanceToTarget * 11.5f) > range[currentEvolution - 1])
+            {
+                CurrentTarget = null;
             }
         }
 

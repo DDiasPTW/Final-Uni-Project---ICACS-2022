@@ -804,8 +804,8 @@ MonoBehaviour:
   - {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
   - {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
   damage:
-  - 15
   - 25
+  - 40
   fireRate:
   - 2
   - 1.5
@@ -839,3 +839,4 @@ MonoBehaviour:
   isPoison: 0
   poisonMultiplier: []
   poisonTime: []
+  CurrentTarget: {fileID: 0}
