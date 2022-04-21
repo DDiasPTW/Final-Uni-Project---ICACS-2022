@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.45082295, g: 0.5007415, b: 0.5746953, a: 1}
+  m_IndirectSpecularColor: {r: 0.4366757, g: 0.48427194, b: 0.5645252, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1295,7 +1295,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 3
+  m_Intensity: 1.5
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -6261,7 +6261,7 @@ MonoBehaviour:
   checkEnemiesToSpawn: 0
   canSpawnBoss: 0
   hasStartedSpawning: 0
-  enemiesPerWave: 5
+  enemiesPerWave: 1
   howManyEnemies: 0
   enemiesToSpawn: 0
   enemiesThatWillSpawn: []
@@ -6305,7 +6305,7 @@ MonoBehaviour:
   towerLayer:
     serializedVersion: 2
     m_Bits: 512
-  startCoins: 300
+  startCoins: 600
   CurrentCoins: 0
   CurrentTowerCost: 0
   TowerToBuild: {fileID: 0}

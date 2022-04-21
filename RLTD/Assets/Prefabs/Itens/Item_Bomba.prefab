@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2568082884862813611}
   - component: {fileID: 8935509724829782702}
   - component: {fileID: 3168495557367087665}
+  - component: {fileID: 3379785660678919640}
   m_Layer: 10
   m_Name: Item_Bomba
   m_TagString: Untagged
@@ -127,3 +128,30 @@ MonoBehaviour:
   itemImage: {fileID: 21300000, guid: 28d2c2677149d45e290e8fa042b1b80f, type: 3}
   aliveTime: 20
   pickedUp: 0
+  activated: 0
+  placed: 0
+--- !u!114 &3379785660678919640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2568082884862813610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cc5e92a14bd690408c335880e39a9ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  layerToBuild:
+    serializedVersion: 2
+    m_Bits: 128
+  rangeSprite: {fileID: 8766062363759346918, guid: ff65d8a73f6ecd34d82151a51961dea3,
+    type: 3}
+  canPlaceColor: {r: 0.28618973, g: 0.9433962, b: 0.17354932, a: 0.7529412}
+  cannotPlaceColor: {r: 0.9716981, g: 0.041251317, b: 0.041251317, a: 0.74509805}
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  range: 30
+  damage: 60
+  attackDelay: 2

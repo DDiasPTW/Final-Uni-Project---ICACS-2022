@@ -20,7 +20,7 @@ public class ShopManager : MonoBehaviour
     #region Abrir/Fechar UI
     public void ShopButton()
     {
-        if (!enemyGen.isSpawning)
+        if (!enemyGen.isSpawning && enemyGen.spawnedEnemies.Count == 0)
         {
             if (!canOpen)
             {

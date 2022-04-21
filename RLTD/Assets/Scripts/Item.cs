@@ -8,6 +8,8 @@ public class Item : MonoBehaviour
     public Sprite itemImage;
     public float aliveTime;
     public bool pickedUp = false;
+    public bool activated = false;
+    public bool placed = false;
     private void Update()
     {
         aliveTime -= Time.deltaTime;
@@ -17,7 +19,7 @@ public class Item : MonoBehaviour
             Destroy(gameObject);
         }
 
-        if (pickedUp)
+        if (pickedUp && !placed)
         {
             gameObject.GetComponent<MeshRenderer>().enabled = false;
             gameObject.GetComponent<SphereCollider>().enabled = false;

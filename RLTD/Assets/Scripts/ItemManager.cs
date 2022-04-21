@@ -30,11 +30,6 @@ public class ItemManager : MonoBehaviour
             itemHolderUI.SetActive(false);
         }
         else itemHolderUI.SetActive(true);
-
-        //if (currentItem != null)
-        //{
-        //    ActivateItem();
-        //}
     }
 
     void PickupItem()
@@ -51,9 +46,13 @@ public class ItemManager : MonoBehaviour
                     currentItem.GetComponent<Item>().pickedUp = false;
                     currentItem = null;
                 }
+
+                if (!hit.collider.gameObject.GetComponent<Item>().placed)
+                {
+                    currentItem = hit.collider.gameObject;
+                    currentItem.GetComponent<Item>().pickedUp = true;
+                }
                 
-                currentItem = hit.collider.gameObject;
-                currentItem.GetComponent<Item>().pickedUp = true;
 
                 itemHolderImage.GetComponent<Image>().sprite = hit.collider.gameObject.GetComponent<Item>().itemImage;
                 
@@ -64,6 +63,7 @@ public class ItemManager : MonoBehaviour
 
     public void ActivateItem() //chamado no event trigger do itemHolder (UI)
     {
-        Debug.Log(currentItem.gameObject.name);
+        //Debug.Log(currentItem.gameObject.name);
+        currentItem.GetComponent<Item>().activated = true;
     }
 }
