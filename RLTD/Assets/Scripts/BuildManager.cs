@@ -166,6 +166,7 @@ public class BuildManager : MonoBehaviour
         {
             rangeSprite.transform.position = mousePos;
             rangeSprite.transform.localScale *= 0;
+            //towerVisualizer.transform.position = new Vector3(mousePos.x,1,mousePos.y);
             towerVisualizer.transform.localScale *= 0;
         }
 

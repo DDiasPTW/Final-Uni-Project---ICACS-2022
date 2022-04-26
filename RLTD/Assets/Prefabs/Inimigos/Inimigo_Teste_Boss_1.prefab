@@ -120,10 +120,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 061ed561f82be2848a9acc6a5d5415be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Health: 5000
+  Health: 10000
   Value: 0
   Damage: 1000
-  speed: 0.5
+  speed: 0.4
   damageIndicatorText: {fileID: 5026368744546682038, guid: 26ff450893a807b47ba655908bb07a44,
     type: 3}
   NormalTextColor: {r: 1, g: 1, b: 1, a: 1}

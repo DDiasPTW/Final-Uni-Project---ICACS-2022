@@ -13,6 +13,7 @@ public class Item_Bomba : MonoBehaviour
     private bool canPlace;
     [Header("Visualizadores")]
     public GameObject rangeSprite;
+    public Sprite thisSprite;
     public Color canPlaceColor;
     public Color cannotPlaceColor;
     private Vector3 mousePos;
@@ -29,6 +30,7 @@ public class Item_Bomba : MonoBehaviour
         worldGen = GameObject.FindGameObjectWithTag("GridManager").GetComponent<WorldGeneration>();
         iM = GameObject.FindGameObjectWithTag("GridManager").GetComponent<ItemManager>();
         item = GetComponent<Item>();
+        item.itemImage = thisSprite;
     }
 
 
@@ -128,7 +130,7 @@ public class Item_Bomba : MonoBehaviour
 
 
             //Verificar onde pode colocar
-            if (hit.point.y <= .1f)
+            if (hit.point.y <= .05f)
             {
                 canPlace = true;
             }
@@ -144,8 +146,9 @@ public class Item_Bomba : MonoBehaviour
         else
         {
             //visualizador de range
-            rangeSprite.transform.position = mousePos;
             rangeSprite.transform.localScale *= 0;
+            rangeSprite.transform.position = mousePos;
+            transform.position = mousePos;
         }
 
         //Visualizador de colocar itens

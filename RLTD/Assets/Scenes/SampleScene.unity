@@ -6261,7 +6261,7 @@ MonoBehaviour:
   checkEnemiesToSpawn: 0
   canSpawnBoss: 0
   hasStartedSpawning: 0
-  enemiesPerWave: 1
+  enemiesPerWave: 5
   howManyEnemies: 0
   enemiesToSpawn: 0
   enemiesThatWillSpawn: []

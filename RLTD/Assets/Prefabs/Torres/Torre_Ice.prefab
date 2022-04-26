@@ -813,7 +813,7 @@ MonoBehaviour:
   range:
   - 60
   - 80
-  evolvePrice: fa000000
+  evolvePrice: 2c010000
   sellPrice: 96000000c8000000
   rangeVisualizer: {fileID: 8766062363759346918, guid: ff65d8a73f6ecd34d82151a51961dea3,
     type: 3}
