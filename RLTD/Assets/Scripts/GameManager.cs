@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour
         worldGen = GetComponent<WorldGeneration>();
         enemyGen = GetComponent<EnemyGeneration>();
         bM = GetComponent<BuildManager>();
+        Time.timeScale = 1;
         //shopM = GameObject.FindGameObjectWithTag("ShopM").GetComponent<ShopManager>();
 
         nextPositionButton.SetActive(false);

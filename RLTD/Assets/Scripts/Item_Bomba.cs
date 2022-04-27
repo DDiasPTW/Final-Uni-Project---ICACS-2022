@@ -20,7 +20,9 @@ public class Item_Bomba : MonoBehaviour
     private bool spawnedRange = false;
     [Header("Ataque")]
     public LayerMask enemyLayer;
-    public float range;
+    public LayerMask itemLayer;
+    public float range; //range do ataque AOE
+    public float activationRange; //range minima que os inimigos precisam de estar para o item ser ativado
     public int damage;
     private bool canAttack = false;
     public float attackDelay;
@@ -129,7 +131,6 @@ public class Item_Bomba : MonoBehaviour
             }
 
 
-            //Verificar onde pode colocar
             if (hit.point.y <= .05f)
             {
                 canPlace = true;
@@ -174,7 +175,7 @@ public class Item_Bomba : MonoBehaviour
 
     private void CheckEnemies()
     {
-        Collider[] allTargets = Physics.OverlapSphere(transform.position, range/ 11, enemyLayer);
+        Collider[] allTargets = Physics.OverlapSphere(transform.position, activationRange/ 11, enemyLayer);
         if (allTargets.Length != 0)
         {
             canAttack = true;

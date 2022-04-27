@@ -143,10 +143,10 @@ public class EnemyGeneration : MonoBehaviour
         }
 
         EnemyContainer.SetActive(true);
-        defaultNumber.text = "x" + howManyDefaults.ToString();
-        assassinNumber.text = "x" + howManyAssassins.ToString();
-        healerNumber.text = "x" + howManyHealers.ToString();
-        tankNumber.text = "x" + howManyTanks.ToString();
+        defaultNumber.text = howManyDefaults.ToString();
+        assassinNumber.text = howManyAssassins.ToString();
+        healerNumber.text = howManyHealers.ToString();
+        tankNumber.text = howManyTanks.ToString();
 
         checkEnemiesToSpawn = false;
     }

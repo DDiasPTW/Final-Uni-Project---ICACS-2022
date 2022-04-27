@@ -13,7 +13,6 @@ public class ItemManager : MonoBehaviour
     public GameObject itemHolderImage;
 
     public LayerMask itemLayer;
-    public LayerMask UILayer;
 
     private void Awake()
     {

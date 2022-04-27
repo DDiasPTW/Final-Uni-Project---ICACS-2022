@@ -64,6 +64,7 @@ public class MainMenu_Manager : MonoBehaviour
         {
             thingsToDisable[i].SetActive(true);         
         }
+        Time.timeScale = 1;
         bM.SetStartCoins();
         mainMenuCamera.SetActive(false);
         mainMenu.SetActive(false);

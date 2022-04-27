@@ -57,7 +57,7 @@ public class CameraController : MonoBehaviour
 
     private void LateUpdate()
     {
-        resTime -= Time.deltaTime;
+        resTime -= Time.deltaTime / Time.timeScale;
         HandleMouseInput();
         HandleMovementInput();
     }
@@ -124,16 +124,13 @@ public class CameraController : MonoBehaviour
         newPosition.x = Mathf.Clamp(newPosition.x,-maxPos,maxPos);
         newPosition.z = Mathf.Clamp(newPosition.z,-maxPos,maxPos);
 
-        transform.position = Vector3.Lerp(transform.position, newPosition, Time.deltaTime * movementTime);
+        transform.position = Vector3.Lerp(transform.position, newPosition, (Time.deltaTime * movementTime)/Time.timeScale);
         transform.rotation = Quaternion.Lerp(transform.rotation, newRotation, Time.deltaTime * movementTime);
-        cameraTransform.localPosition = Vector3.Lerp(cameraTransform.localPosition, newZoom, Time.deltaTime * movementTime);
+        cameraTransform.localPosition = Vector3.Lerp(cameraTransform.localPosition, newZoom, (Time.deltaTime * movementTime) / Time.timeScale);
     }
 
-
-    //TO DO: CAMERA DAR SNAP A CADA 45 GRAUS USANDO O RATO
     void HandleMouseInput()
     {
-        //Dar zoom - n funciona se camera estiver em orthographic mode
         if (Input.mouseScrollDelta.y != 0)
         {
             newZoom += Input.mouseScrollDelta.y * zoomAmount;

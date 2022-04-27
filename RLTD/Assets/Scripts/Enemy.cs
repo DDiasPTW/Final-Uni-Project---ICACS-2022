@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.AI;
 using TMPro;
 
@@ -43,6 +42,8 @@ public class Enemy : MonoBehaviour
     private Vector3 startScale;
     private float startHealth;
 
+    //private float timeScale;
+
     private void Awake()
     {
         navAgent = GetComponent<NavMeshAgent>();
@@ -71,6 +72,8 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
+        navAgent.speed = speed;
+
         if (Vector3.Distance(gameObject.transform.position, navAgent.destination) < .8f)
         {
             gM.LoseHealth(Damage);
@@ -110,9 +113,7 @@ public class Enemy : MonoBehaviour
             //currentColor = SlowTextColor;
             if (slowTimeElapsed <= 0)
             {
-                isSlow = false;
-                
-                
+                isSlow = false;             
             }
         }
         else if (!isSlow)
