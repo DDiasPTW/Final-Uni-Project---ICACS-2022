@@ -679,14 +679,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1796187790638553795}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6263871644433721933}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!33 &8505504896838414787
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -694,7 +694,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1796187790638553795}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: -2432090755550338912, guid: 3d10064f54fc0ff4484a93b65324d7fe, type: 3}
 --- !u!23 &6637384398581686656
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -715,7 +715,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a992280ed31208147a8447f833c54193, type: 2}
+  - {fileID: 2100000, guid: 7a31723d2fb97064f8f161d75bbec33a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -763,8 +763,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9201170739185646984}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.1717305, y: -1.7757909, z: -0.8622236}
-  m_LocalScale: {x: 0.75, y: 1, z: 0.75}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8240262660318000013}
@@ -783,8 +783,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1, y: 1.7846212, z: 1}
+  m_Center: {x: 0, y: 0.39230958, z: 0}
 --- !u!114 &2879876980003009399
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -801,9 +801,9 @@ MonoBehaviour:
   numberOfEvolutions: 3
   xp: 0
   evolutionLooks:
-  - {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
-  - {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
-  - {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  - {fileID: -2432090755550338912, guid: 3d10064f54fc0ff4484a93b65324d7fe, type: 3}
+  - {fileID: -2432090755550338912, guid: 1b6d878ce3fa5ec4bbb2414023f77ce1, type: 3}
+  - {fileID: -2432090755550338912, guid: f2b42e7ce5ff23747846c36a69b8714d, type: 3}
   damage:
   - 20
   - 30

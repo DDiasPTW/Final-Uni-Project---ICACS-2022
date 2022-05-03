@@ -21,7 +21,7 @@ public class Item : MonoBehaviour
 
         if (pickedUp && !placed)
         {
-            gameObject.GetComponent<MeshRenderer>().enabled = false;
+            gameObject.GetComponentInChildren<MeshRenderer>().enabled = false;
             gameObject.GetComponent<SphereCollider>().enabled = false;
         }
 

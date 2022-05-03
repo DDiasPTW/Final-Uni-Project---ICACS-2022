@@ -10,11 +10,13 @@ public class ShopManager : MonoBehaviour
     private string closeShopAnimation = "CloseShop_Anim";
     private string openShopAnimation = "OpenShop_Anim";
     private EnemyGeneration enemyGen;
+    private WorldGeneration worldGen;
     //----
     private void Awake()
     {
         anim = GetComponent<Animator>();
         enemyGen = GameObject.FindGameObjectWithTag("GridManager").GetComponent<EnemyGeneration>();
+        worldGen = GameObject.FindGameObjectWithTag("GridManager").GetComponent<WorldGeneration>();
     }
 
     #region Abrir/Fechar UI

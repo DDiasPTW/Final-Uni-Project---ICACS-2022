@@ -18,6 +18,8 @@ public class Item_Bomba : MonoBehaviour
     public Color cannotPlaceColor;
     private Vector3 mousePos;
     private bool spawnedRange = false;
+    private Animator anim;
+    private string attackAnimation = "BombAttack_Anim";
     [Header("Ataque")]
     public LayerMask enemyLayer;
     public LayerMask itemLayer;
@@ -33,6 +35,7 @@ public class Item_Bomba : MonoBehaviour
         iM = GameObject.FindGameObjectWithTag("GridManager").GetComponent<ItemManager>();
         item = GetComponent<Item>();
         item.itemImage = thisSprite;
+        anim = GetComponent<Animator>();
     }
 
 
@@ -43,7 +46,7 @@ public class Item_Bomba : MonoBehaviour
         if (item.activated)
         {
             //Do stuff
-            gameObject.GetComponent<MeshRenderer>().enabled = true;
+            gameObject.GetComponentInChildren<MeshRenderer>().enabled = true;
             FollowMouse();
 
             if (!spawnedRange)
@@ -71,6 +74,7 @@ public class Item_Bomba : MonoBehaviour
 
         if (canAttack)
         {
+            anim.Play(attackAnimation);
             attackDelay -= Time.deltaTime;
 
             if (attackDelay <= 0)

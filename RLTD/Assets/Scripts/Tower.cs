@@ -9,6 +9,7 @@ public class Tower : MonoBehaviour
     private BuildManager bM;
     private MeshFilter mF;
     private GameObject cameraPivot;
+    private EnemyGeneration enemyGen;
 
     [Header("Evolution Stuff")]
     public int currentEvolution = 1;
@@ -56,6 +57,7 @@ public class Tower : MonoBehaviour
         rangeVisualizer = Instantiate(rangeVisualizer);
         currentEvolution = 1;
         evoMenu.SetActive(false);
+        enemyGen = GameObject.FindGameObjectWithTag("GridManager").GetComponent<EnemyGeneration>();
     }
 
 
@@ -70,7 +72,6 @@ public class Tower : MonoBehaviour
     {
         UpdateUIElements();
 
-        //fazer mais smooth
         if (CurrentTarget == null)
         {
             //transform.LookAt(new Vector3(Camera.main.transform.position.x, transform.position.y, Camera.main.transform.position.z));
@@ -79,7 +80,7 @@ public class Tower : MonoBehaviour
         }
         else
         {
-            //transform.LookAt(new Vector3(CurrentTarget.transform.position.x, transform.position.y, CurrentTarget.transform.position.z));
+            transform.LookAt(new Vector3(CurrentTarget.transform.position.x, transform.position.y, CurrentTarget.transform.position.z));
 
             startFireRate -= Time.deltaTime;
             float distanceToTarget = Vector3.Distance(transform.position, CurrentTarget.transform.position);          
@@ -131,7 +132,7 @@ public class Tower : MonoBehaviour
 
     private void CheckRange()
     {
-        rangeVisualizer.transform.position = new Vector3(transform.position.x,transform.position.y / 1.9f,transform.position.z);
+        rangeVisualizer.transform.position = new Vector3(transform.position.x,.75f,transform.position.z);
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
                
@@ -152,7 +153,7 @@ public class Tower : MonoBehaviour
 
     private void CheckEvolutionMenu()
     {      
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) /*&& enemyGen.isSpawning*/)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -164,10 +165,6 @@ public class Tower : MonoBehaviour
                     evoMenu.SetActive(true);
                     //Debug.Log("Abrir menu evolução");
                 }
-            }
-            else
-            {
-
             }
         }
         if (Input.GetMouseButtonDown(1))

@@ -93,7 +93,7 @@ public class Enemy : MonoBehaviour
             Destroy(gameObject);
         }
 
-        transform.localScale = startScale * (Health/startHealth);
+        //transform.localScale = startScale * (Health/startHealth);
         UpdateTextColor();
 
         if (isPoison)

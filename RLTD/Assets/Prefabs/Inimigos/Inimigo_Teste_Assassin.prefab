@@ -82,7 +82,7 @@ MonoBehaviour:
   currentColor: {r: 0, g: 0, b: 0, a: 0}
   isPoison: 0
   isSlow: 0
-  itemDropChance: 5
+  itemDropChance: 25
   willDropItem: 0
   resSlow: 1
   resPoison: 0

@@ -59,6 +59,7 @@ public class BuildManager : MonoBehaviour
         if (TowerToBuild != null)
         {
             canBuild = true;
+            towerVisualizer.GetComponent<MeshFilter>().mesh = TowerToBuild.GetComponent<Tower>().evolutionLooks[0];
         }
         else canBuild = false; 
 
@@ -156,7 +157,7 @@ public class BuildManager : MonoBehaviour
 
             //Seguir cursor
             towerVisualizer.transform.localScale = TowerToBuild.transform.localScale;
-            towerVisualizer.transform.position = new Vector3(seePos.x, hit.point.y + (TowerToBuild.transform.localScale.y / 2), seePos.z);
+            towerVisualizer.transform.position = new Vector3(seePos.x, hit.point.y + (TowerToBuild.transform.localScale.y / 2) + TowerToBuild.transform.GetChild(0).transform.position.y, seePos.z);
             //towerVisualizer.transform.position = new Vector3(seePos.x, .5f + (TowerToBuild.transform.localScale.y / 2), seePos.z);
 
             rangeSprite.transform.localScale = new Vector3(TowerToBuild.GetComponent<Tower>().range[0], TowerToBuild.GetComponent<Tower>().range[0], 0);
@@ -260,12 +261,26 @@ public class BuildManager : MonoBehaviour
 
     public void SellTowers()
     {
-        for (int i = 0; i < allTowers.Count; i++)
+        if (worldGen.CurrentWave <= 1)
         {
-            CurrentCoins += allTowers[i].GetComponent<Tower>().sellPrice[allTowers[i].GetComponent<Tower>().currentEvolution - 1];
-            Destroy(allTowers[i]);
-            Destroy(allTowers[i].GetComponent<Tower>().rangeVisualizer);
+            for (int i = 0; i < allTowers.Count; i++)
+            {
+                //CurrentCoins += allTowers[i].GetComponent<Tower>().sellPrice[allTowers[i].GetComponent<Tower>().currentEvolution - 1];
+                CurrentCoins = startCoins;
+                Destroy(allTowers[i]);
+                Destroy(allTowers[i].GetComponent<Tower>().rangeVisualizer);
+            }
         }
+        else
+        {
+            for (int i = 0; i < allTowers.Count; i++)
+            {
+                CurrentCoins += allTowers[i].GetComponent<Tower>().sellPrice[allTowers[i].GetComponent<Tower>().currentEvolution - 1];
+                Destroy(allTowers[i]);
+                Destroy(allTowers[i].GetComponent<Tower>().rangeVisualizer);
+            }
+        }
+        
 
         allTowers.Clear();
     }
