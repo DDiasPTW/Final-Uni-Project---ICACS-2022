@@ -654,6 +654,37 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
+--- !u!1 &5080652367687236854
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8467015053289188708}
+  m_Layer: 9
+  m_Name: projectile_exit
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8467015053289188708
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5080652367687236854}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 2.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6263871644433721933}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5597360726391801875
 GameObject:
   m_ObjectHideFlags: 0
@@ -748,6 +779,7 @@ GameObject:
   - component: {fileID: 6263871644433721933}
   - component: {fileID: 3286661989173916956}
   - component: {fileID: 2879876980003009399}
+  - component: {fileID: 4169626079038169499}
   m_Layer: 9
   m_Name: Torre_Ice
   m_TagString: Untagged
@@ -769,6 +801,7 @@ Transform:
   m_Children:
   - {fileID: 4111832762356453190}
   - {fileID: 225155329}
+  - {fileID: 8467015053289188708}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -799,7 +832,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentEvolution: 1
   numberOfEvolutions: 2
-  xp: 0
   evolutionLooks:
   - {fileID: -2432090755550338912, guid: f96af2cb5df3e9748b6b59757448a0ec, type: 3}
   - {fileID: -2432090755550338912, guid: 219df6f31c58f7b48a2133b106a2bae2, type: 3}
@@ -809,7 +841,6 @@ MonoBehaviour:
   fireRate:
   - 2
   - 1.5
-  startFireRate: 0
   range:
   - 60
   - 80
@@ -827,16 +858,30 @@ MonoBehaviour:
   TowerLayer:
     serializedVersion: 2
     m_Bits: 512
-  AOERange: 6
-  isAOE: 1
-  isSlow: 1
+  AOERange: 3
   slowMultiplier:
-  - 0.2
-  - 0.4
+  - 0.3
+  - 0.5
   slowTime:
   - 1
   - 1.5
-  isPoison: 0
   poisonMultiplier: []
   poisonTime: []
-  CurrentTarget: {fileID: 0}
+--- !u!114 &4169626079038169499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9201170739185646984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9aff22103a4317a459bfb113b7b84ae9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentTarget: {fileID: 0}
+  iceProjectile: {fileID: 8211587972960151310, guid: 4bce579b9f958df41819e4284e63d38b,
+    type: 3}
+  projExit: {fileID: 8467015053289188708}
+  multiplier: 1.8
+  timeOfFlight: 2

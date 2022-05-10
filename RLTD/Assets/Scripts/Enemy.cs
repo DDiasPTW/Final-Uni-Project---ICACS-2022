@@ -35,14 +35,14 @@ public class Enemy : MonoBehaviour
 
 
     public float poisonTime, poisonMultiplier;
+    [SerializeField] private float slowMulti;
 
-    private float slowTimeElapsed;
+    [SerializeField] private float slowTimeElapsed;
     private float poisonTimeElapsed;
 
     private Vector3 startScale;
     private float startHealth;
 
-    //private float timeScale;
 
     private void Awake()
     {
@@ -72,8 +72,6 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
-        navAgent.speed = speed;
-
         if (Vector3.Distance(gameObject.transform.position, navAgent.destination) < .8f)
         {
             gM.LoseHealth(Damage);
@@ -93,33 +91,34 @@ public class Enemy : MonoBehaviour
             Destroy(gameObject);
         }
 
-        //transform.localScale = startScale * (Health/startHealth);
+        transform.localScale = startScale * (Health/startHealth);
         UpdateTextColor();
 
         if (isPoison)
         {
-            //currentColor = PoisonTextColor;
             poisonTimeElapsed -= Time.deltaTime;
             if (poisonTimeElapsed <= 0)
             {
                 isPoison = false;
-                //currentColor = NormalTextColor;
             }
         }
         
+        //Slow effect
         if (isSlow)
-        {
-            slowTimeElapsed -= Time.deltaTime;
-            //currentColor = SlowTextColor;
+        {          
             if (slowTimeElapsed <= 0)
             {
-                isSlow = false;             
+                isSlow = false;
+            }
+            else
+            {
+                navAgent.speed = speed - (speed * slowMulti);
+                slowTimeElapsed -= Time.deltaTime;
             }
         }
         else if (!isSlow)
         {
             navAgent.speed = speed;
-            //currentColor = NormalTextColor;
         }
 
     }
@@ -166,15 +165,15 @@ public class Enemy : MonoBehaviour
         
         if (!isPoison)
         {            
-            ShowDamage(damage);
             Health -= damage;
+            ShowDamage(damage);
         }
         else if(isPoison)
         {            
             currentColor = PoisonTextColor;
 
-            ShowDamage(damage + (damage * poisonMultiplier));
             Health -= damage + (damage * poisonMultiplier);
+            ShowDamage(damage + (damage * poisonMultiplier));
         }    
     }
 
@@ -182,11 +181,11 @@ public class Enemy : MonoBehaviour
     {
         if (!resSlow)//apenas é afetado caso não tenha resistência a esse elemento
         {
-            currentColor = SlowTextColor;
-            navAgent.speed = speed - (speed * slowMultiplier);
-            slowTimeElapsed = slowTime;
             isSlow = true;
-        }         
+            currentColor = SlowTextColor;           
+            slowMulti = slowMultiplier;
+            slowTimeElapsed = slowTime;
+        }
     }
     
 }

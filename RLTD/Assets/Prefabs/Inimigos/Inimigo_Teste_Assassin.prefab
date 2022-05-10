@@ -71,7 +71,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Health: 100
-  Value: 2
+  Value: 5
   Damage: 10
   speed: 2
   damageIndicatorText: {fileID: 5026368744546682038, guid: 26ff450893a807b47ba655908bb07a44,
@@ -82,12 +82,14 @@ MonoBehaviour:
   currentColor: {r: 0, g: 0, b: 0, a: 0}
   isPoison: 0
   isSlow: 0
-  itemDropChance: 25
+  itemDropChance: 5
   willDropItem: 0
   resSlow: 1
   resPoison: 0
   poisonTime: 0
   poisonMultiplier: 0
+  slowMulti: 0
+  slowTimeElapsed: 0
 --- !u!135 &4847366230953287042
 SphereCollider:
   m_ObjectHideFlags: 0

@@ -9,22 +9,20 @@ public class Tower : MonoBehaviour
     private BuildManager bM;
     private MeshFilter mF;
     private GameObject cameraPivot;
-    private EnemyGeneration enemyGen;
 
     [Header("Evolution Stuff")]
-    public int currentEvolution = 1;
+    public int currentEvolution = 1; 
     public int numberOfEvolutions;
-    public int xp = 0;
-    public List<Mesh> evolutionLooks = new List<Mesh>();
+
+    public List<Mesh> evolutionLooks = new List<Mesh>(); 
     public List<float> damage = new List<float>();
     public List<float> fireRate = new List<float>();
-    [SerializeField]private float startFireRate;
-    public List<float> range = new List<float>();
+    public List<float> range = new List<float>(); 
     public List<int> evolvePrice = new List<int>();
     public List<int> sellPrice = new List<int>();
 
     [Header("UI Elements")]
-    public GameObject rangeVisualizer;
+    public GameObject rangeVisualizer; 
     public GameObject evoMenu;   
     public TextMeshProUGUI evoPriceText;
     public GameObject evoButton;
@@ -32,21 +30,18 @@ public class Tower : MonoBehaviour
     [Header("Damage Stuff")]
     public LayerMask EnemyLayer;
     public LayerMask TowerLayer;
-    public float AOERange;
-    public bool isAOE;
+    public float AOERange; 
 
     
     [Header("Slow")]
-    public bool isSlow;
     [Range(0,1)]
     public List<float> slowMultiplier = new List<float>();
     public List<float> slowTime = new List<float>();
+    
     [Header("Poison")]
-    public bool isPoison;
     [Range(0,1)]
     public List<float> poisonMultiplier = new List<float>();
     public List<float> poisonTime = new List<float>();
-    [SerializeField] private GameObject CurrentTarget;
     
     
     private void Awake()
@@ -57,13 +52,11 @@ public class Tower : MonoBehaviour
         rangeVisualizer = Instantiate(rangeVisualizer);
         currentEvolution = 1;
         evoMenu.SetActive(false);
-        enemyGen = GameObject.FindGameObjectWithTag("GridManager").GetComponent<EnemyGeneration>();
     }
 
 
     private void Start()
     {
-        startFireRate = 0;
         rangeVisualizer.GetComponent<SpriteRenderer>().color = rangeVisualizerColor;
     }
 
@@ -72,35 +65,59 @@ public class Tower : MonoBehaviour
     {
         UpdateUIElements();
 
-        if (CurrentTarget == null)
-        {
-            //transform.LookAt(new Vector3(Camera.main.transform.position.x, transform.position.y, Camera.main.transform.position.z));
+        //if (CurrentTarget == null)
+        //{
+        //    //transform.LookAt(new Vector3(Camera.main.transform.position.x, transform.position.y, Camera.main.transform.position.z));
 
-            GetTarget();
-        }
-        else
-        {
-            transform.LookAt(new Vector3(CurrentTarget.transform.position.x, transform.position.y, CurrentTarget.transform.position.z));
+        //    //GetTarget();
+        //}
+        //else
+        //{
+        //    //transform.LookAt(new Vector3(CurrentTarget.transform.position.x, transform.position.y, CurrentTarget.transform.position.z));
 
-            startFireRate -= Time.deltaTime;
-            float distanceToTarget = Vector3.Distance(transform.position, CurrentTarget.transform.position);          
+        //    //startFireRate -= Time.deltaTime;
+        //    //float distanceToTarget = Vector3.Distance(transform.position, CurrentTarget.transform.position);
 
 
-            if (isAOE && startFireRate <= 0)
-            {
-                AttackTargetAOE();
-            }
-            else if (!isAOE && startFireRate <= 0)
-            {
-                AttackTarget();
-            }
+        //    //Vector3 targetDir = CurrentTarget.transform.position - transform.position;
 
-            //limpa o target caso saia da range
-            if ((distanceToTarget * 11.5f) > range[currentEvolution - 1])
-            {
-                CurrentTarget = null;
-            }
-        }
+        //    //if (isAOE && startFireRate <= 0)
+        //    //{
+        //    //    //AttackTargetAOE();
+
+        //    //    //if (thisTowerName == iceTowerName) //TORRE AOE DE GELO
+        //    //    //{                  
+        //    //    //    gameObject.GetComponent<IceTowerVisuals>().Shoot(CurrentTarget.transform.position);
+        //    //    //}
+        //    //    //else if (thisTowerName == poisonTowerName) //TORRE AOE DE POISON
+        //    //    //{
+        //    //    //    gameObject.GetComponent<PoisonTowerVisuals>().Shoot(CurrentTarget.transform.position);
+        //    //    //}
+        //    //    //else
+        //    //    //{
+        //    //    //    Debug.Log("INVALID NAME");
+        //    //    //}
+        //    //}
+        //    //else if (!isAOE && startFireRate <= 0)
+        //    //{
+        //    //    //AttackTarget();
+
+        //    //    //if (thisTowerName == defaultTowerName) //TORRE DEFAULT - TARGETED
+        //    //    //{
+        //    //    //    gameObject.GetComponent<Default_Tower_Visuals>().Shoot(targetDir);
+        //    //    //}
+        //    //    //else
+        //    //    //{
+        //    //    //    Debug.Log("INVALID NAME");
+        //    //    //}
+        //    //}
+
+        //    //limpa o target caso saia da range
+        //    //if ((distanceToTarget * 11.5f) > range[currentEvolution - 1])
+        //    //{
+        //    //    CurrentTarget = null;
+        //    //}
+        //}
 
         CheckRange();
 
@@ -185,83 +202,4 @@ public class Tower : MonoBehaviour
 
     }
 
-    #region Tower AI
-    private void GetTarget()
-    {
-        Collider[] allTargets = Physics.OverlapSphere(transform.position, range[currentEvolution-1] / 11, EnemyLayer);
-
-        if (allTargets.Length != 0)
-        {
-            CurrentTarget = allTargets[0].gameObject;            
-        }
-    }
-
-    private void AttackTarget()
-    {
-        if (!isPoison)
-        {
-            CurrentTarget.GetComponent<Enemy>().LoseHealth(damage[currentEvolution-1]);
-        }
-        else if (isPoison)
-        {
-            CurrentTarget.GetComponent<Enemy>().LoseHealth(damage[currentEvolution - 1]);
-            CurrentTarget.GetComponent<Enemy>().currentColor = CurrentTarget.GetComponent<Enemy>().PoisonTextColor;
-            CurrentTarget.GetComponent<Enemy>().poisonTime = poisonTime[currentEvolution - 1];
-            CurrentTarget.GetComponent<Enemy>().poisonMultiplier = poisonMultiplier[currentEvolution - 1];
-        }
-
-        if (isSlow)
-        {
-            CurrentTarget.GetComponent<Enemy>().ChangeSpeed(slowMultiplier[currentEvolution - 1], slowTime[currentEvolution - 1]);
-        }
-        
-        startFireRate = fireRate[currentEvolution-1];
-    }
-
-    private void AttackTargetAOE()
-    {
-        Collider[] allTargets = Physics.OverlapSphere(CurrentTarget.transform.position, AOERange, EnemyLayer);
-
-        if (!isPoison)
-        {
-            for (int i = 0; i < allTargets.Length; i++)
-            {
-                allTargets[i].GetComponent<Enemy>().LoseHealth(damage[currentEvolution-1]);
-                //Debug.Log(allTargets[i].name + "Damage");
-            }
-            
-        }
-        else if (isPoison)
-        {
-            for (int i = 0; i < allTargets.Length; i++)
-            {
-                allTargets[i].GetComponent<Enemy>().poisonTime = poisonTime[currentEvolution - 1];
-                allTargets[i].GetComponent<Enemy>().currentColor = allTargets[i].GetComponent<Enemy>().PoisonTextColor;
-                allTargets[i].GetComponent<Enemy>().poisonMultiplier = poisonMultiplier[currentEvolution - 1];
-                allTargets[i].GetComponent<Enemy>().LoseHealth(damage[currentEvolution-1]);
-                //Debug.Log(allTargets[i].name + " Poison");
-            }
-            
-        }
-
-        if (isSlow)
-        {
-            for (int i = 0; i < allTargets.Length; i++)
-            {
-                allTargets[i].GetComponent<Enemy>().ChangeSpeed(slowMultiplier[currentEvolution - 1], slowTime[currentEvolution - 1]);
-                //Debug.Log(allTargets[i].name + " Slow");
-            }
-            
-        }
-
-        startFireRate = fireRate[currentEvolution-1];
-
-    }
-
-    #endregion
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawWireSphere(transform.position,range[currentEvolution-1]/11);
-        Gizmos.DrawWireSphere(CurrentTarget.transform.position,AOERange);
-    }
 }

@@ -63,18 +63,10 @@ public class WorldGeneration : MonoBehaviour
 
     private void Update()
     {
-        //if (Input.GetKeyDown(KeyCode.C) && CurrentWave < MaxWave && !enemyGen.isSpawning)
-        //{
-        //    NextWave();
-        //}
-
         if (spawnableTiles.Count > 0)
         {
             CheckNeighbours();
         }
-        //CheckNeighbours();
-
-        
     }
 
     public void NextWave()

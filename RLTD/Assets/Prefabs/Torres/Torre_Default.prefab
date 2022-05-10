@@ -654,6 +654,37 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!1 &851507717653249138
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1747034782371231083}
+  m_Layer: 9
+  m_Name: Projectile_Exit
+  m_TagString: Untagged
+  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1747034782371231083
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 851507717653249138}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.175, z: 0.892}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6263871644433721933}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3614514086682665069
 GameObject:
   m_ObjectHideFlags: 0
@@ -763,6 +794,7 @@ GameObject:
   - component: {fileID: 6263871644433721933}
   - component: {fileID: 3286661989173916956}
   - component: {fileID: 2879876980003009399}
+  - component: {fileID: 747083370724481548}
   m_Layer: 9
   m_Name: Torre_Default
   m_TagString: Untagged
@@ -784,6 +816,7 @@ Transform:
   m_Children:
   - {fileID: 5061541899975665357}
   - {fileID: 735873485}
+  - {fileID: 1747034782371231083}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -812,9 +845,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10ed55e8b69d3f243842b90b1cc35b85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  thisTowerName: default
+  defaultTowerName: default
+  iceTowerName: ice
+  poisonTowerName: poison
   currentEvolution: 1
   numberOfEvolutions: 3
-  xp: 0
   evolutionLooks:
   - {fileID: -2432090755550338912, guid: 6bc0c7a52a0d1f345873705dd718d26c, type: 3}
   - {fileID: -2432090755550338912, guid: 9713f59c4d18da34989a635ade7769ea, type: 3}
@@ -855,3 +891,21 @@ MonoBehaviour:
   poisonMultiplier: []
   poisonTime: []
   CurrentTarget: {fileID: 0}
+--- !u!114 &747083370724481548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9201170739185646984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50a9ac1e59395d648b888ae844b37737, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startFireRate: 0
+  currentTarget: {fileID: 0}
+  projectile: {fileID: 4348312631160130442, guid: 8e225b02e9972424b8c13a77d06cd2c2,
+    type: 3}
+  projectileShootPos: {fileID: 1747034782371231083}
+  speed: 5

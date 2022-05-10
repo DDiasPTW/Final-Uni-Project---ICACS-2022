@@ -196,4 +196,12 @@ public class Item_Bomba : MonoBehaviour
         }
         Destroy(gameObject);
     }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position,activationRange/11);
+        Gizmos.color = Color.white;
+        Gizmos.DrawWireSphere(transform.position,range/11);
+    }
 }
