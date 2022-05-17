@@ -8,7 +8,6 @@ public class EnemyGeneration : MonoBehaviour
 {
     private WorldGeneration worldGen;
 
-    public bool checkEnemiesToSpawn = false;
     public bool canSpawnBoss;
     public bool hasStartedSpawning = false;
     [Range(1,30)]
@@ -16,9 +15,20 @@ public class EnemyGeneration : MonoBehaviour
     public int howManyEnemies; //Quantos inimigos vao dar spawn nesta wave
     public int enemiesToSpawn; //Quantos inimigos faltam dar spawn
 
-    public List<GameObject> enemiesThatWillSpawn = new List<GameObject>();
+    //public List<GameObject> enemiesThatWillSpawn = new List<GameObject>();
 
-    [SerializeField] private List<GameObject> enemies = new List<GameObject>(); //Todos os inimigos do jogo (SEM BOSSES)
+    //[SerializeField] private List<GameObject> enemies = new List<GameObject>(); //Todos os inimigos do jogo (SEM BOSSES)
+    public GameObject enemyPref;
+    [SerializeField] private List<GameObject> en_acessorio = new List<GameObject>();
+    [SerializeField] private List<GameObject> en_cabeca = new List<GameObject>();
+    [SerializeField] private List<GameObject> en_corpo = new List<GameObject>();
+    [SerializeField] private List<GameObject> en_pes = new List<GameObject>();
+    public GameObject chosen_acessorio;
+    public GameObject chosen_cabeca;
+    public GameObject chosen_corpo;
+    public GameObject chosen_pes;
+
+
     [SerializeField] private List<GameObject> BossList = new List<GameObject>(); //Todos os bosses do jogo
     public List<GameObject> spawnedEnemies = new List<GameObject>();
 
@@ -31,24 +41,9 @@ public class EnemyGeneration : MonoBehaviour
     [SerializeField] private float spawnTime;
 
 
-    [Header("UI Stuff")]
-    public GameObject EnemyContainer;
-    public TextMeshProUGUI defaultNumber, assassinNumber, healerNumber, tankNumber;
-
-
-    private string EnemyDefault = "Default";
-    [SerializeField] private int howManyDefaults = 0;
-    private string EnemyAssassin = "Assassin";
-    [SerializeField] private int howManyAssassins = 0;
-    private string EnemyHealer = "Healer";
-    [SerializeField]private int howManyHealers = 0;
-    private string EnemyTank = "Tank";
-    [SerializeField]private int howManyTanks = 0;
-
     private void Awake()
     {
         enemiesPerWave = enemiesPerWave * currentDifficulty;
-        EnemyContainer.SetActive(false);
     }
 
     void Start()
@@ -79,11 +74,6 @@ public class EnemyGeneration : MonoBehaviour
             enemiesToSpawn = howManyEnemies;
         }
 
-        if (checkEnemiesToSpawn)
-        {
-            DefineEnemies();
-        }
-
 
         spawnTime -= Time.deltaTime;
     }
@@ -91,7 +81,7 @@ public class EnemyGeneration : MonoBehaviour
     public void StartWave()
     {
         worldGen.UpdateNavMesh();
-        EnemyContainer.SetActive(false);
+
         if (worldGen.CurrentWave > 0)
         {
             isSpawning = true;
@@ -115,55 +105,43 @@ public class EnemyGeneration : MonoBehaviour
         
     }
 
-    public void DefineEnemies()
+    public void DefineEnemy()
     {
-        howManyHealers = 0; howManyDefaults = 0; howManyAssassins = 0; howManyTanks = 0;
+        //Limpa inimigo gerado anteriormente
+        chosen_acessorio = null;
+        chosen_cabeca = null;
+        chosen_corpo = null;
+        chosen_pes = null;
 
-        for (int i = 0; i < howManyEnemies; i++)
-        {
-            int whatEnemy = Random.Range(0, enemies.Count);
-            enemiesThatWillSpawn.Add(enemies[whatEnemy]);
-        }
+        //ESCOLHE UM ELEMENTO DE CADA CATEGORIA PARA CRIAR INIMIGO
+        int whatAcess = Random.Range(0, en_acessorio.Count);
+        int whatCabeca = Random.Range(0, en_cabeca.Count); 
+        int whatCorpo = Random.Range(0, en_corpo.Count);
+        int whatPes = Random.Range(0, en_pes.Count);
 
-        for (int i = 0; i < enemiesThatWillSpawn.Count; i++)
-        {
-            if (enemiesThatWillSpawn[i].tag == EnemyDefault)
-            {
-                howManyDefaults++;
-            }else if (enemiesThatWillSpawn[i].tag == EnemyAssassin)
-            {
-                howManyAssassins++;
-            }else if (enemiesThatWillSpawn[i].tag == EnemyHealer)
-            {
-                howManyHealers++;
-            }else if (enemiesThatWillSpawn[i].tag == EnemyTank)
-            {
-                howManyTanks++;
-            }
-        }
-
-        EnemyContainer.SetActive(true);
-        defaultNumber.text = howManyDefaults.ToString();
-        assassinNumber.text = howManyAssassins.ToString();
-        healerNumber.text = howManyHealers.ToString();
-        tankNumber.text = howManyTanks.ToString();
-
-        checkEnemiesToSpawn = false;
+        //Define inimigo
+        chosen_acessorio = en_acessorio[whatAcess];
+        chosen_cabeca = en_cabeca[whatCabeca];
+        chosen_corpo = en_corpo[whatCorpo];
+        chosen_pes = en_pes[whatPes];
     }
 
     void SpawnEnemies() //da loop por todos os spawnpoints de modo a que haja um numero igual de inimigos por spawnPoint.
-        //TO DO: Definir percentagem de chance de cada inimigo, tendo em conta as waves e a dificuldade
     {
+        //DefineEnemy();
+
         if (spawnTime <= 0)
         {
             for (int i = 0; i < worldGen.spawnPoints.Count; i++)
             {
-                int whatEnemy = Random.Range(0, enemiesThatWillSpawn.Count);
+                //int whatEnemy = Random.Range(0, enemiesThatWillSpawn.Count);
+                //int whatEnemy = Random.Range(0, howManyEnemies);
                 GameObject enemy;
 
-                //enemy = Instantiate(enemies[whatEnemy], worldGen.spawnPoints[i].transform.position - new Vector3(0, worldGen.spawnPoints[i].transform.localScale.y / 2, 0), Quaternion.identity);
-                enemy = Instantiate(enemiesThatWillSpawn[whatEnemy], worldGen.spawnPoints[i].transform.position - new Vector3(0, worldGen.spawnPoints[i].transform.localScale.y / 2, 0), Quaternion.identity);
-                enemiesThatWillSpawn.RemoveAt(whatEnemy);
+                //enemy = Instantiate(enemyPref, worldGen.spawnPoints[i].transform.position, Quaternion.identity);
+                enemy = Instantiate(enemyPref, worldGen.spawnPoints[i].transform.position - new Vector3(0, worldGen.spawnPoints[i].transform.localScale.y / 2, 0), Quaternion.identity);
+                //Debug.Log("Spawned " + enemyPref.name + " @: " + worldGen.spawnPoints[i].transform.position);
+                //enemiesThatWillSpawn.RemoveAt(whatEnemy);
 
 
                 spawnedEnemies.Add(enemy);

@@ -24,6 +24,16 @@ public class Enemy : MonoBehaviour
     [SerializeField]private bool isPoison = false;
     [SerializeField]private bool isSlow = false;
 
+    [Header("Aparencia")]
+    public GameObject acessorio;
+    private MeshFilter mF_acess;
+    public GameObject cabeca;
+    private MeshFilter mF_cabeca;
+    public GameObject corpo;
+    private MeshFilter mF_corpo;
+    public GameObject pes;
+    private MeshFilter mF_pes;
+
     [Header("Itens")]
     [Range(0,100)]
     public float itemDropChance;
@@ -54,12 +64,36 @@ public class Enemy : MonoBehaviour
         iM = GameObject.FindGameObjectWithTag("GridManager").GetComponent<ItemManager>();
         cameraPivot = GameObject.FindGameObjectWithTag("Pivot");
 
-        startScale = transform.localScale;
+        mF_acess = transform.GetChild(0).GetComponent<MeshFilter>();
+        mF_cabeca = transform.GetChild(1).GetComponent<MeshFilter>();
+        mF_corpo = transform.GetChild(2).GetComponent<MeshFilter>();
+        mF_pes = transform.GetChild(3).GetComponent<MeshFilter>();
+        
+        
+
+        //startScale = transform.localScale;
         startHealth = Health;
         currentColor = NormalTextColor;
+
+    }
+
+    private void SetLooks()
+    {
+        //mF_acess.mesh = enemyGen.chosen_acessorio.GetComponent<MeshFilter>().sharedMesh;
+        //acessorio.GetComponent<MeshRenderer>().material = enemyGen.chosen_acessorio.GetComponent<MeshRenderer>().material;
+
+        mF_cabeca.mesh = enemyGen.chosen_cabeca.GetComponent<MeshFilter>().sharedMesh;
+        //cabeca.GetComponent<MeshRenderer>().material = enemyGen.chosen_cabeca.GetComponent<MeshRenderer>().material;
+
+        mF_corpo.mesh = enemyGen.chosen_corpo.GetComponent<MeshFilter>().sharedMesh;
+        //corpo.GetComponent<MeshRenderer>().material = enemyGen.chosen_corpo.GetComponent<MeshRenderer>().material;
+
+        mF_pes.mesh = enemyGen.chosen_pes.GetComponent<MeshFilter>().sharedMesh;
+        //pes.GetComponent<MeshRenderer>().material = enemyGen.chosen_pes.GetComponent<MeshRenderer>().material;
     }
     void Start()
     {
+        SetLooks();
         navAgent.SetDestination(GameObject.FindGameObjectWithTag("TARGET").transform.position);
 
         float itemDrop = Random.Range(0f,100f);
@@ -91,7 +125,7 @@ public class Enemy : MonoBehaviour
             Destroy(gameObject);
         }
 
-        transform.localScale = startScale * (Health/startHealth);
+        //transform.localScale = startScale * (Health/startHealth);
         UpdateTextColor();
 
         if (isPoison)
@@ -116,7 +150,7 @@ public class Enemy : MonoBehaviour
                 slowTimeElapsed -= Time.deltaTime;
             }
         }
-        else if (!isSlow)
+        else
         {
             navAgent.speed = speed;
         }

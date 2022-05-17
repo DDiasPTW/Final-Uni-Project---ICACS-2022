@@ -65,59 +65,6 @@ public class Tower : MonoBehaviour
     {
         UpdateUIElements();
 
-        //if (CurrentTarget == null)
-        //{
-        //    //transform.LookAt(new Vector3(Camera.main.transform.position.x, transform.position.y, Camera.main.transform.position.z));
-
-        //    //GetTarget();
-        //}
-        //else
-        //{
-        //    //transform.LookAt(new Vector3(CurrentTarget.transform.position.x, transform.position.y, CurrentTarget.transform.position.z));
-
-        //    //startFireRate -= Time.deltaTime;
-        //    //float distanceToTarget = Vector3.Distance(transform.position, CurrentTarget.transform.position);
-
-
-        //    //Vector3 targetDir = CurrentTarget.transform.position - transform.position;
-
-        //    //if (isAOE && startFireRate <= 0)
-        //    //{
-        //    //    //AttackTargetAOE();
-
-        //    //    //if (thisTowerName == iceTowerName) //TORRE AOE DE GELO
-        //    //    //{                  
-        //    //    //    gameObject.GetComponent<IceTowerVisuals>().Shoot(CurrentTarget.transform.position);
-        //    //    //}
-        //    //    //else if (thisTowerName == poisonTowerName) //TORRE AOE DE POISON
-        //    //    //{
-        //    //    //    gameObject.GetComponent<PoisonTowerVisuals>().Shoot(CurrentTarget.transform.position);
-        //    //    //}
-        //    //    //else
-        //    //    //{
-        //    //    //    Debug.Log("INVALID NAME");
-        //    //    //}
-        //    //}
-        //    //else if (!isAOE && startFireRate <= 0)
-        //    //{
-        //    //    //AttackTarget();
-
-        //    //    //if (thisTowerName == defaultTowerName) //TORRE DEFAULT - TARGETED
-        //    //    //{
-        //    //    //    gameObject.GetComponent<Default_Tower_Visuals>().Shoot(targetDir);
-        //    //    //}
-        //    //    //else
-        //    //    //{
-        //    //    //    Debug.Log("INVALID NAME");
-        //    //    //}
-        //    //}
-
-        //    //limpa o target caso saia da range
-        //    //if ((distanceToTarget * 11.5f) > range[currentEvolution - 1])
-        //    //{
-        //    //    CurrentTarget = null;
-        //    //}
-        //}
 
         CheckRange();
 
