@@ -74,6 +74,8 @@ public class GameManager : MonoBehaviour
         enemyGen.hasStartedSpawning = false;
         bM.CurrentCoins += (worldGen.CurrentWave - 1) * coinsPerWave /** enemyGen.currentDifficulty*/;
         bM.SellTowers();
+
+        enemyGen.DefineEnemy();
         canSpawn = true;
     }
 
@@ -90,13 +92,7 @@ public class GameManager : MonoBehaviour
 
     public void SpawnNextWave()
     {
-        //if (shopM.canOpen)
-        //{
-        //    shopM.canOpen = false;
-        //    shopM.anim.Play("CloseShop_Anim");
-        //}
-
-        enemyGen.DefineEnemy();
+        
         enemyGen.StartWave();
         worldGen.ShowSpawnPos();
         canSpawn = false;

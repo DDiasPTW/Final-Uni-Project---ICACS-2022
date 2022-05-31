@@ -830,26 +830,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10ed55e8b69d3f243842b90b1cc35b85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thisTowerName: poison
-  defaultTowerName: default
-  iceTowerName: ice
-  poisonTowerName: poison
   currentEvolution: 1
   numberOfEvolutions: 3
-  xp: 0
   evolutionLooks:
   - {fileID: -2432090755550338912, guid: 3d10064f54fc0ff4484a93b65324d7fe, type: 3}
   - {fileID: -2432090755550338912, guid: 1b6d878ce3fa5ec4bbb2414023f77ce1, type: 3}
   - {fileID: -2432090755550338912, guid: f2b42e7ce5ff23747846c36a69b8714d, type: 3}
   damage:
-  - 20
-  - 30
-  - 40
+  - 5
+  - 10
+  - 15
   fireRate:
   - 2
   - 1.8
   - 1.6
-  startFireRate: 0
   range:
   - 50
   - 75
@@ -869,20 +863,16 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   AOERange: 3
-  isAOE: 1
-  isSlow: 0
   slowMultiplier: []
   slowTime: []
-  isPoison: 1
   poisonMultiplier:
   - 0.2
   - 0.3
-  - 0.4
+  - 0.45
   poisonTime:
   - 1
   - 1.5
-  - 2
-  CurrentTarget: {fileID: 0}
+  - 1.5
 --- !u!114 &-5822625200991483037
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -895,6 +885,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9fe91429c7620443878c3a8f4510e94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startFireRate: 0
+  currentTarget: {fileID: 0}
   projectile: {fileID: 583062692037944403, guid: 805b1f24005e10844a98a94b5d671783,
     type: 3}
   projectileShootPos: {fileID: 1356229847001117096}

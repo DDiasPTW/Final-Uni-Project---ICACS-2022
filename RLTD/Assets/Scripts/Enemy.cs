@@ -34,6 +34,7 @@ public class Enemy : MonoBehaviour
     public GameObject pes;
     private MeshFilter mF_pes;
 
+
     [Header("Itens")]
     [Range(0,100)]
     public float itemDropChance;
@@ -57,7 +58,7 @@ public class Enemy : MonoBehaviour
     private void Awake()
     {
         navAgent = GetComponent<NavMeshAgent>();
-        navAgent.speed = speed;
+        //navAgent.speed = speed;
         bM = GameObject.FindGameObjectWithTag("GridManager").GetComponent<BuildManager>();
         enemyGen = GameObject.FindGameObjectWithTag("GridManager").GetComponent<EnemyGeneration>();
         gM = GameObject.FindGameObjectWithTag("GridManager").GetComponent<GameManager>();
@@ -68,32 +69,50 @@ public class Enemy : MonoBehaviour
         mF_cabeca = transform.GetChild(1).GetComponent<MeshFilter>();
         mF_corpo = transform.GetChild(2).GetComponent<MeshFilter>();
         mF_pes = transform.GetChild(3).GetComponent<MeshFilter>();
-        
-        
+
+        SetLooks();
 
         //startScale = transform.localScale;
         startHealth = Health;
         currentColor = NormalTextColor;
-
     }
 
     private void SetLooks()
     {
-        //mF_acess.mesh = enemyGen.chosen_acessorio.GetComponent<MeshFilter>().sharedMesh;
-        //acessorio.GetComponent<MeshRenderer>().material = enemyGen.chosen_acessorio.GetComponent<MeshRenderer>().material;
+        BoxCollider pesColl = enemyGen.chosen_pes.GetComponent<BoxCollider>();
+        BoxCollider corpoColl = enemyGen.chosen_corpo.GetComponent<BoxCollider>();
+        BoxCollider cabecaColl = enemyGen.chosen_cabeca.GetComponent<BoxCollider>();
+        BoxCollider acessColl = enemyGen.chosen_acessorio.GetComponent<BoxCollider>();
 
-        mF_cabeca.mesh = enemyGen.chosen_cabeca.GetComponent<MeshFilter>().sharedMesh;
-        //cabeca.GetComponent<MeshRenderer>().material = enemyGen.chosen_cabeca.GetComponent<MeshRenderer>().material;
+        pes.transform.localPosition = new Vector3(0, pesColl.size.y / 2, 0);
 
-        mF_corpo.mesh = enemyGen.chosen_corpo.GetComponent<MeshFilter>().sharedMesh;
-        //corpo.GetComponent<MeshRenderer>().material = enemyGen.chosen_corpo.GetComponent<MeshRenderer>().material;
+        corpo.transform.localPosition = new Vector3(0, corpoColl.size.y / 2 + pesColl.size.y, 0);
 
+        cabeca.transform.localPosition = new Vector3(0, cabecaColl.size.y / 2 + corpoColl.size.y + pesColl.size.y, 0);
+
+        acessorio.transform.localPosition = new Vector3(0,acessColl.size.y / 2 + cabecaColl.size.y + corpoColl.size.y + pesColl.size.y,0);
+
+        //Pes - muda a velocidade que inimigo ira ter
         mF_pes.mesh = enemyGen.chosen_pes.GetComponent<MeshFilter>().sharedMesh;
-        //pes.GetComponent<MeshRenderer>().material = enemyGen.chosen_pes.GetComponent<MeshRenderer>().material;
+        speed = enemyGen.chosen_pes.GetComponent<Pes>().speed;
+        navAgent.speed = speed;
+
+        //Corpo - muda quanta vida inimigo ira ter
+        mF_corpo.mesh = enemyGen.chosen_corpo.GetComponent<MeshFilter>().sharedMesh;
+        Health = enemyGen.chosen_corpo.GetComponent<Corpo>().health;
+        
+        //Cabeca - muda quanto dano inimigo ira dar na base e muda tambem quanto dinheiro esse inimigo da quando morre
+        mF_cabeca.mesh = enemyGen.chosen_cabeca.GetComponent<MeshFilter>().sharedMesh;
+        Damage = enemyGen.chosen_cabeca.GetComponent<Head>().damage;
+        Value = enemyGen.chosen_cabeca.GetComponent<Head>().value;
+
+        //Acessorio - muda que resistencia inimigo vai ter
+        mF_acess.mesh = enemyGen.chosen_acessorio.GetComponent<MeshFilter>().sharedMesh;
+        resSlow = enemyGen.chosen_acessorio.GetComponent<Acessorio>().resSlow;
+        resPoison = enemyGen.chosen_acessorio.GetComponent<Acessorio>().resPoison;
     }
     void Start()
-    {
-        SetLooks();
+    {     
         navAgent.SetDestination(GameObject.FindGameObjectWithTag("TARGET").transform.position);
 
         float itemDrop = Random.Range(0f,100f);

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Item_Bomba : MonoBehaviour
+public class Item_Trap : MonoBehaviour
 {
     [Header("Classes necessarias")]
     private Item item;
@@ -18,14 +18,14 @@ public class Item_Bomba : MonoBehaviour
     public Color cannotPlaceColor;
     private Vector3 mousePos;
     private bool spawnedRange = false;
-    private Animator anim;
-    private string attackAnimation = "BombAttack_Anim";
     [Header("Ataque")]
     public LayerMask enemyLayer;
     public LayerMask itemLayer;
     public float range; //range do ataque AOE
     public float activationRange; //range minima que os inimigos precisam de estar para o item ser ativado
-    public int damage;
+    [Range(0,1)]
+    public float multiplier;
+    public float duration;
     private bool canAttack = false;
     public float attackDelay;
 
@@ -35,7 +35,6 @@ public class Item_Bomba : MonoBehaviour
         iM = GameObject.FindGameObjectWithTag("GridManager").GetComponent<ItemManager>();
         item = GetComponent<Item>();
         item.itemImage = thisSprite;
-        anim = GetComponent<Animator>();
     }
 
 
@@ -58,9 +57,9 @@ public class Item_Bomba : MonoBehaviour
             if (Input.GetMouseButtonDown(1))
             {
                 item.activated = false;
-            }            
+            }
         }
-        else if(!item.activated)
+        else if (!item.activated)
         {
             rangeSprite.transform.localScale *= 0;
         }
@@ -72,7 +71,6 @@ public class Item_Bomba : MonoBehaviour
 
         if (canAttack)
         {
-            anim.Play(attackAnimation);
             attackDelay -= Time.deltaTime;
 
             if (attackDelay <= 0)
@@ -178,7 +176,7 @@ public class Item_Bomba : MonoBehaviour
 
     private void CheckEnemies()
     {
-        Collider[] allTargets = Physics.OverlapSphere(transform.position, activationRange/ 11, enemyLayer);
+        Collider[] allTargets = Physics.OverlapSphere(transform.position, activationRange / 11, enemyLayer);
         if (allTargets.Length != 0)
         {
             canAttack = true;
@@ -186,12 +184,12 @@ public class Item_Bomba : MonoBehaviour
     }
 
     private void Attack()
-    {       
-        Collider[] allTargets = Physics.OverlapSphere(transform.position, range/11, enemyLayer);
+    {
+        Collider[] allTargets = Physics.OverlapSphere(transform.position, range / 11, enemyLayer);
 
         for (int i = 0; i < allTargets.Length; i++)
         {
-            allTargets[i].GetComponent<Enemy>().LoseHealth(damage);
+            allTargets[i].GetComponent<Enemy>().ChangeSpeed(multiplier,duration);
         }
         Destroy(gameObject);
     }
@@ -199,8 +197,8 @@ public class Item_Bomba : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position,activationRange/11);
+        Gizmos.DrawWireSphere(transform.position, activationRange / 11);
         Gizmos.color = Color.white;
-        Gizmos.DrawWireSphere(transform.position,range/11);
+        Gizmos.DrawWireSphere(transform.position, range / 11);
     }
 }

@@ -47,7 +47,7 @@ public class BuildManager : MonoBehaviour
 
     public void SetStartCoins() //chamado no mainMenu
     {
-        CurrentCoins = startCoins * enemyGen.currentDifficulty;
+        CurrentCoins = startCoins /** enemyGen.currentDifficulty*/;
     }
 
     private void Update()
@@ -99,8 +99,6 @@ public class BuildManager : MonoBehaviour
         //Apenas mostra os sitios onde se pode colocar a torre
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerToBuild))
         {
-            
-
             if (Mathf.Round(hit.point.x) <= (-(worldGen.chunkSize / 2) + hit.transform.position.x + 1f)) //min x
             {
                 seePos.x = Mathf.Round(hit.point.x);
@@ -150,24 +148,20 @@ public class BuildManager : MonoBehaviour
             if (hit.point.y < .49f || hit.point.y > 1.1f || CurrentCoins < CurrentTowerCost || checkTower.Length != 0)
             {
                 canPlace = false;
+                
+                //rangeSprite.transform.position = mousePos;
             }
             else canPlace = true;
 
-
+            //Debug.Log(hit.point.y);
 
             //Seguir cursor
-            towerVisualizer.transform.localScale = TowerToBuild.transform.localScale;
-            towerVisualizer.transform.position = new Vector3(seePos.x, hit.point.y + (TowerToBuild.transform.localScale.y / 2) + TowerToBuild.transform.GetChild(0).transform.position.y, seePos.z);
-            //towerVisualizer.transform.position = new Vector3(seePos.x, .5f + (TowerToBuild.transform.localScale.y / 2), seePos.z);
-
-            rangeSprite.transform.localScale = new Vector3(TowerToBuild.GetComponent<Tower>().range[0], TowerToBuild.GetComponent<Tower>().range[0], 0);
-            rangeSprite.transform.position = new Vector3(seePos.x, hit.point.y + .1f, seePos.z);
+            
         }
         else
         {
             rangeSprite.transform.position = mousePos;
             rangeSprite.transform.localScale *= 0;
-            //towerVisualizer.transform.position = new Vector3(mousePos.x,1,mousePos.y);
             towerVisualizer.transform.localScale *= 0;
         }
 
@@ -175,9 +169,18 @@ public class BuildManager : MonoBehaviour
         if (canPlace)
         {
             rangeSprite.GetComponent<SpriteRenderer>().color = canPlaceColor;
-        }else if (!canPlace)
+            towerVisualizer.transform.localScale = TowerToBuild.transform.localScale;
+            towerVisualizer.transform.position = new Vector3(seePos.x, hit.point.y + (TowerToBuild.transform.localScale.y / 2) + TowerToBuild.transform.GetChild(0).transform.position.y, seePos.z);
+
+            rangeSprite.transform.localScale = new Vector3(TowerToBuild.GetComponent<Tower>().range[0], TowerToBuild.GetComponent<Tower>().range[0], 0);
+            rangeSprite.transform.position = new Vector3(seePos.x, hit.point.y + .1f, seePos.z);
+        }
+        else if (!canPlace)
         {
             rangeSprite.GetComponent<SpriteRenderer>().color = cannotPlaceColor;
+
+            rangeSprite.transform.localScale *= 0;
+            towerVisualizer.transform.localScale *= 0;
         }
     }
 
