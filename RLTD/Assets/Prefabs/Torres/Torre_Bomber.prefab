@@ -851,16 +851,16 @@ MonoBehaviour:
   - {fileID: -2432090755550338912, guid: 6bc0c7a52a0d1f345873705dd718d26c, type: 3}
   - {fileID: -2432090755550338912, guid: 9713f59c4d18da34989a635ade7769ea, type: 3}
   damage:
-  - 50
-  - 75
-  fireRate:
-  - 3
-  - 1.5
-  range:
+  - 60
   - 80
-  - 100
-  evolvePrice: f4010000
-  sellPrice: 2c010000c2010000
+  fireRate:
+  - 5
+  - 3
+  range:
+  - 60
+  - 85
+  evolvePrice: ee020000
+  sellPrice: c2010000f4010000
   rangeVisualizer: {fileID: 8766062363759346918, guid: ff65d8a73f6ecd34d82151a51961dea3,
     type: 3}
   evoMenu: {fileID: 1360801627}

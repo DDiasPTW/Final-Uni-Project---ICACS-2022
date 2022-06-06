@@ -845,10 +845,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10ed55e8b69d3f243842b90b1cc35b85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thisTowerName: default
-  defaultTowerName: default
-  iceTowerName: ice
-  poisonTowerName: poison
   currentEvolution: 1
   numberOfEvolutions: 3
   evolutionLooks:
@@ -856,14 +852,13 @@ MonoBehaviour:
   - {fileID: -2432090755550338912, guid: 9713f59c4d18da34989a635ade7769ea, type: 3}
   - {fileID: -2432090755550338912, guid: 14d2810c57b1878408213333284b8d03, type: 3}
   damage:
-  - 25
+  - 20
   - 40
   - 65
   fireRate:
   - 0.6
   - 0.5
   - 0.4
-  startFireRate: 0
   range:
   - 30
   - 40
@@ -883,14 +878,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   AOERange: 0
-  isAOE: 0
-  isSlow: 0
   slowMultiplier: []
   slowTime: []
-  isPoison: 0
   poisonMultiplier: []
   poisonTime: []
-  CurrentTarget: {fileID: 0}
 --- !u!114 &747083370724481548
 MonoBehaviour:
   m_ObjectHideFlags: 0

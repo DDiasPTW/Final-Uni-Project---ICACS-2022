@@ -198,10 +198,11 @@ public class Enemy : MonoBehaviour
 
     private void ShowDamage(float value)
     {
+        int valueToShow = (int) value;
         GameObject text;
         text = Instantiate(damageIndicatorText, transform.position + new Vector3(0, 2f, 0), Quaternion.identity);
         text.transform.localEulerAngles = new Vector3(45f, cameraPivot.transform.localEulerAngles.y, text.transform.localEulerAngles.z);
-        text.GetComponent<TextMeshPro>().text = value.ToString();   
+        text.GetComponent<TextMeshPro>().text = valueToShow.ToString();   
         text.GetComponent<TextMeshPro>().color = currentColor;
     }
 

@@ -94,7 +94,7 @@ public class BuildManager : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
-        
+        seePos.y = .5f;
 
         //Apenas mostra os sitios onde se pode colocar a torre
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerToBuild))
@@ -140,48 +140,35 @@ public class BuildManager : MonoBehaviour
                 seePos.z = Mathf.Round(hit.point.z);
             }
 
-            //garantir que não coloca por cima de outras torres
+            //Garantir que não coloca por cima de outras torres
             Collider[] checkTower = Physics.OverlapSphere(new Vector3(seePos.x,hit.point.y,seePos.z), .3f, towerLayer);
             
             
             //Verificar onde pode colocar
-            if (hit.point.y < .49f || hit.point.y > 1.1f || CurrentCoins < CurrentTowerCost || checkTower.Length != 0)
+            if (hit.point.y < .45f || hit.point.y > 1.1f || CurrentCoins < CurrentTowerCost || checkTower.Length != 0)
             {
                 canPlace = false;
-                
-                //rangeSprite.transform.position = mousePos;
+                rangeSprite.GetComponent<SpriteRenderer>().color = cannotPlaceColor;
             }
-            else canPlace = true;
+            else
+            {
+                canPlace = true;
+                rangeSprite.GetComponent<SpriteRenderer>().color = canPlaceColor;  
+            }
 
-            //Debug.Log(hit.point.y);
-
-            //Seguir cursor
+            towerVisualizer.transform.localScale = TowerToBuild.transform.localScale;
+            towerVisualizer.transform.position = new Vector3(seePos.x, seePos.y + (TowerToBuild.transform.localScale.y / 2) + TowerToBuild.transform.GetChild(0).transform.position.y, seePos.z);
             
+            rangeSprite.transform.localScale = new Vector3(TowerToBuild.GetComponent<Tower>().range[0], TowerToBuild.GetComponent<Tower>().range[0], 0);
+            rangeSprite.transform.position = new Vector3(seePos.x, seePos.y + .1f, seePos.z);
         }
         else
         {
-            rangeSprite.transform.position = mousePos;
-            rangeSprite.transform.localScale *= 0;
             towerVisualizer.transform.localScale *= 0;
-        }
-
-        //Muda cor da range como indicador
-        if (canPlace)
-        {
-            rangeSprite.GetComponent<SpriteRenderer>().color = canPlaceColor;
-            towerVisualizer.transform.localScale = TowerToBuild.transform.localScale;
-            towerVisualizer.transform.position = new Vector3(seePos.x, hit.point.y + (TowerToBuild.transform.localScale.y / 2) + TowerToBuild.transform.GetChild(0).transform.position.y, seePos.z);
-
-            rangeSprite.transform.localScale = new Vector3(TowerToBuild.GetComponent<Tower>().range[0], TowerToBuild.GetComponent<Tower>().range[0], 0);
-            rangeSprite.transform.position = new Vector3(seePos.x, hit.point.y + .1f, seePos.z);
-        }
-        else if (!canPlace)
-        {
-            rangeSprite.GetComponent<SpriteRenderer>().color = cannotPlaceColor;
-
             rangeSprite.transform.localScale *= 0;
-            towerVisualizer.transform.localScale *= 0;
         }
+
+        
     }
 
     private void PlaceTower()
@@ -189,13 +176,9 @@ public class BuildManager : MonoBehaviour
         Vector3 buildPos = new Vector3();
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-
+        buildPos.y = .5f;
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerToBuild))
-        {
-            
-            buildPos.y = hit.point.y;
-            //buildPos.y = .5f;
-
+        {       
             if (canPlace)
             {
                 if (Mathf.Round(hit.point.x) <= (-(worldGen.chunkSize / 2) + hit.transform.position.x + 1f)) //min x
