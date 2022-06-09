@@ -48,6 +48,14 @@ public class CameraController : MonoBehaviour
         maxZoomY = GameObject.FindGameObjectWithTag("GridManager").GetComponent<WorldGeneration>().MaxWave * 7f;
         maxPos = GameObject.FindGameObjectWithTag("GridManager").GetComponent<WorldGeneration>().chunkSize * 12f;
 
+        if (maxZoomY < minZoomY)
+        {
+            maxZoomY = minZoomY;
+        }
+        if (maxZoomZ < minZoomZ)
+        {
+            maxZoomZ = minZoomZ;
+        }
 
         newPosition = transform.position;
         newRotation = transform.rotation;

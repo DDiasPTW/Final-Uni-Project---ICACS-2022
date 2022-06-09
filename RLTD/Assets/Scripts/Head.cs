@@ -5,6 +5,6 @@ using UnityEngine;
 public class Head : MonoBehaviour
 {
     public int damage;
-    public int value;
+    //public int value;
     public Sprite icon;
 }

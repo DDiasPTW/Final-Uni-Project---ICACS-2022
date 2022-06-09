@@ -36,7 +36,7 @@ public class PoisonTower : MonoBehaviour
             if (startFireRate <= 0)
             {
                 AttackTarget();
-                Shoot(currentTarget.transform.position);
+                //Shoot(currentTarget.transform.position);
             }
 
             //limpa o target caso saia da range
@@ -71,13 +71,13 @@ public class PoisonTower : MonoBehaviour
         startFireRate = tower.fireRate[tower.currentEvolution - 1];
     }
 
-    public void Shoot(Vector3 position) //Projetil da spawn na posicao do inimigo e "explode"
-    {
-        GameObject proj;
+    //public void Shoot(Vector3 position) //Projetil da spawn na posicao do inimigo e "explode"
+    //{
+    //    GameObject proj;
 
-        proj = Instantiate(projectile, position, Quaternion.identity);
-        //VFX
+    //    proj = Instantiate(projectile, position, Quaternion.identity);
+    //    //VFX
 
-        //Debug.Log("spawned proj");
-    }
+    //    //Debug.Log("spawned proj");
+    //}
 }

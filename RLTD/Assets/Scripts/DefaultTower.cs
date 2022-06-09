@@ -41,7 +41,7 @@ public class DefaultTower : MonoBehaviour
             if (startFireRate <= 0)
             {
                 AttackTarget();
-                Shoot(targetDir);
+                //Shoot(targetDir);
             }
 
             //limpa o target caso saia da range
@@ -69,11 +69,11 @@ public class DefaultTower : MonoBehaviour
         startFireRate = tower.fireRate[tower.currentEvolution - 1];
     }
 
-    public void Shoot(Vector3 direction) //Projetil e disparado diretamente ao inimigo
-    {
-        GameObject proj;
+    //public void Shoot(Vector3 direction) //Projetil e disparado diretamente ao inimigo
+    //{
+    //    GameObject proj;
 
-        proj = Instantiate(projectile,projectileShootPos.position,Quaternion.identity);
-        proj.GetComponent<Rigidbody>().AddForce(direction * speed,ForceMode.Impulse);
-    }
+    //    proj = Instantiate(projectile,projectileShootPos.position,Quaternion.identity);
+    //    proj.GetComponent<Rigidbody>().AddForce(direction * speed,ForceMode.Impulse);
+    //}
 }

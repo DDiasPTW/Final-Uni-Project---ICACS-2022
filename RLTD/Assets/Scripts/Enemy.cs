@@ -12,10 +12,13 @@ public class Enemy : MonoBehaviour
     private EnemyGeneration enemyGen;
     private GameManager gM;
     private ItemManager iM;
+
     public float Health;
     public int Value;
     public int Damage;
     public float speed;
+    
+    private float startAccel;
 
     public GameObject damageIndicatorText;
     public Color NormalTextColor, PoisonTextColor, SlowTextColor;
@@ -51,13 +54,11 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float slowTimeElapsed;
     private float poisonTimeElapsed;
 
-    private Vector3 startScale;
-    private float startHealth;
-
 
     private void Awake()
     {
         navAgent = GetComponent<NavMeshAgent>();
+        startAccel = navAgent.acceleration;
         //navAgent.speed = speed;
         bM = GameObject.FindGameObjectWithTag("GridManager").GetComponent<BuildManager>();
         enemyGen = GameObject.FindGameObjectWithTag("GridManager").GetComponent<EnemyGeneration>();
@@ -65,15 +66,14 @@ public class Enemy : MonoBehaviour
         iM = GameObject.FindGameObjectWithTag("GridManager").GetComponent<ItemManager>();
         cameraPivot = GameObject.FindGameObjectWithTag("Pivot");
 
-        mF_acess = transform.GetChild(0).GetComponent<MeshFilter>();
-        mF_cabeca = transform.GetChild(1).GetComponent<MeshFilter>();
-        mF_corpo = transform.GetChild(2).GetComponent<MeshFilter>();
-        mF_pes = transform.GetChild(3).GetComponent<MeshFilter>();
+        mF_acess = transform.GetChild(0).GetChild(0).GetComponent<MeshFilter>();
+        mF_cabeca = transform.GetChild(0).GetChild(1).GetComponent<MeshFilter>();
+        mF_corpo = transform.GetChild(0).GetChild(2).GetComponent<MeshFilter>();
+        mF_pes = transform.GetChild(0).GetChild(3).GetComponent<MeshFilter>();
 
         SetLooks();
 
-        //startScale = transform.localScale;
-        startHealth = Health;
+
         currentColor = NormalTextColor;
     }
 
@@ -100,11 +100,11 @@ public class Enemy : MonoBehaviour
         //Corpo - muda quanta vida inimigo ira ter
         mF_corpo.mesh = enemyGen.chosen_corpo.GetComponent<MeshFilter>().sharedMesh;
         Health = enemyGen.chosen_corpo.GetComponent<Corpo>().health;
+        Value = enemyGen.chosen_corpo.GetComponent<Corpo>().value;
         
         //Cabeca - muda quanto dano inimigo ira dar na base e muda tambem quanto dinheiro esse inimigo da quando morre
         mF_cabeca.mesh = enemyGen.chosen_cabeca.GetComponent<MeshFilter>().sharedMesh;
         Damage = enemyGen.chosen_cabeca.GetComponent<Head>().damage;
-        Value = enemyGen.chosen_cabeca.GetComponent<Head>().value;
 
         //Acessorio - muda que resistencia inimigo vai ter
         mF_acess.mesh = enemyGen.chosen_acessorio.GetComponent<MeshFilter>().sharedMesh;
@@ -143,8 +143,6 @@ public class Enemy : MonoBehaviour
             enemyGen.spawnedEnemies.Remove(gameObject);
             Destroy(gameObject);
         }
-
-        //transform.localScale = startScale * (Health/startHealth);
         UpdateTextColor();
 
         if (isPoison)
@@ -192,7 +190,7 @@ public class Enemy : MonoBehaviour
     private void DropItem()
     {
         int whatItem = Random.Range(0,iM.allItems.Count);
-        Instantiate(iM.allItems[whatItem],transform.position + Vector3.up,Quaternion.identity);
+        Instantiate(iM.allItems[whatItem],transform.position + new Vector3(0,3f,0),Quaternion.identity);
         //Debug.Log("Item chosen is: " + iM.allItems[whatItem].name);
     }
 
@@ -240,6 +238,14 @@ public class Enemy : MonoBehaviour
             slowMulti = slowMultiplier;
             slowTimeElapsed = slowTime;
         }
+    }
+
+    public void ItemChangeSpeed(float slowMultiplier, float slowTime)
+    {
+        isSlow = true;
+        currentColor = SlowTextColor;
+        slowMulti = slowMultiplier;
+        slowTimeElapsed = slowTime;
     }
     
 }

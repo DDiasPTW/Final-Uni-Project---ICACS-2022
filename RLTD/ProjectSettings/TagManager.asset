@@ -10,12 +10,9 @@ TagManager:
   - Inimigo
   - TARGET
   - Pivot
-  - Tank
-  - Default
-  - Assassin
-  - Healer
   - ShopM
   - ItemH
+  - Speed
   layers:
   - Default
   - TransparentFX

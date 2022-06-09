@@ -21,6 +21,7 @@ public class Item_Money : MonoBehaviour
 
     private void Update()
     {
+        
         if (item.pickedUp)
         {
             timer -= Time.deltaTime;
@@ -33,6 +34,6 @@ public class Item_Money : MonoBehaviour
                 bM.CurrentCoins += value;
                 timer = delay;
             }
-        }       
+        }
     }
 }

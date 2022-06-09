@@ -68,6 +68,10 @@ public class Item_Bomba : MonoBehaviour
         if (item.placed)
         {
             CheckEnemies();
+            if (!canAttack)
+            {
+                anim.Play("Idle");//
+            }
         }
 
         if (canAttack)
@@ -134,7 +138,7 @@ public class Item_Bomba : MonoBehaviour
 
             Collider[] checkItens = Physics.OverlapSphere(new Vector3(seePos.x, hit.point.y, seePos.z), .3f, itemLayer);
 
-            if (hit.point.y <= .05f && checkItens.Length == 0)
+            if (hit.point.y <= .05f && hit.point.y >= -.1f && checkItens.Length == 0)
             {
                 canPlace = true;
             }
@@ -168,7 +172,7 @@ public class Item_Bomba : MonoBehaviour
         //Place the bomb
         if (Input.GetMouseButtonDown(0) && canPlace)
         {
-            gameObject.transform.position = new Vector3(seePos.x, hit.point.y + (transform.localScale.y / 2), seePos.z);
+            gameObject.transform.position = new Vector3(seePos.x, 0f + (transform.localScale.y / 2), seePos.z);
 
             item.placed = true;
             item.activated = false;

@@ -220,19 +220,13 @@ public class BuildManager : MonoBehaviour
                 else if (Mathf.Round(hit.point.z) >= 0 && Mathf.Round(hit.point.z) < ((worldGen.chunkSize / 2) + hit.transform.position.z - 1f)) //z pos
                 {
                     buildPos.z = Mathf.Round(hit.point.z);
-                }
+                }            
 
-                //Debug.Log("Max x: " + ((worldGen.chunkSize / 2) + hit.transform.position.x - 1));
-                //Debug.Log("Max z: " + ((worldGen.chunkSize / 2) + hit.transform.position.z - 1));            
-
-                placedTower = Instantiate(TowerToBuild, mousePos, Quaternion.identity);
+                placedTower = Instantiate(TowerToBuild, mousePos, Quaternion.Euler(new Vector3(0f,90f,0f)));
                 placedTower.transform.position = new Vector3(buildPos.x, buildPos.y + (placedTower.transform.localScale.y / 2), buildPos.z);
                 CurrentCoins -= CurrentTowerCost;
                 allTowers.Add(placedTower);
 
-                //Debug.Log(worldGen.chunkSize + " | " + Mathf.Round(hit.point.x) + " | " + buildPos.x);
-                //Debug.Log("Clicado em: " + hit.point);
-                //Debug.Log("Colocado em: " + new Vector3(buildPos.x, buildPos.y + (placedTower.transform.localScale.y / 2), buildPos.z));
             }
             else Debug.Log("CANNOT PLACE HERE");  
         }

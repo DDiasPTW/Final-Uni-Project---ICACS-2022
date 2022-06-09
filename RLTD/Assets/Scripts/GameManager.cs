@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     public ShopManager shopM;
 
     public bool canSpawn = false;
-    public GameObject nextPositionButton;
+    //public GameObject nextPositionButton;
     public GameObject spawnButton;
     public GameObject mainMenuUI;
 
@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
         //shopM = GameObject.FindGameObjectWithTag("ShopM").GetComponent<ShopManager>();
 
-        nextPositionButton.SetActive(false);
+        //nextPositionButton.SetActive(false);
         spawnButton.SetActive(false);
     }
 
@@ -45,9 +45,10 @@ public class GameManager : MonoBehaviour
 
         if (enemyGen.spawnedEnemies.Count == 0 && !enemyGen.isSpawning && worldGen.CurrentWave < worldGen.MaxWave && mainMenuUI.activeSelf == false && enemyGen.enemiesToSpawn == 0)
         {
-            nextPositionButton.SetActive(true);
+            //nextPositionButton.SetActive(true);
+            ExpandWorld();
         }
-        else nextPositionButton.SetActive(false);
+        //else nextPositionButton.SetActive(false);
 
         if (enemyGen.enemiesToSpawn != 0 && !enemyGen.isSpawning && enemyGen.spawnedEnemies.Count == 0 && canSpawn)
         {
@@ -60,7 +61,7 @@ public class GameManager : MonoBehaviour
             LoseGame();
         }
 
-        waveText.text = worldGen.CurrentWave.ToString() + " / " + worldGen.MaxWave.ToString();
+        waveText.text = worldGen.CurrentWave.ToString() + "/" + worldGen.MaxWave.ToString();
 
         if (Input.GetKeyDown(KeyCode.R))
         {
@@ -73,8 +74,9 @@ public class GameManager : MonoBehaviour
         worldGen.NextWave();
         enemyGen.hasStartedSpawning = false;
         bM.CurrentCoins += (worldGen.CurrentWave - 1) * coinsPerWave /** enemyGen.currentDifficulty*/;
-        bM.SellTowers();
+        //bM.SellTowers();
 
+        //worldGen.ShowSpawnPos();
         enemyGen.DefineEnemy();
         canSpawn = true;
     }
@@ -92,9 +94,8 @@ public class GameManager : MonoBehaviour
 
     public void SpawnNextWave()
     {
-        
         enemyGen.StartWave();
-        worldGen.ShowSpawnPos();
+        //worldGen.ShowSpawnPos();
         canSpawn = false;
     }
 }

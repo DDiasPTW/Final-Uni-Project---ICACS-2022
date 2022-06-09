@@ -19,7 +19,9 @@ public class Tower : MonoBehaviour
     public List<float> fireRate = new List<float>();
     public List<float> range = new List<float>(); 
     public List<int> evolvePrice = new List<int>();
+    public List<AnimationCurve> evolvePriceCurve = new List<AnimationCurve>();
     public List<int> sellPrice = new List<int>();
+    public List<AnimationCurve> sellPriceCurve = new List<AnimationCurve>();
 
     [Header("UI Elements")]
     public GameObject rangeVisualizer; 
@@ -122,12 +124,16 @@ public class Tower : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, TowerLayer))
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity/*, TowerLayer*/))
             {
                 if (hit.collider.gameObject == gameObject)
                 {
                     evoMenu.SetActive(true);
                     //Debug.Log("Abrir menu evolução");
+                }
+                else if (hit.collider.gameObject != gameObject && !EventSystem.current.IsPointerOverGameObject())
+                {
+                    evoMenu.SetActive(false);
                 }
             }
         }
@@ -147,6 +153,13 @@ public class Tower : MonoBehaviour
             mF.mesh = evolutionLooks[currentEvolution - 1];
         }
 
+    }
+
+    public void SellTower()
+    {
+        bM.CurrentCoins += sellPrice[currentEvolution-1];
+        bM.allTowers.Remove(gameObject);
+        Destroy(gameObject);
     }
 
 }

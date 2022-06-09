@@ -5,7 +5,7 @@ using UnityEngine;
 public class ShopManager : MonoBehaviour
 { 
     //----
-    public bool canOpen = false;
+    public bool isOpen = false;
     public Animator anim;
     private string closeShopAnimation = "CloseShop_Anim";
     private string openShopAnimation = "OpenShop_Anim";
@@ -14,6 +14,7 @@ public class ShopManager : MonoBehaviour
     //----
     private void Awake()
     {
+        isOpen = false;
         anim = GetComponent<Animator>();
         enemyGen = GameObject.FindGameObjectWithTag("GridManager").GetComponent<EnemyGeneration>();
         worldGen = GameObject.FindGameObjectWithTag("GridManager").GetComponent<WorldGeneration>();
@@ -22,20 +23,15 @@ public class ShopManager : MonoBehaviour
     #region Abrir/Fechar UI
     public void ShopButton()
     {
-        //if (!enemyGen.isSpawning && enemyGen.spawnedEnemies.Count == 0)
-        //{
-            
-        //}
-
-        if (!canOpen)
+        if (isOpen)
         {
+            isOpen = false;
             anim.Play(closeShopAnimation);
-            canOpen = true;
         }
-        if (canOpen)
+        if (!isOpen)
         {
+            isOpen = true;
             anim.Play(openShopAnimation);
-            canOpen = false;
         }
 
     }

@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class GameSpeedChanger : MonoBehaviour
 {
     public List<Button> buttons = new List<Button>();
+    public float gameSpeed = 1f;
 
     private void Update()
     {
