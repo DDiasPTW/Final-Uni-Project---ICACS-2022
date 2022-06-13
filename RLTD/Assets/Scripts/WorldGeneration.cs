@@ -80,12 +80,12 @@ public class WorldGeneration : MonoBehaviour
         }
         else if (CurrentWave >= (MaxWave / 5) && CurrentWave < (MaxWave / 2f))
         {
-            enemyGen.spawnCooldown = enemyGen.spawnCooldown - .02f;
+            enemyGen.spawnCooldown = enemyGen.spawnCooldown - .01f;
             enemyGen.howManyEnemies = (int) (enemyGen.enemiesPerWave * CurrentWave * enemyGen.currentDifficulty * 1.5f);
         }
         else
         {
-            enemyGen.spawnCooldown = enemyGen.spawnCooldown - .04f;
+            enemyGen.spawnCooldown = enemyGen.spawnCooldown - .03f;
             enemyGen.howManyEnemies = /*(int)*/ (enemyGen.enemiesPerWave * CurrentWave * enemyGen.currentDifficulty * 2);
         }
     }

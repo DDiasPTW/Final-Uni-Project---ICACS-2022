@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
 
@@ -79,12 +80,7 @@ public class Tower : MonoBehaviour
 
 
         CheckRange();
-
-        if (currentEvolution < numberOfEvolutions)
-        {
-            CheckEvolutionMenu();
-        }
-        
+        CheckEvolutionMenu();        
     }
 
     private void UpdateUIElements()
@@ -96,7 +92,7 @@ public class Tower : MonoBehaviour
         {
             evoButton.SetActive(false);
             evoPriceText.text = "";
-            evoMenu.SetActive(false);
+            //evoMenu.SetActive(false);
         }
         else
         {
@@ -104,7 +100,18 @@ public class Tower : MonoBehaviour
             int price = (int)evolutionPrices[currentEvolution - 1].Evaluate(worldGen.CurrentWave - 1);
             evoPriceText.text = price.ToString();
             evoButton.SetActive(true);
+
+            if (bM.CurrentCoins < (int)evolutionPrices[currentEvolution - 1].Evaluate(worldGen.CurrentWave - 1))
+            {
+                evoButton.GetComponent<Button>().interactable = false;
+            }
+            else
+            {
+                evoButton.GetComponent<Button>().interactable = true;
+            }
         }
+
+        
     }
 
 
@@ -158,7 +165,7 @@ public class Tower : MonoBehaviour
     //Chamar quando evoluir torre
     public void EvolveTower()
     {
-        if (bM.CurrentCoins >= evolvePrice[currentEvolution - 1] && currentEvolution < numberOfEvolutions)
+        if (bM.CurrentCoins >= (int)evolutionPrices[currentEvolution - 1].Evaluate(worldGen.CurrentWave - 1) && currentEvolution < numberOfEvolutions)
         {
             //bM.CurrentCoins -= evolvePrice[currentEvolution - 1];
             bM.CurrentCoins -= (int) evolutionPrices[currentEvolution - 1].Evaluate(worldGen.CurrentWave - 1);

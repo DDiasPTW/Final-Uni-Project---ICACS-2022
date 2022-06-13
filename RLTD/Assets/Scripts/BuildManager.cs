@@ -9,6 +9,7 @@ public class BuildManager : MonoBehaviour
     public List<GameObject> allTowers = new List<GameObject>();
     private WorldGeneration worldGen;
     private EnemyGeneration enemyGen;
+    private ItemManager iM;
     public LayerMask layerToBuild;
     public LayerMask towerLayer;
     [Header("Building stats")]
@@ -23,6 +24,8 @@ public class BuildManager : MonoBehaviour
     public GameObject towerVisualizer;
     public Color canPlaceColor;
     public Color cannotPlaceColor;
+    [SerializeField] private float checkRadius;
+    [SerializeField] private int maxTowerNumber;
 
     [Header("UI Stuff")]
     public TextMeshProUGUI moneyText;
@@ -41,6 +44,7 @@ public class BuildManager : MonoBehaviour
     {
         worldGen = GetComponent<WorldGeneration>();
         enemyGen = GetComponent<EnemyGeneration>();
+        iM = GetComponent<ItemManager>();
         rangeSprite = Instantiate(rangeSprite);
         towerVisualizer = Instantiate(towerVisualizer);
     }
@@ -64,7 +68,8 @@ public class BuildManager : MonoBehaviour
         else canBuild = false; 
 
         if (canBuild)
-        {
+        {         
+
             FollowMouse();
 
             if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject()) //apenas pode colocar torre se nao estiver sobre elemento UI
@@ -90,6 +95,14 @@ public class BuildManager : MonoBehaviour
 
     private void FollowMouse()
     {
+        if (iM.currentItem != null)
+        {
+            if (iM.currentItem.GetComponent<Item>().activated)
+            {
+                iM.currentItem.GetComponent<Item>().activated = false;
+            }
+        }
+
         Vector3 seePos = new Vector3();            
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
@@ -140,12 +153,13 @@ public class BuildManager : MonoBehaviour
                 seePos.z = Mathf.Round(hit.point.z);
             }
 
-            //Garantir que não coloca por cima de outras torres
+            //Garantir que não coloca por cima de outras torres nem se coloca demasiadas torres no mesmo sitio
             Collider[] checkTower = Physics.OverlapSphere(new Vector3(seePos.x,hit.point.y,seePos.z), .3f, towerLayer);
-            
+            Collider[] checkTowerNumber = Physics.OverlapSphere(towerVisualizer.transform.position, checkRadius, towerLayer);
+            //Debug.Log(checkTowerNumber.Length);
             
             //Verificar onde pode colocar
-            if (hit.point.y < .45f || hit.point.y > 1.1f || CurrentCoins < CurrentTowerCost || checkTower.Length != 0)
+            if (hit.point.y < .45f || hit.point.y > 1.1f || CurrentCoins < CurrentTowerCost || checkTower.Length != 0 || checkTowerNumber.Length >= maxTowerNumber)
             {
                 canPlace = false;
                 rangeSprite.GetComponent<SpriteRenderer>().color = cannotPlaceColor;
@@ -263,6 +277,12 @@ public class BuildManager : MonoBehaviour
         
 
         allTowers.Clear();
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(towerVisualizer.transform.position,checkRadius);
     }
 
 }

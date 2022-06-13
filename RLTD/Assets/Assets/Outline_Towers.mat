@@ -92,7 +92,7 @@ Material:
     - _REFLECTIONS_WEIGHT: 1
     - _SPECULAR_IOR: 1.5
     - _SPECULAR_ROUGHNESS: 0
-    - _Size: 40
+    - _Size: 20
     - _TRANSPARENCY: 0
     m_Colors:
     - _BASE_COLOR: {r: 1, g: 1, b: 1, a: 1}

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using TMPro;
 
 public class ItemManager : MonoBehaviour
 {
@@ -11,6 +12,10 @@ public class ItemManager : MonoBehaviour
     public GameObject currentItem;
     public GameObject itemHolderUI;
     public GameObject itemHolderImage;
+
+    [SerializeField] private GameObject itemDesc;
+    [SerializeField] private Image itemDescImage;
+    [SerializeField] private TextMeshProUGUI descriptionText;
 
     public LayerMask itemLayer;
 
@@ -29,6 +34,18 @@ public class ItemManager : MonoBehaviour
             itemHolderUI.SetActive(false);
         }
         else itemHolderUI.SetActive(true);
+
+        if (Input.GetMouseButton(1))
+        {
+            if (currentItem != null)
+            {
+                if (currentItem.GetComponent<Item>().activated == true)
+                {
+                    currentItem.GetComponent<Item>().activated = false;
+                }
+            }
+            
+        }
     }
 
     void PickupItem()
@@ -64,5 +81,11 @@ public class ItemManager : MonoBehaviour
     {
         //Debug.Log(currentItem.gameObject.name);
         currentItem.GetComponent<Item>().activated = true;
+        
+        
+        itemDesc.SetActive(true);
+        descriptionText.text = currentItem.GetComponent<Item>().description;
+        itemDescImage.sprite = currentItem.GetComponent<Item>().itemImage;
+        //Debug.Log("Show item desc");
     }
 }

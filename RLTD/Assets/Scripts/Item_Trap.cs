@@ -6,6 +6,7 @@ public class Item_Trap : MonoBehaviour
 {
     [Header("Classes necessarias")]
     private Item item;
+    private BuildManager bM;
     private ItemManager iM;
     private WorldGeneration worldGen;
     [Header("Building")]
@@ -33,6 +34,7 @@ public class Item_Trap : MonoBehaviour
     {
         worldGen = GameObject.FindGameObjectWithTag("GridManager").GetComponent<WorldGeneration>();
         iM = GameObject.FindGameObjectWithTag("GridManager").GetComponent<ItemManager>();
+        bM = GameObject.FindGameObjectWithTag("GridManager").GetComponent<BuildManager>();
         item = GetComponent<Item>();
         item.itemImage = thisSprite;
     }
@@ -44,6 +46,11 @@ public class Item_Trap : MonoBehaviour
 
         if (item.activated)
         {
+            if (bM.TowerToBuild != null)
+            {
+                bM.TowerToBuild = null;
+            }
+
             //Do stuff
             gameObject.GetComponentInChildren<MeshRenderer>().enabled = true;
             FollowMouse();

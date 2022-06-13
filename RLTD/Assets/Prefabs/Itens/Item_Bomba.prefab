@@ -66,6 +66,9 @@ MonoBehaviour:
   pickedUp: 0
   activated: 0
   placed: 0
+  description: 'Item capable of damaging multiple enemies at
+
+    the same time'
 --- !u!114 &3379785660678919640
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -93,8 +96,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   range: 15
-  activationRange: 7
-  damage: 50
+  activationRange: 10
+  damage: 75
   attackDelay: 1
 --- !u!95 &4962197503624446033
 Animator:
@@ -178,6 +181,7 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 703c38eac0e69ea4c8c2912f8c87e315, type: 2}
+  - {fileID: 2100000, guid: 2f6c43da235789148a4d184a7a90d0a8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

@@ -66,6 +66,10 @@ MonoBehaviour:
   pickedUp: 0
   activated: 0
   placed: 0
+  description: 'This item gives you +5 moneys every 2 seconds
+
+    while the wave
+    is being played'
 --- !u!114 &5493610853357176272
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -162,6 +166,7 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 183d7e6ee93ce274fa19898d680e1f9f, type: 2}
+  - {fileID: 2100000, guid: 2f6c43da235789148a4d184a7a90d0a8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

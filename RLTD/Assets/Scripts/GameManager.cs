@@ -73,7 +73,18 @@ public class GameManager : MonoBehaviour
     {
         worldGen.NextWave();
         enemyGen.hasStartedSpawning = false;
-        bM.CurrentCoins += (worldGen.CurrentWave - 1) * coinsPerWave /** enemyGen.currentDifficulty*/;
+
+        if (worldGen.CurrentWave < worldGen.MaxWave / 5)
+        {
+            bM.CurrentCoins +=(int) ((worldGen.CurrentWave - 1) * coinsPerWave * 1.5f);
+        }else if (worldGen.CurrentWave >= (worldGen.MaxWave / 5) && worldGen.CurrentWave < (worldGen.MaxWave / 2f))
+        {
+            bM.CurrentCoins +=(worldGen.CurrentWave - 1) * coinsPerWave;
+        }
+        else
+        {
+            bM.CurrentCoins += coinsPerWave;
+        }
         //bM.SellTowers();
 
         //worldGen.ShowSpawnPos();

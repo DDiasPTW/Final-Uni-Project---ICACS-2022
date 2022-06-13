@@ -68,12 +68,4 @@ public class DefaultTower : MonoBehaviour
         currentTarget.GetComponent<Enemy>().LoseHealth(tower.damage[tower.currentEvolution - 1]);
         startFireRate = tower.fireRate[tower.currentEvolution - 1];
     }
-
-    //public void Shoot(Vector3 direction) //Projetil e disparado diretamente ao inimigo
-    //{
-    //    GameObject proj;
-
-    //    proj = Instantiate(projectile,projectileShootPos.position,Quaternion.identity);
-    //    proj.GetComponent<Rigidbody>().AddForce(direction * speed,ForceMode.Impulse);
-    //}
 }

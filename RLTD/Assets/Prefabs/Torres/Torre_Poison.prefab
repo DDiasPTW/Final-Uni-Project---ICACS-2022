@@ -238,7 +238,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.5943396, g: 0.58536845, b: 0.58536845, a: 1}
     m_PressedColor: {r: 0.3018868, g: 0.29163405, b: 0.29163405, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.15294118, g: 0.15294118, b: 0.15294118, a: 0.65882355}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -1115,9 +1115,9 @@ MonoBehaviour:
   - 1.8
   - 1.6
   range:
+  - 35
   - 50
   - 75
-  - 100
   evolvePrice: 5e01000058020000
   sellPrice: af000000e1000000c2010000
   buyPrice:
@@ -1126,12 +1126,12 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 175
-      inSlope: 66.628685
-      outSlope: 66.628685
+      inSlope: 10.617536
+      outSlope: 10.617536
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.12061403
+      outWeight: 0.13523391
     - serializedVersion: 3
       time: 24
       value: 800
@@ -1150,12 +1150,12 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 350
-      inSlope: 87.115944
-      outSlope: 87.115944
+      inSlope: 4.1550317
+      outSlope: 4.1550317
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.03472222
+      outWeight: 0.14437135
     - serializedVersion: 3
       time: 24
       value: 1000
@@ -1173,12 +1173,12 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 600
-      inSlope: 102.15444
-      outSlope: 102.15444
+      inSlope: 6.8959107
+      outSlope: 6.8959107
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.040204678
+      outWeight: 0.2229532
     - serializedVersion: 3
       time: 24
       value: 1500

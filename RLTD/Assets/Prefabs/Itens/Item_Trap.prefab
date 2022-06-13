@@ -65,6 +65,10 @@ MonoBehaviour:
   pickedUp: 0
   activated: 0
   placed: 0
+  description: 'A trap capable of slowing down multiple enemies
+
+    at the same
+    time'
 --- !u!114 &6497095456486113373
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -91,11 +95,11 @@ MonoBehaviour:
   itemLayer:
     serializedVersion: 2
     m_Bits: 1024
-  range: 10
-  activationRange: 5
+  range: 15
+  activationRange: 10
   multiplier: 0.5
   duration: 2
-  attackDelay: 1
+  attackDelay: 0.5
 --- !u!1 &2779768247486563791
 GameObject:
   m_ObjectHideFlags: 0
@@ -158,6 +162,7 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 15e0abb486382234f82b8310d923798f, type: 2}
+  - {fileID: 2100000, guid: 2f6c43da235789148a4d184a7a90d0a8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

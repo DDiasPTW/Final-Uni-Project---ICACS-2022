@@ -8,6 +8,7 @@ public class Item_Bomba : MonoBehaviour
     private Item item;
     private ItemManager iM;
     private WorldGeneration worldGen;
+    private BuildManager bM;
     [Header("Building")]
     public LayerMask layerToBuild;
     private bool canPlace;
@@ -33,6 +34,7 @@ public class Item_Bomba : MonoBehaviour
     {
         worldGen = GameObject.FindGameObjectWithTag("GridManager").GetComponent<WorldGeneration>();
         iM = GameObject.FindGameObjectWithTag("GridManager").GetComponent<ItemManager>();
+        bM = GameObject.FindGameObjectWithTag("GridManager").GetComponent<BuildManager>();
         item = GetComponent<Item>();
         item.itemImage = thisSprite;
         anim = GetComponent<Animator>();

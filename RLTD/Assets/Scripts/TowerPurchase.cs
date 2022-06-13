@@ -11,6 +11,7 @@ public class TowerPurchase : MonoBehaviour
     private WorldGeneration worldGen;
     private BuildManager bM;
     private ShopManager shopM;
+    private ItemManager iM;
     public TextMeshProUGUI textoPreco;
 
     [SerializeField] private GameObject towerDesc;
@@ -23,9 +24,9 @@ public class TowerPurchase : MonoBehaviour
     {
         worldGen = GameObject.FindGameObjectWithTag("GridManager").GetComponent<WorldGeneration>();
         bM = GameObject.FindGameObjectWithTag("GridManager").GetComponent<BuildManager>();
+        iM = GameObject.FindGameObjectWithTag("GridManager").GetComponent<ItemManager>();
         shopM = GameObject.FindGameObjectWithTag("ShopM").GetComponent<ShopManager>();
         towerDesc.SetActive(false);
-        //price = towerToPurchase.GetComponent<Tower>().sellPrice[towerToPurchase.GetComponent<Tower>().currentEvolution - 1];
         GetPrice();
     }
 
@@ -50,7 +51,14 @@ public class TowerPurchase : MonoBehaviour
 
         if (bM.TowerToBuild == null)
         {
-            towerDesc.SetActive(false);
+            if (iM.currentItem != null && iM.currentItem.GetComponent<Item>().activated == true) 
+            {
+                //Debug.Log("");
+            }
+            else
+            {
+                towerDesc.SetActive(false);
+            }
         }
     }
 

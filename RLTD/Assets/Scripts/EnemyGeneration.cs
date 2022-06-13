@@ -26,13 +26,19 @@ public class EnemyGeneration : MonoBehaviour
     public GameObject chosen_cabeca;
     public GameObject chosen_corpo;
     public GameObject chosen_pes;
+    public Sprite slowResSprite;
+    public Sprite poisonResSprite;
 
     [Header("UI Stuff")]
     public GameObject enemyVisualizer;
     public GameObject acess_Icon;
+    public Image resUISprite;
     public GameObject cabeca_Icon;
+    public TextMeshProUGUI damageText;
     public GameObject corpo_Icon;
+    public TextMeshProUGUI healthText;
     public GameObject pes_Icon;
+    public TextMeshProUGUI speedText;
 
     [SerializeField] private List<GameObject> BossList = new List<GameObject>(); //Todos os bosses do jogo
 
@@ -135,10 +141,26 @@ public class EnemyGeneration : MonoBehaviour
 
         //Atualiza UI
         enemyVisualizer.SetActive(true);
-        acess_Icon.GetComponent<Image>().sprite = chosen_acessorio.GetComponent<Acessorio>().Icon; 
+        acess_Icon.GetComponent<Image>().sprite = chosen_acessorio.GetComponent<Acessorio>().Icon;       
         cabeca_Icon.GetComponent<Image>().sprite = chosen_cabeca.GetComponent<Head>().icon; 
         corpo_Icon.GetComponent<Image>().sprite = chosen_corpo.GetComponent<Corpo>().icon; 
-        pes_Icon.GetComponent<Image>().sprite = chosen_pes.GetComponent<Pes>().icon; 
+        pes_Icon.GetComponent<Image>().sprite = chosen_pes.GetComponent<Pes>().icon;
+
+        if (chosen_acessorio.GetComponent<Acessorio>().resSlow)
+        {
+            resUISprite.sprite = slowResSprite;
+        }
+        else if (chosen_acessorio.GetComponent<Acessorio>().resPoison)
+        {
+            resUISprite.sprite = poisonResSprite;
+        }
+        else
+        {
+            resUISprite.sprite = null;
+        }
+        damageText.text = chosen_cabeca.GetComponent<Head>().damage.ToString();
+        healthText.text = chosen_corpo.GetComponent<Corpo>().health.ToString();
+        speedText.text = ((int)(chosen_pes.GetComponent<Pes>().speed * 10 )).ToString();
 
     }
 

@@ -624,7 +624,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.5943396, g: 0.58536845, b: 0.58536845, a: 1}
     m_PressedColor: {r: 0.3018868, g: 0.29163405, b: 0.29163405, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.15294118, g: 0.15294118, b: 0.15294118, a: 0.65882355}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -831,7 +831,6 @@ GameObject:
   - component: {fileID: 5061541899975665357}
   - component: {fileID: 5280405173145812782}
   - component: {fileID: 5854721982210845818}
-  - component: {fileID: 241403670733314010}
   m_Layer: 9
   m_Name: Sprite
   m_TagString: Untagged
@@ -904,20 +903,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &241403670733314010
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3614514086682665069}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -2432090755550338912, guid: 6bc0c7a52a0d1f345873705dd718d26c, type: 3}
 --- !u!1 &8451709109387137368
 GameObject:
   m_ObjectHideFlags: 0
@@ -1124,15 +1109,15 @@ MonoBehaviour:
   damage:
   - 20
   - 25
-  - 35
+  - 30
   fireRate:
-  - 0.6
-  - 0.45
-  - 0.35
+  - 0.8
+  - 0.65
+  - 0.65
   range:
   - 30
   - 45
-  - 70
+  - 60
   evolvePrice: c8000000c2010000
   sellPrice: 64000000af0000002c010000
   buyPrice:
@@ -1141,12 +1126,12 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 100
-      inSlope: 22.909895
-      outSlope: 22.909895
+      inSlope: 1.7823409
+      outSlope: 1.7823409
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.100681245
+      outWeight: 0.15533625
     - serializedVersion: 3
       time: 24
       value: 400
@@ -1165,12 +1150,12 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 200
-      inSlope: 32.552727
-      outSlope: 32.552727
+      inSlope: 6.5541954
+      outSlope: 6.5541954
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.05847953
+      outWeight: 0.12792397
     - serializedVersion: 3
       time: 24
       value: 550
@@ -1188,12 +1173,12 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 450
-      inSlope: 29.317385
-      outSlope: 29.317385
+      inSlope: 6.078377
+      outSlope: 6.078377
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.076754384
+      outWeight: 0.12792397
     - serializedVersion: 3
       time: 24
       value: 750

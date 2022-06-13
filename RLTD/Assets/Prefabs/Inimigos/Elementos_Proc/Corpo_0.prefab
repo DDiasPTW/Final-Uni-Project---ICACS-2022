@@ -98,7 +98,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 150
-  value: 3
+  value: 5
   icon: {fileID: 21300000, guid: cb8a12047514f5646a27535d34db5d57, type: 3}
 --- !u!65 &3631916838487052876
 BoxCollider:

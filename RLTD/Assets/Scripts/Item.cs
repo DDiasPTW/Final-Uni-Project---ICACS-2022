@@ -10,6 +10,8 @@ public class Item : MonoBehaviour
     public bool pickedUp = false;
     public bool activated = false;
     public bool placed = false;
+    [Multiline]
+    public string description;
     private void Update()
     {
         aliveTime -= Time.deltaTime;
