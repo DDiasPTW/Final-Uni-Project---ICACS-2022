@@ -1120,6 +1120,77 @@ MonoBehaviour:
   - 100
   evolvePrice: 5e01000058020000
   sellPrice: af000000e1000000c2010000
+  buyPrice:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 175
+      inSlope: 66.628685
+      outSlope: 66.628685
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.12061403
+    - serializedVersion: 3
+      time: 24
+      value: 800
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  evolutionPrices:
+  - serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 350
+      inSlope: 87.115944
+      outSlope: 87.115944
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.03472222
+    - serializedVersion: 3
+      time: 24
+      value: 1000
+      inSlope: 3.5999897
+      outSlope: 3.5999897
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.10635972
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  - serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 600
+      inSlope: 102.15444
+      outSlope: 102.15444
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.040204678
+    - serializedVersion: 3
+      time: 24
+      value: 1500
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
   rangeVisualizer: {fileID: 8766062363759346918, guid: ff65d8a73f6ecd34d82151a51961dea3,
     type: 3}
   evoMenu: {fileID: 915876214}

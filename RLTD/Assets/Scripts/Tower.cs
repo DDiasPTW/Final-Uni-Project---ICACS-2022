@@ -9,6 +9,7 @@ public class Tower : MonoBehaviour
     private BuildManager bM;
     private MeshFilter mF;
     private GameObject cameraPivot;
+    private WorldGeneration worldGen;
 
     [Header("Evolution Stuff")]
     public int currentEvolution = 1; 
@@ -19,9 +20,11 @@ public class Tower : MonoBehaviour
     public List<float> fireRate = new List<float>();
     public List<float> range = new List<float>(); 
     public List<int> evolvePrice = new List<int>();
-    public List<AnimationCurve> evolvePriceCurve = new List<AnimationCurve>();
+
     public List<int> sellPrice = new List<int>();
-    public List<AnimationCurve> sellPriceCurve = new List<AnimationCurve>();
+
+    public AnimationCurve buyPrice;
+    public List<AnimationCurve> evolutionPrices = new List<AnimationCurve>();
 
     [Header("UI Elements")]
     public GameObject rangeVisualizer; 
@@ -50,11 +53,18 @@ public class Tower : MonoBehaviour
     {
         mF = GetComponentInChildren<MeshFilter>();
         bM = GameObject.FindGameObjectWithTag("GridManager").GetComponent<BuildManager>();
+        worldGen = GameObject.FindGameObjectWithTag("GridManager").GetComponent<WorldGeneration>();
         cameraPivot = GameObject.FindGameObjectWithTag("Pivot");
         rangeVisualizer = Instantiate(rangeVisualizer);
         currentEvolution = 1;
         evoMenu.SetActive(false);
     }
+
+    //Arranjar um tower price manager (TowerPurchase)
+    //que altera remotamente o preço de cada uma das torres utilizando
+    //os valores definidos neste script (pela animation curve)
+    //de modo a comunicar com a Shop e com o menu de evolução / venda
+
 
 
     private void Start()
@@ -90,7 +100,9 @@ public class Tower : MonoBehaviour
         }
         else
         {
-            evoPriceText.text = evolvePrice[currentEvolution-1].ToString();
+            //evoPriceText.text = evolvePrice[currentEvolution-1].ToString();
+            int price = (int)evolutionPrices[currentEvolution - 1].Evaluate(worldGen.CurrentWave - 1);
+            evoPriceText.text = price.ToString();
             evoButton.SetActive(true);
         }
     }
@@ -148,16 +160,19 @@ public class Tower : MonoBehaviour
     {
         if (bM.CurrentCoins >= evolvePrice[currentEvolution - 1] && currentEvolution < numberOfEvolutions)
         {
-            bM.CurrentCoins -= evolvePrice[currentEvolution - 1];
+            //bM.CurrentCoins -= evolvePrice[currentEvolution - 1];
+            bM.CurrentCoins -= (int) evolutionPrices[currentEvolution - 1].Evaluate(worldGen.CurrentWave - 1);
             currentEvolution++;
             mF.mesh = evolutionLooks[currentEvolution - 1];
         }
 
     }
 
+    //Chamar quando vender torre
     public void SellTower()
     {
         bM.CurrentCoins += sellPrice[currentEvolution-1];
+        //bM.CurrentCoins += sellPrices[currentEvolution-1[]];
         bM.allTowers.Remove(gameObject);
         Destroy(gameObject);
     }
