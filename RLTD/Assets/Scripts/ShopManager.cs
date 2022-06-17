@@ -14,10 +14,15 @@ public class ShopManager : MonoBehaviour
     //----
     private void Awake()
     {
-        isOpen = false;
         anim = GetComponent<Animator>();
         enemyGen = GameObject.FindGameObjectWithTag("GridManager").GetComponent<EnemyGeneration>();
         worldGen = GameObject.FindGameObjectWithTag("GridManager").GetComponent<WorldGeneration>();
+    }
+
+    private void Start()
+    {
+        anim.Play(openShopAnimation);
+        isOpen = true;
     }
 
     #region Abrir/Fechar UI
@@ -25,13 +30,13 @@ public class ShopManager : MonoBehaviour
     {
         if (isOpen)
         {
-            isOpen = false;
             anim.Play(closeShopAnimation);
+            isOpen = false;
         }
         if (!isOpen)
         {
-            isOpen = true;
             anim.Play(openShopAnimation);
+            isOpen = true;
         }
 
     }

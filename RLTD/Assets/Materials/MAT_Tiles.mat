@@ -123,7 +123,7 @@ Material:
     - _Glossiness: 0
     - _GlossyReflections: 0
     - _LightScalar: 1
-    - _Metallic: 1
+    - _Metallic: 0.9
     - _OcclusionStrength: 1
     - _OutlineSize: 0.07
     - _Parallax: 0.005

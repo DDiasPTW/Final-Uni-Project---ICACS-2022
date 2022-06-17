@@ -18,11 +18,11 @@ public class Enemy : MonoBehaviour
     public int Damage;
     public float speed;
     
-    private float startAccel;
 
     public GameObject damageIndicatorText;
-    public Color NormalTextColor, PoisonTextColor, SlowTextColor;
-    public Color currentColor;
+    //public Color NormalTextColor, PoisonTextColor, SlowTextColor;
+    //public Color currentColor;
+    public GameObject slowIndicator, poisonIndicator;
 
     [SerializeField]private bool isPoison = false;
     [SerializeField]private bool isSlow = false;
@@ -58,8 +58,7 @@ public class Enemy : MonoBehaviour
     private void Awake()
     {
         navAgent = GetComponent<NavMeshAgent>();
-        startAccel = navAgent.acceleration;
-        //navAgent.speed = speed;
+        
         bM = GameObject.FindGameObjectWithTag("GridManager").GetComponent<BuildManager>();
         enemyGen = GameObject.FindGameObjectWithTag("GridManager").GetComponent<EnemyGeneration>();
         gM = GameObject.FindGameObjectWithTag("GridManager").GetComponent<GameManager>();
@@ -73,8 +72,9 @@ public class Enemy : MonoBehaviour
 
         SetLooks();
 
-
-        currentColor = NormalTextColor;
+        slowIndicator.SetActive(false);
+        poisonIndicator.SetActive(false);
+        //currentColor = NormalTextColor;
     }
 
     private void SetLooks()
@@ -178,13 +178,19 @@ public class Enemy : MonoBehaviour
     {
         if (isPoison)
         {
-            currentColor = PoisonTextColor;
+            //currentColor = PoisonTextColor;
+            poisonIndicator.SetActive(true);
+            poisonIndicator.transform.eulerAngles = new Vector3(45f, cameraPivot.transform.localEulerAngles.y, transform.eulerAngles.z);
         }
-        else if (isSlow)
+        else poisonIndicator.SetActive(false);
+
+        if (isSlow)
         {
-            currentColor = SlowTextColor;
+            //currentColor = SlowTextColor;
+            slowIndicator.SetActive(true);
+            slowIndicator.transform.eulerAngles = new Vector3(45f, cameraPivot.transform.localEulerAngles.y, transform.eulerAngles.z);
         }
-        else currentColor = NormalTextColor;
+        else slowIndicator.SetActive(false);
     }
 
     private void DropItem()
@@ -201,7 +207,7 @@ public class Enemy : MonoBehaviour
         text = Instantiate(damageIndicatorText, transform.position + new Vector3(0, 2f, 0), Quaternion.identity);
         text.transform.localEulerAngles = new Vector3(45f, cameraPivot.transform.localEulerAngles.y, text.transform.localEulerAngles.z);
         text.GetComponent<TextMeshPro>().text = valueToShow.ToString();   
-        text.GetComponent<TextMeshPro>().color = currentColor;
+        //text.GetComponent<TextMeshPro>().color = currentColor;
     }
 
     public void LoseHealth(float damage)
@@ -209,7 +215,7 @@ public class Enemy : MonoBehaviour
         if (!resPoison) //apenas é afetado caso não tenha resistência a esse elemento
         {
             poisonTimeElapsed = poisonTime;
-            if (poisonTime > 0)
+            if (poisonTimeElapsed > 0)
             {
                 isPoison = true;
             }
@@ -222,7 +228,7 @@ public class Enemy : MonoBehaviour
         }
         else if(isPoison)
         {            
-            currentColor = PoisonTextColor;
+            //currentColor = PoisonTextColor;
 
             Health -= damage + (damage * poisonMultiplier);
             ShowDamage(damage + (damage * poisonMultiplier));
@@ -234,7 +240,7 @@ public class Enemy : MonoBehaviour
         if (!resSlow)//apenas é afetado caso não tenha resistência a esse elemento
         {
             isSlow = true;
-            currentColor = SlowTextColor;           
+            //currentColor = SlowTextColor;           
             slowMulti = slowMultiplier;
             slowTimeElapsed = slowTime;
         }
@@ -243,7 +249,7 @@ public class Enemy : MonoBehaviour
     public void ItemChangeSpeed(float slowMultiplier, float slowTime)
     {
         isSlow = true;
-        currentColor = SlowTextColor;
+        //currentColor = SlowTextColor;
         slowMulti = slowMultiplier;
         slowTimeElapsed = slowTime;
     }

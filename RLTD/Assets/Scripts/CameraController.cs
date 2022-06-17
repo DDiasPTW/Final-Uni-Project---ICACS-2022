@@ -6,6 +6,8 @@ public class CameraController : MonoBehaviour
 {
     public Transform cameraTransform;
 
+    private Camera cam;
+
     public float resetTimer;
     [SerializeField] private float resTime;
 
@@ -19,6 +21,8 @@ public class CameraController : MonoBehaviour
     public Vector3 zoomAmount;
     private Quaternion startRotation;
     private Vector3 startPosition;
+    [Range(0,3)]
+    [SerializeField] private float colorChangeMultiplier;
 
     [Header("Limites de camera")]
     public float minZoomY;
@@ -26,7 +30,7 @@ public class CameraController : MonoBehaviour
     public float minZoomZ;
     public float maxZoomZ;
     public float maxPos;
-
+    public float hue;
 
     private Vector3 newPosition;
     private Quaternion newRotation;
@@ -36,17 +40,20 @@ public class CameraController : MonoBehaviour
     private Vector3 dragCurrentPosition;
     private Vector3 rotateStartPosition;
     private Vector3 rotateCurrentPosition;
+
     void Start()
     {
+        cam = cameraTransform.GetComponent<Camera>();
+
         resTime = 0;
 
         startRotation = transform.rotation;
         startPosition = transform.position;
 
 
-        minZoomZ = -GameObject.FindGameObjectWithTag("GridManager").GetComponent<WorldGeneration>().MaxWave * 7f;
-        maxZoomY = GameObject.FindGameObjectWithTag("GridManager").GetComponent<WorldGeneration>().MaxWave * 7f;
-        maxPos = GameObject.FindGameObjectWithTag("GridManager").GetComponent<WorldGeneration>().chunkSize * 12f;
+        minZoomZ = -GameObject.FindGameObjectWithTag("GridManager").GetComponent<WorldGeneration>().MaxWave * 3f;
+        maxZoomY = GameObject.FindGameObjectWithTag("GridManager").GetComponent<WorldGeneration>().MaxWave * 3f;
+        maxPos = GameObject.FindGameObjectWithTag("GridManager").GetComponent<WorldGeneration>().chunkSize * 8f;
 
         if (maxZoomY < minZoomY)
         {
@@ -61,6 +68,27 @@ public class CameraController : MonoBehaviour
         newRotation = transform.rotation;
         newZoom = cameraTransform.localPosition;
         
+    }
+
+    private void Update()
+    {
+        float H, S, V;
+         
+        Color.RGBToHSV(cam.backgroundColor, out H, out S, out V);
+        //Debug.Log(H /*+ " " + S + " " + V*/);
+
+
+
+        if (hue >= 1)
+        {
+            hue = 0;
+        }
+        else
+        {
+            hue += (Time.deltaTime / 100) * colorChangeMultiplier;
+        }
+
+        cam.backgroundColor = Color.HSVToRGB(hue,S,V);
     }
 
     private void LateUpdate()

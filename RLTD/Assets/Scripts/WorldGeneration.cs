@@ -7,6 +7,7 @@ using Unity.AI.Navigation;
 public class WorldGeneration : MonoBehaviour
 {
     private BuildManager bM;
+    private GameManager gM;
     public LayerMask TileLayer;
     public int CurrentWave = 0; //wave atual
     [Range(1,50)]
@@ -50,6 +51,7 @@ public class WorldGeneration : MonoBehaviour
         nav = GetComponent<NavMeshSurface>();
         enemyGen = GetComponent<EnemyGeneration>();
         bM = GetComponent<BuildManager>();
+        gM = GetComponent<GameManager>();
         baseTile = Instantiate(baseTiles[enemyGen.currentDifficulty - 1], Vector3.zero, Quaternion.identity);
         spawnableTiles.Add(baseTile); allTiles.Add(baseTile);
        
@@ -535,6 +537,7 @@ public class WorldGeneration : MonoBehaviour
         for (int i = 0; i < spawnPoints.Count; i++)
         {
             spawnPoints[i].GetComponent<MeshRenderer>().enabled = true;
+            gM.spawnButton.SetActive(true);
         }
     }
 

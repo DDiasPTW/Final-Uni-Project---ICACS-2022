@@ -97,8 +97,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffde97e7fd9d476488adaef700218e74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 200
-  value: 5
+  health: 150
+  value: 4
   icon: {fileID: 21300000, guid: f7a61cb1da1048142b4fa116824d2344, type: 3}
 --- !u!65 &2487120423882931950
 BoxCollider:

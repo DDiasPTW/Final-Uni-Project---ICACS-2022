@@ -128,7 +128,14 @@ public class EnemyGeneration : MonoBehaviour
         chosen_pes = null;
 
         //ESCOLHE UM ELEMENTO DE CADA CATEGORIA PARA CRIAR INIMIGO
-        int whatAcess = Random.Range(0, en_acessorio.Count);
+        int randomNumber = Random.Range(0,100); //0-99
+        int whatAcess;
+        if (randomNumber < 75)
+        {
+            whatAcess = 0; //0 - null, 1- ice, 2- poison
+        }
+        else whatAcess = Random.Range(1,en_acessorio.Count);
+
         int whatCabeca = Random.Range(0, en_cabeca.Count); 
         int whatCorpo = Random.Range(0, en_corpo.Count);
         int whatPes = Random.Range(0, en_pes.Count);

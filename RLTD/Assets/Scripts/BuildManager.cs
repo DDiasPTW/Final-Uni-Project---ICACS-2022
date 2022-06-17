@@ -156,7 +156,7 @@ public class BuildManager : MonoBehaviour
             //Garantir que não coloca por cima de outras torres nem se coloca demasiadas torres no mesmo sitio
             Collider[] checkTower = Physics.OverlapSphere(new Vector3(seePos.x,hit.point.y,seePos.z), .3f, towerLayer);
             Collider[] checkTowerNumber = Physics.OverlapSphere(towerVisualizer.transform.position, checkRadius, towerLayer);
-            //Debug.Log(checkTowerNumber.Length);
+            Debug.Log(checkTowerNumber.Length);
             
             //Verificar onde pode colocar
             if (hit.point.y < .45f || hit.point.y > 1.1f || CurrentCoins < CurrentTowerCost || checkTower.Length != 0 || checkTowerNumber.Length >= maxTowerNumber)
@@ -170,8 +170,12 @@ public class BuildManager : MonoBehaviour
                 rangeSprite.GetComponent<SpriteRenderer>().color = canPlaceColor;  
             }
 
-            towerVisualizer.transform.localScale = TowerToBuild.transform.localScale;
-            towerVisualizer.transform.position = new Vector3(seePos.x, seePos.y + (TowerToBuild.transform.localScale.y / 2) + TowerToBuild.transform.GetChild(0).transform.position.y, seePos.z);
+            //towerVisualizer.transform.localScale = (TowerToBuild.transform.localScale + TowerToBuild.transform.GetChild(0).transform.localScale) / 2;
+            towerVisualizer.transform.localScale = new Vector3(TowerToBuild.transform.localScale.x * TowerToBuild.transform.GetChild(0).transform.localScale.x,
+                TowerToBuild.transform.localScale.y * TowerToBuild.transform.GetChild(0).transform.localScale.y,
+                TowerToBuild.transform.localScale.z * TowerToBuild.transform.GetChild(0).transform.localScale.z);
+
+            towerVisualizer.transform.position = new Vector3(seePos.x, .5f + (towerVisualizer.transform.localScale.y * 2), seePos.z);
             
             rangeSprite.transform.localScale = new Vector3(TowerToBuild.GetComponent<Tower>().range[0], TowerToBuild.GetComponent<Tower>().range[0], 0);
             rangeSprite.transform.position = new Vector3(seePos.x, seePos.y + .1f, seePos.z);

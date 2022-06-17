@@ -52,7 +52,7 @@ public class GameManager : MonoBehaviour
 
         if (enemyGen.enemiesToSpawn != 0 && !enemyGen.isSpawning && enemyGen.spawnedEnemies.Count == 0 && canSpawn)
         {
-            spawnButton.SetActive(true);
+            //spawnButton.SetActive(true);
         }
         else spawnButton.SetActive(false);
 

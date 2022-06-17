@@ -63,7 +63,7 @@ public class PoisonTower : MonoBehaviour
         for (int i = 0; i < allTargets.Length; i++)
         {
             allTargets[i].GetComponent<Enemy>().poisonTime = tower.poisonTime[tower.currentEvolution - 1];
-            allTargets[i].GetComponent<Enemy>().currentColor = allTargets[i].GetComponent<Enemy>().PoisonTextColor;
+            //allTargets[i].GetComponent<Enemy>().currentColor = allTargets[i].GetComponent<Enemy>().PoisonTextColor;
             allTargets[i].GetComponent<Enemy>().poisonMultiplier = tower.poisonMultiplier[tower.currentEvolution - 1];
             allTargets[i].GetComponent<Enemy>().LoseHealth(tower.damage[tower.currentEvolution - 1]);
         }

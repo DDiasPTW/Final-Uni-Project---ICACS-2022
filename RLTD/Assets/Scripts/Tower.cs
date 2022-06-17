@@ -7,10 +7,11 @@ using TMPro;
 
 public class Tower : MonoBehaviour
 {
-    private BuildManager bM;
+    public BuildManager bM;
     private MeshFilter mF;
     private GameObject cameraPivot;
-    private WorldGeneration worldGen;
+    public WorldGeneration worldGen;
+    private GameObject towerDesc;
 
     [Header("Evolution Stuff")]
     public int currentEvolution = 1; 
@@ -29,9 +30,9 @@ public class Tower : MonoBehaviour
 
     [Header("UI Elements")]
     public GameObject rangeVisualizer; 
-    public GameObject evoMenu;   
-    public TextMeshProUGUI evoPriceText;
-    public GameObject evoButton;
+
+    private GameObject evoMenu; 
+    
     public Color rangeVisualizerColor;
     [Header("Damage Stuff")]
     public LayerMask EnemyLayer;
@@ -57,8 +58,9 @@ public class Tower : MonoBehaviour
         worldGen = GameObject.FindGameObjectWithTag("GridManager").GetComponent<WorldGeneration>();
         cameraPivot = GameObject.FindGameObjectWithTag("Pivot");
         rangeVisualizer = Instantiate(rangeVisualizer);
+        towerDesc = GameObject.FindGameObjectWithTag("TowerDesc");
         currentEvolution = 1;
-        evoMenu.SetActive(false);
+        evoMenu = GameObject.FindGameObjectWithTag("TowerEvo");
     }
 
     //Arranjar um tower price manager (TowerPurchase)
@@ -76,43 +78,43 @@ public class Tower : MonoBehaviour
 
     private void Update()
     {
-        UpdateUIElements();
+        //UpdateUIElements();
 
 
         CheckRange();
         CheckEvolutionMenu();        
     }
 
-    private void UpdateUIElements()
-    {
-        evoMenu.transform.eulerAngles = new Vector3(45f, cameraPivot.transform.localEulerAngles.y, evoMenu.transform.eulerAngles.z);
+    //private void UpdateUIElements()
+    //{
+    //    //evoMenu.transform.eulerAngles = new Vector3(45f, cameraPivot.transform.localEulerAngles.y, evoMenu.transform.eulerAngles.z);
        
 
-        if (currentEvolution == numberOfEvolutions)
-        {
-            evoButton.SetActive(false);
-            evoPriceText.text = "";
-            //evoMenu.SetActive(false);
-        }
-        else
-        {
-            //evoPriceText.text = evolvePrice[currentEvolution-1].ToString();
-            int price = (int)evolutionPrices[currentEvolution - 1].Evaluate(worldGen.CurrentWave - 1);
-            evoPriceText.text = price.ToString();
-            evoButton.SetActive(true);
+    //    if (currentEvolution == numberOfEvolutions)
+    //    {
+    //        evoButton.SetActive(false);
+    //        evoPriceText.text = "";
+    //        //evoMenu.SetActive(false);
+    //    }
+    //    else
+    //    {
+    //        //evoPriceText.text = evolvePrice[currentEvolution-1].ToString();
+    //        int price = (int)evolutionPrices[currentEvolution - 1].Evaluate(worldGen.CurrentWave - 1);
+    //        evoPriceText.text = price.ToString();
+    //        evoButton.SetActive(true);
 
-            if (bM.CurrentCoins < (int)evolutionPrices[currentEvolution - 1].Evaluate(worldGen.CurrentWave - 1))
-            {
-                evoButton.GetComponent<Button>().interactable = false;
-            }
-            else
-            {
-                evoButton.GetComponent<Button>().interactable = true;
-            }
-        }
+    //        if (bM.CurrentCoins < (int)evolutionPrices[currentEvolution - 1].Evaluate(worldGen.CurrentWave - 1))
+    //        {
+    //            evoButton.GetComponent<Button>().interactable = false;
+    //        }
+    //        else
+    //        {
+    //            evoButton.GetComponent<Button>().interactable = true;
+    //        }
+    //    }
 
         
-    }
+    //}
 
 
     private void CheckRange()
@@ -138,27 +140,31 @@ public class Tower : MonoBehaviour
 
     private void CheckEvolutionMenu()
     {      
-        if (Input.GetMouseButtonDown(0) /*&& enemyGen.isSpawning*/)
+        if (Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity/*, TowerLayer*/))
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity))
             {
                 if (hit.collider.gameObject == gameObject)
                 {
-                    evoMenu.SetActive(true);
-                    //Debug.Log("Abrir menu evolução");
+                    //evoMenu.SetActive(true);
+                    evoMenu.GetComponent<TowerEvoMenu>().currentTower = gameObject;
                 }
-                else if (hit.collider.gameObject != gameObject && !EventSystem.current.IsPointerOverGameObject())
-                {
-                    evoMenu.SetActive(false);
-                }
+                //else if (hit.collider.gameObject != gameObject && !EventSystem.current.IsPointerOverGameObject())
+                //{
+                //    //evoMenu.GetComponent<TowerEvoMenu>().currentTower = null;
+                //    //evoMenu.SetActive(false);
+                //}
             }
         }
+
+
         if (Input.GetMouseButtonDown(1))
         {
-            evoMenu.SetActive(false);
+            evoMenu.GetComponent<TowerEvoMenu>().currentTower = null;
+            //evoMenu.SetActive(false);
         }
     }
 
@@ -179,7 +185,7 @@ public class Tower : MonoBehaviour
     public void SellTower()
     {
         bM.CurrentCoins += sellPrice[currentEvolution-1];
-        //bM.CurrentCoins += sellPrices[currentEvolution-1[]];
+        evoMenu.GetComponent<TowerEvoMenu>().currentTower = null;
         bM.allTowers.Remove(gameObject);
         Destroy(gameObject);
     }

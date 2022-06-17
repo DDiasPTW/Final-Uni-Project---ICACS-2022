@@ -85,6 +85,6 @@ public class IceTower : MonoBehaviour
     private void OnDrawGizmos()
     {
         //Gizmos.DrawWireSphere(transform.position, tower.range[tower.currentEvolution - 1] / 11);
-        Gizmos.DrawWireSphere(currentTarget.transform.position, tower.AOERange);
+        //Gizmos.DrawWireSphere(currentTarget.transform.position, tower.AOERange);
     }
 }
