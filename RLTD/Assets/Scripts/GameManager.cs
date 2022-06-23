@@ -21,7 +21,6 @@ public class GameManager : MonoBehaviour
     public int coinsPerWave;
 
     public int Health = 100;
-    public List<TextMeshProUGUI> healthText;
 
     private void Awake()
     {
@@ -37,12 +36,6 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        for (int i = 0; i < healthText.Count; i++)
-        {
-            healthText[i].text = Health.ToString();
-        }
-
-
         if (enemyGen.spawnedEnemies.Count == 0 && !enemyGen.isSpawning && worldGen.CurrentWave < worldGen.MaxWave && mainMenuUI.activeSelf == false && enemyGen.enemiesToSpawn == 0)
         {
             //nextPositionButton.SetActive(true);
@@ -50,18 +43,27 @@ public class GameManager : MonoBehaviour
         }
         //else nextPositionButton.SetActive(false);
 
-        if (enemyGen.enemiesToSpawn != 0 && !enemyGen.isSpawning && enemyGen.spawnedEnemies.Count == 0 && canSpawn)
+        if (enemyGen.enemiesToSpawn != 0 && !enemyGen.isSpawning && enemyGen.spawnedEnemies.Count == 0 && canSpawn /*&& !worldGen.canSpawn*/)
         {
-            //spawnButton.SetActive(true);
+            spawnButton.SetActive(true);
         }
         else spawnButton.SetActive(false);
+
+        if (enemyGen.isSpawning)
+        {
+            //waveText.gameObject.SetActive(false);
+        }
+        else if (!enemyGen.isSpawning && enemyGen.spawnedEnemies.Count == 0)
+        {
+            //waveText.gameObject.SetActive(true);
+        }
 
         if (Health <= 0)
         {
             LoseGame();
         }
 
-        waveText.text = worldGen.CurrentWave.ToString() + "/" + worldGen.MaxWave.ToString();
+        waveText.text = "WAVE " + worldGen.CurrentWave.ToString() + "/" + worldGen.MaxWave.ToString();
 
         if (Input.GetKeyDown(KeyCode.R))
         {

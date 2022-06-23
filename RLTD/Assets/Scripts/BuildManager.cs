@@ -51,7 +51,7 @@ public class BuildManager : MonoBehaviour
 
     public void SetStartCoins() //chamado no mainMenu
     {
-        CurrentCoins = startCoins /** enemyGen.currentDifficulty*/;
+        CurrentCoins = startCoins * enemyGen.currentDifficulty;
     }
 
     private void Update()
@@ -65,7 +65,7 @@ public class BuildManager : MonoBehaviour
             canBuild = true;
             towerVisualizer.GetComponent<MeshFilter>().mesh = TowerToBuild.GetComponent<Tower>().evolutionLooks[0];
         }
-        else canBuild = false; 
+        else canBuild = false;  
 
         if (canBuild)
         {         
@@ -79,6 +79,7 @@ public class BuildManager : MonoBehaviour
 
             if (Input.GetMouseButtonDown(1)) //Dar reset da compra, caso queira comprar outra ou nao queira comprar de todo
             {
+
                 ResetPurchase();
             }
         }
@@ -95,6 +96,8 @@ public class BuildManager : MonoBehaviour
 
     private void FollowMouse()
     {
+        checkRadius = TowerToBuild.GetComponent<Tower>().range[0] / worldGen.chunkSize;
+
         if (iM.currentItem != null)
         {
             if (iM.currentItem.GetComponent<Item>().activated)
@@ -155,8 +158,11 @@ public class BuildManager : MonoBehaviour
 
             //Garantir que não coloca por cima de outras torres nem se coloca demasiadas torres no mesmo sitio
             Collider[] checkTower = Physics.OverlapSphere(new Vector3(seePos.x,hit.point.y,seePos.z), .3f, towerLayer);
+
+            
             Collider[] checkTowerNumber = Physics.OverlapSphere(towerVisualizer.transform.position, checkRadius, towerLayer);
-            Debug.Log(checkTowerNumber.Length);
+            //Collider[] checkTowerNumber = Physics.OverlapSphere(towerVisualizer.transform.position, TowerToBuild.GetComponent<Tower>().range[0] / 7, towerLayer);
+            //Debug.Log(checkTowerNumber.Length);
             
             //Verificar onde pode colocar
             if (hit.point.y < .45f || hit.point.y > 1.1f || CurrentCoins < CurrentTowerCost || checkTower.Length != 0 || checkTowerNumber.Length >= maxTowerNumber)
@@ -283,10 +289,11 @@ public class BuildManager : MonoBehaviour
         allTowers.Clear();
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(towerVisualizer.transform.position,checkRadius);
-    }
+    //private void OnDrawGizmos()
+    //{
+    //    //Gizmos.color = Color.green;
+    //    Gizmos.color = canPlaceColor;
+    //    Gizmos.DrawSphere(towerVisualizer.transform.position, checkRadius);
+    //}
 
 }

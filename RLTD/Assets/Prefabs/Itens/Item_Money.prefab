@@ -47,7 +47,7 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1.4689094
+  m_Radius: 1.2
   m_Center: {x: 0, y: 0.46890917, z: 0}
 --- !u!114 &3168495557367087665
 MonoBehaviour:
@@ -61,12 +61,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64c1146d6323924499c157a710f1d7d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemImage: {fileID: 21300000, guid: 6efb02805f5d29441810eb7762b06b4b, type: 3}
+  thisMesh: {fileID: -2432090755550338912, guid: 17b09bdef342ddd429867a775317f711,
+    type: 3}
   aliveTime: 10
   pickedUp: 0
   activated: 0
   placed: 0
-  description: 'This item gives you +5 moneys every 2 seconds
+  description: 'This item gives you +10 moneys every 5 seconds
 
     while the wave
     is being played'
@@ -82,8 +83,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c370d75e987c1546b1ede43d001b324, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  value: 5
-  delay: 2
+  value: 10
+  delay: 5
 --- !u!95 &2012054341391302553
 Animator:
   serializedVersion: 4
@@ -115,6 +116,7 @@ GameObject:
   - component: {fileID: 2658527185716843766}
   - component: {fileID: 1536041062995021230}
   - component: {fileID: 5632677274700777346}
+  - component: {fileID: 2504534303517030132}
   m_Layer: 10
   m_Name: Mesh
   m_TagString: Untagged
@@ -144,7 +146,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2779768247486563791}
-  m_Mesh: {fileID: -2432090755550338912, guid: a1915b6d8a1f6db41806684568291672, type: 3}
+  m_Mesh: {fileID: -2432090755550338912, guid: 17b09bdef342ddd429867a775317f711, type: 3}
 --- !u!23 &5632677274700777346
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -166,7 +168,6 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 183d7e6ee93ce274fa19898d680e1f9f, type: 2}
-  - {fileID: 2100000, guid: 2f6c43da235789148a4d184a7a90d0a8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -188,3 +189,21 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &2504534303517030132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2779768247486563791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 1
+  outlineColor: {r: 0.9622642, g: 0.757631, b: 0.05900679, a: 1}
+  outlineWidth: 4
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []

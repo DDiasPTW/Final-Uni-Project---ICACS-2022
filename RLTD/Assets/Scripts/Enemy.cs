@@ -12,6 +12,7 @@ public class Enemy : MonoBehaviour
     private EnemyGeneration enemyGen;
     private GameManager gM;
     private ItemManager iM;
+    private WorldGeneration worldGen;
 
     public float Health;
     public int Value;
@@ -63,6 +64,7 @@ public class Enemy : MonoBehaviour
         enemyGen = GameObject.FindGameObjectWithTag("GridManager").GetComponent<EnemyGeneration>();
         gM = GameObject.FindGameObjectWithTag("GridManager").GetComponent<GameManager>();
         iM = GameObject.FindGameObjectWithTag("GridManager").GetComponent<ItemManager>();
+        worldGen = GameObject.FindGameObjectWithTag("GridManager").GetComponent<WorldGeneration>();
         cameraPivot = GameObject.FindGameObjectWithTag("Pivot");
 
         mF_acess = transform.GetChild(0).GetChild(0).GetComponent<MeshFilter>();
@@ -112,8 +114,18 @@ public class Enemy : MonoBehaviour
         resPoison = enemyGen.chosen_acessorio.GetComponent<Acessorio>().resPoison;
     }
     void Start()
-    {     
-        navAgent.SetDestination(GameObject.FindGameObjectWithTag("TARGET").transform.position);
+    {
+        float distance = 10000000;
+        int t = 0;
+        for (int i = 0; i < worldGen.allTargets.Count; i++)
+        {
+            if (Vector3.Distance(transform.position, worldGen.allTargets[i].transform.position) < distance)
+            {
+                distance = Vector3.Distance(transform.position, worldGen.allTargets[i].transform.position);
+                t = i;
+            }
+        }
+        navAgent.SetDestination(worldGen.allTargets[t].transform.position);
 
         float itemDrop = Random.Range(0f,100f);
         if (itemDrop <= itemDropChance)

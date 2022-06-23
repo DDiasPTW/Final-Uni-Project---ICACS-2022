@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1923043927479675655}
   - component: {fileID: 3140623446372175763}
   - component: {fileID: 3631916838487052879}
-  - component: {fileID: 3631916838487052876}
+  - component: {fileID: -7332763876713532844}
   m_Layer: 0
   m_Name: Corpo_0
   m_TagString: Untagged
@@ -42,7 +42,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5535212432141173110}
-  m_Mesh: {fileID: -2432090755550338912, guid: f573eb88f76485a45b5fca8e7946db9c, type: 3}
+  m_Mesh: {fileID: -2432090755550338912, guid: 09c93fd962a55444b9a6c35de19a77ff, type: 3}
 --- !u!23 &3140623446372175763
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -97,10 +97,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffde97e7fd9d476488adaef700218e74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 75
+  health: 90
   value: 1
   icon: {fileID: 21300000, guid: cb8a12047514f5646a27535d34db5d57, type: 3}
---- !u!65 &3631916838487052876
+--- !u!65 &-7332763876713532844
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -111,5 +111,5 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.3, y: 0.3, z: 0.5}
-  m_Center: {x: 0.1, y: 0, z: 0}
+  m_Size: {x: 1.2, y: 0.6, z: 0.8}
+  m_Center: {x: -0.049999982, y: 0, z: 0}

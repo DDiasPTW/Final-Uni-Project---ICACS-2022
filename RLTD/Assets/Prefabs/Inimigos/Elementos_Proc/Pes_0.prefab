@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 3513662103363869768}
   - component: {fileID: 1735053869687465218}
   - component: {fileID: 2968325618531320214}
-  - component: {fileID: 5653467167532732285}
   - component: {fileID: 5653467167532732274}
+  - component: {fileID: -3040781198369888639}
   m_Layer: 0
   m_Name: Pes_0
   m_TagString: Untagged
@@ -42,7 +42,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5653467167532732275}
-  m_Mesh: {fileID: -2432090755550338912, guid: 4b2c0bcbcdef29843923a51b64b588e8, type: 3}
+  m_Mesh: {fileID: -2432090755550338912, guid: c941bb4dafb4cf24596c27bca8f7cb1c, type: 3}
 --- !u!23 &2968325618531320214
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -85,19 +85,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &5653467167532732285
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5653467167532732275}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.79999995, y: 0.5, z: 0.3}
-  m_Center: {x: -0.24999999, y: 0, z: 0}
 --- !u!114 &5653467167532732274
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -110,5 +97,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f55fe897d03a96d4399b5a84256768e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 2
+  speed: 1.8
   icon: {fileID: 21300000, guid: fe02f27a82370ed4d99c4dda548b7788, type: 3}
+--- !u!65 &-3040781198369888639
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5653467167532732275}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.5, y: 0.4, z: 0.8}
+  m_Center: {x: 0.19999999, y: 0, z: 0}

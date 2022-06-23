@@ -61,6 +61,7 @@ public class Tower : MonoBehaviour
         towerDesc = GameObject.FindGameObjectWithTag("TowerDesc");
         currentEvolution = 1;
         evoMenu = GameObject.FindGameObjectWithTag("TowerEvo");
+        mF.mesh = evolutionLooks[currentEvolution - 1];
     }
 
     //Arranjar um tower price manager (TowerPurchase)
@@ -177,6 +178,7 @@ public class Tower : MonoBehaviour
             bM.CurrentCoins -= (int) evolutionPrices[currentEvolution - 1].Evaluate(worldGen.CurrentWave - 1);
             currentEvolution++;
             mF.mesh = evolutionLooks[currentEvolution - 1];
+            gameObject.GetComponent<Outline>().Repeat();
         }
 
     }

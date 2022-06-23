@@ -95,6 +95,7 @@ GameObject:
   - component: {fileID: 3286661989173916956}
   - component: {fileID: 2879876980003009399}
   - component: {fileID: 747083370724481548}
+  - component: {fileID: 7912929963206911640}
   m_Layer: 9
   m_Name: Torre_Default
   m_TagString: Untagged
@@ -129,8 +130,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.750505, y: 0.93979836, z: 0.7658105}
-  m_Center: {x: 0, y: -0.030100837, z: 0}
+  m_Size: {x: 0.5, y: 1.2756814, z: 0.5}
+  m_Center: {x: 0, y: 0.14707665, z: 0}
 --- !u!114 &2879876980003009399
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -162,7 +163,7 @@ MonoBehaviour:
   range:
   - 35
   - 45
-  - 60
+  - 55
   evolvePrice: c8000000c2010000
   sellPrice: 64000000af0000002c010000
   buyPrice:
@@ -268,3 +269,21 @@ MonoBehaviour:
     type: 3}
   projectileShootPos: {fileID: 0}
   speed: 5
+--- !u!114 &7912929963206911640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9201170739185646984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 1
+  outlineColor: {r: 1, g: 0, b: 0.11302805, a: 1}
+  outlineWidth: 1.5
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []

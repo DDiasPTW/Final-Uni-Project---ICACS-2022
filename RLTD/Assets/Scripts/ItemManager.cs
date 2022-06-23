@@ -11,11 +11,13 @@ public class ItemManager : MonoBehaviour
 
     public GameObject currentItem;
     public GameObject itemHolderUI;
-    public GameObject itemHolderImage;
+    public GameObject itemHolderPreview;
 
     [SerializeField] private GameObject itemDesc;
     [SerializeField] private Image itemDescImage;
     [SerializeField] private TextMeshProUGUI descriptionText;
+    [SerializeField] private GameObject itemPrev;
+    [SerializeField] private GameObject towerPrev;
 
     public LayerMask itemLayer;
 
@@ -32,6 +34,7 @@ public class ItemManager : MonoBehaviour
         if (currentItem == null)
         {
             itemHolderUI.SetActive(false);
+            itemPrev.GetComponent<MeshFilter>().mesh = null;
         }
         else itemHolderUI.SetActive(true);
 
@@ -68,9 +71,10 @@ public class ItemManager : MonoBehaviour
                     currentItem = hit.collider.gameObject;
                     currentItem.GetComponent<Item>().pickedUp = true;
                 }
-                
 
-                itemHolderImage.GetComponent<Image>().sprite = hit.collider.gameObject.GetComponent<Item>().itemImage;
+
+                //itemHolderImage.GetComponent<RawImage>().sprite = hit.collider.gameObject.GetComponent<Item>().itemImage;
+                itemHolderPreview.GetComponent<MeshFilter>().mesh = hit.collider.gameObject.GetComponent<Item>().thisMesh;
                 
             }
         }
@@ -81,11 +85,12 @@ public class ItemManager : MonoBehaviour
     {
         //Debug.Log(currentItem.gameObject.name);
         currentItem.GetComponent<Item>().activated = true;
-        
-        
+
         itemDesc.SetActive(true);
         descriptionText.text = currentItem.GetComponent<Item>().description;
-        itemDescImage.sprite = currentItem.GetComponent<Item>().itemImage;
+        itemPrev.GetComponent<MeshFilter>().mesh = currentItem.GetComponentInChildren<MeshFilter>().sharedMesh;
+        towerPrev.GetComponent<MeshFilter>().mesh = null;
+        //itemDescImage.sprite = currentItem.GetComponent<Item>().itemImage;
         //Debug.Log("Show item desc");
     }
 }

@@ -36,7 +36,7 @@ public class Item_Bomba : MonoBehaviour
         iM = GameObject.FindGameObjectWithTag("GridManager").GetComponent<ItemManager>();
         bM = GameObject.FindGameObjectWithTag("GridManager").GetComponent<BuildManager>();
         item = GetComponent<Item>();
-        item.itemImage = thisSprite;
+        //item.itemImage = thisSprite;
         anim = GetComponent<Animator>();
     }
 
@@ -138,7 +138,7 @@ public class Item_Bomba : MonoBehaviour
                 seePos.z = Mathf.Round(hit.point.z);
             }
 
-            Collider[] checkItens = Physics.OverlapSphere(new Vector3(seePos.x, hit.point.y, seePos.z), .3f, itemLayer);
+            Collider[] checkItens = Physics.OverlapSphere(new Vector3(seePos.x, hit.point.y, seePos.z), .1f, itemLayer);
 
             if (hit.point.y <= .05f && hit.point.y >= -.1f && checkItens.Length == 0)
             {

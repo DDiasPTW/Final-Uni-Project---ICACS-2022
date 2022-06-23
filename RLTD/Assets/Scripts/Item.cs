@@ -5,7 +5,8 @@ using UnityEngine.UI;
 
 public class Item : MonoBehaviour
 {
-    public Sprite itemImage;
+    //public Sprite itemImage;
+    public Mesh thisMesh;
     public float aliveTime;
     public bool pickedUp = false;
     public bool activated = false;

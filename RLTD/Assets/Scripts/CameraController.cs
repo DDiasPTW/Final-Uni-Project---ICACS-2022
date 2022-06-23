@@ -53,7 +53,7 @@ public class CameraController : MonoBehaviour
 
         minZoomZ = -GameObject.FindGameObjectWithTag("GridManager").GetComponent<WorldGeneration>().MaxWave * 3f;
         maxZoomY = GameObject.FindGameObjectWithTag("GridManager").GetComponent<WorldGeneration>().MaxWave * 3f;
-        maxPos = GameObject.FindGameObjectWithTag("GridManager").GetComponent<WorldGeneration>().chunkSize * 8f;
+        maxPos = GameObject.FindGameObjectWithTag("GridManager").GetComponent<WorldGeneration>().MaxWave * 3.5f;
 
         if (maxZoomY < minZoomY)
         {
@@ -167,6 +167,7 @@ public class CameraController : MonoBehaviour
 
     void HandleMouseInput()
     {
+        //Zoom camera
         if (Input.mouseScrollDelta.y != 0)
         {
             newZoom += Input.mouseScrollDelta.y * zoomAmount;
@@ -174,8 +175,15 @@ public class CameraController : MonoBehaviour
             if (Camera.main.orthographic)
             {
                 Camera.main.orthographicSize = newZoom.y;
-            }
-            
+            }          
+        }
+
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            newZoom -= zoomAmount;
+        }else if (Input.GetKeyDown(KeyCode.C))
+        {
+            newZoom += zoomAmount;
         }
         //Dar drag da camera
         if (Input.GetMouseButtonDown(2))

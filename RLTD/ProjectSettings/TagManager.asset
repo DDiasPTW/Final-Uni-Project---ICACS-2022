@@ -15,6 +15,7 @@ TagManager:
   - Speed
   - TowerDesc
   - TowerEvo
+  - Preview
   layers:
   - Default
   - TransparentFX
@@ -27,7 +28,7 @@ TagManager:
   - Target
   - Tower
   - Item
-  - 
+  - Prev
   - 
   - 
   - 

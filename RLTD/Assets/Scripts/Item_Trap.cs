@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class Item_Trap : MonoBehaviour
 {
-    [Header("Classes necessarias")]
+    [Header("Componentes necessarios")]
     private Item item;
     private BuildManager bM;
     private ItemManager iM;
     private WorldGeneration worldGen;
+    private Animator anim;
     [Header("Building")]
     public LayerMask layerToBuild;
     private bool canPlace;
@@ -35,8 +36,9 @@ public class Item_Trap : MonoBehaviour
         worldGen = GameObject.FindGameObjectWithTag("GridManager").GetComponent<WorldGeneration>();
         iM = GameObject.FindGameObjectWithTag("GridManager").GetComponent<ItemManager>();
         bM = GameObject.FindGameObjectWithTag("GridManager").GetComponent<BuildManager>();
+        anim = GetComponent<Animator>();
         item = GetComponent<Item>();
-        item.itemImage = thisSprite;
+        //item.itemImage = thisSprite;
     }
 
 
@@ -74,6 +76,10 @@ public class Item_Trap : MonoBehaviour
         if (item.placed)
         {
             CheckEnemies();
+            if (!canAttack)
+            {
+                anim.Play("Idle");//
+            }
         }
 
         if (canAttack)
@@ -137,7 +143,7 @@ public class Item_Trap : MonoBehaviour
                 seePos.z = Mathf.Round(hit.point.z);
             }
 
-            Collider[] checkItens = Physics.OverlapSphere(new Vector3(seePos.x, hit.point.y, seePos.z), .3f, itemLayer);
+            Collider[] checkItens = Physics.OverlapSphere(new Vector3(seePos.x, hit.point.y, seePos.z), .1f, itemLayer);
 
             if (hit.point.y <= .05f && hit.point.y >= -.1f && checkItens.Length == 0)
             {

@@ -14,8 +14,12 @@ public class TowerPurchase : MonoBehaviour
     private ItemManager iM;
     public TextMeshProUGUI textoPreco;
 
+    [SerializeField] private Mesh towerMesh;
+    [SerializeField] private GameObject towerPreviewMesh;
+    [SerializeField] private GameObject itemPreviewMesh;
+
     [SerializeField] private GameObject towerDesc;
-    [SerializeField] private Image towerDescImage;
+    //[SerializeField] private Image towerDescImage;
     [SerializeField] private TextMeshProUGUI descriptionText;
     [Multiline(2)]
     [SerializeField] private string towerDescription;
@@ -66,7 +70,9 @@ public class TowerPurchase : MonoBehaviour
     {
         towerDesc.SetActive(true);
         descriptionText.text = towerDescription;
-        towerDescImage.sprite = gameObject.GetComponent<Image>().sprite;
+        towerPreviewMesh.GetComponent<MeshFilter>().mesh = towerMesh;
+        itemPreviewMesh.GetComponent<MeshFilter>().sharedMesh = null;
+        //towerDescImage.sprite = gameObject.GetComponent<Image>().sprite;
 
         if (bM.CurrentCoins >= price)
         {

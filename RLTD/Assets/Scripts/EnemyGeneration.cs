@@ -148,10 +148,19 @@ public class EnemyGeneration : MonoBehaviour
 
         //Atualiza UI
         enemyVisualizer.SetActive(true);
-        acess_Icon.GetComponent<Image>().sprite = chosen_acessorio.GetComponent<Acessorio>().Icon;       
-        cabeca_Icon.GetComponent<Image>().sprite = chosen_cabeca.GetComponent<Head>().icon; 
-        corpo_Icon.GetComponent<Image>().sprite = chosen_corpo.GetComponent<Corpo>().icon; 
-        pes_Icon.GetComponent<Image>().sprite = chosen_pes.GetComponent<Pes>().icon;
+        acess_Icon.GetComponent<MeshFilter>().mesh = chosen_acessorio.GetComponent<MeshFilter>().sharedMesh;
+        cabeca_Icon.GetComponent<MeshFilter>().mesh = chosen_cabeca.GetComponent<MeshFilter>().sharedMesh;
+        corpo_Icon.GetComponent<MeshFilter>().mesh = chosen_corpo.GetComponent<MeshFilter>().sharedMesh;
+        pes_Icon.GetComponent<MeshFilter>().mesh = chosen_pes.GetComponent<MeshFilter>().sharedMesh;
+        
+        pes_Icon.transform.localPosition = new Vector3(0, chosen_pes.GetComponent<BoxCollider>().size.y / 2, 0);
+
+        corpo_Icon.transform.localPosition = new Vector3(0, chosen_corpo.GetComponent<BoxCollider>().size.y / 2 + chosen_pes.GetComponent<BoxCollider>().size.y, 0);
+
+        cabeca_Icon.transform.localPosition = new Vector3(0, chosen_cabeca.GetComponent<BoxCollider>().size.y / 2 + chosen_corpo.GetComponent<BoxCollider>().size.y + chosen_pes.GetComponent<BoxCollider>().size.y, 0);
+
+        acess_Icon.transform.localPosition = new Vector3(0, chosen_acessorio.GetComponent<BoxCollider>().size.y / 2 + chosen_cabeca.GetComponent<BoxCollider>().size.y + chosen_corpo.GetComponent<BoxCollider>().size.y + chosen_pes.GetComponent<BoxCollider>().size.y, 0);
+
 
         if (chosen_acessorio.GetComponent<Acessorio>().resSlow)
         {
