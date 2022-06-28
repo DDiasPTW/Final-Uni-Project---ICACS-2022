@@ -19,7 +19,6 @@ public class TowerPurchase : MonoBehaviour
     [SerializeField] private GameObject itemPreviewMesh;
 
     [SerializeField] private GameObject towerDesc;
-    //[SerializeField] private Image towerDescImage;
     [SerializeField] private TextMeshProUGUI descriptionText;
     [Multiline(2)]
     [SerializeField] private string towerDescription;
@@ -72,7 +71,6 @@ public class TowerPurchase : MonoBehaviour
         descriptionText.text = towerDescription;
         towerPreviewMesh.GetComponent<MeshFilter>().mesh = towerMesh;
         itemPreviewMesh.GetComponent<MeshFilter>().sharedMesh = null;
-        //towerDescImage.sprite = gameObject.GetComponent<Image>().sprite;
 
         if (bM.CurrentCoins >= price)
         {

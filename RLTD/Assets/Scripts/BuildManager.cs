@@ -161,7 +161,7 @@ public class BuildManager : MonoBehaviour
 
             
             Collider[] checkTowerNumber = Physics.OverlapSphere(towerVisualizer.transform.position, checkRadius, towerLayer);
-            //Collider[] checkTowerNumber = Physics.OverlapSphere(towerVisualizer.transform.position, TowerToBuild.GetComponent<Tower>().range[0] / 7, towerLayer);
+            
             //Debug.Log(checkTowerNumber.Length);
             
             //Verificar onde pode colocar
@@ -175,8 +175,7 @@ public class BuildManager : MonoBehaviour
                 canPlace = true;
                 rangeSprite.GetComponent<SpriteRenderer>().color = canPlaceColor;  
             }
-
-            //towerVisualizer.transform.localScale = (TowerToBuild.transform.localScale + TowerToBuild.transform.GetChild(0).transform.localScale) / 2;
+          
             towerVisualizer.transform.localScale = new Vector3(TowerToBuild.transform.localScale.x * TowerToBuild.transform.GetChild(0).transform.localScale.x,
                 TowerToBuild.transform.localScale.y * TowerToBuild.transform.GetChild(0).transform.localScale.y,
                 TowerToBuild.transform.localScale.z * TowerToBuild.transform.GetChild(0).transform.localScale.z);

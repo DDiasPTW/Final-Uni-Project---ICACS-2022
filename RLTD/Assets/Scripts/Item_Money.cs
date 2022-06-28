@@ -20,8 +20,7 @@ public class Item_Money : MonoBehaviour
     }
 
     private void Update()
-    {
-        
+    {      
         if (item.pickedUp)
         {
             timer -= Time.deltaTime;

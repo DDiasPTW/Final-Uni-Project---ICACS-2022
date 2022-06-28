@@ -74,16 +74,30 @@ public class Outline : MonoBehaviour {
   [SerializeField, HideInInspector]
   private List<ListVector3> bakeValues = new List<ListVector3>();
 
-  private Renderer[] renderers;
+  [SerializeField]private Renderer[] renderers;
+  [SerializeField]private List<Renderer> newRenderers = new List<Renderer>();
   private Material outlineMaskMaterial;
   private Material outlineFillMaterial;
 
   private bool needsUpdate;
 
-  void Awake() {
+  void Awake() 
+  {
 
-    // Cache renderers
-    renderers = GetComponentsInChildren<Renderer>();
+        // Cache renderers
+        renderers = GetComponentsInChildren<Renderer>();
+        
+        for (int i = 0; i < renderers.Length; i++)
+        {
+            if (renderers[i].GetComponent<ParticleSystem>())
+            {
+                //ignore
+            }
+            else
+            {
+                newRenderers.Add(renderers[i]);
+            }
+        }
 
     // Instantiate outline materials
     outlineMaskMaterial = Instantiate(Resources.Load<Material>(@"Materials/OutlineMask"));
@@ -100,10 +114,22 @@ public class Outline : MonoBehaviour {
   }
 
 
-    public void Repeat()
+  public void Repeat()
     {
         // Cache renderers
         renderers = GetComponentsInChildren<Renderer>();
+
+        for (int i = 0; i < renderers.Length; i++)
+        {
+            if (renderers[i].GetComponent<ParticleSystem>())
+            {
+                //ignore
+            }
+            else
+            {
+                newRenderers.Add(renderers[i]);
+            }
+        }
 
         // Instantiate outline materials
         outlineMaskMaterial = Instantiate(Resources.Load<Material>(@"Materials/OutlineMask"));
@@ -120,7 +146,7 @@ public class Outline : MonoBehaviour {
     }
 
   void OnEnable() {
-    foreach (var renderer in renderers) {
+    foreach (var renderer in newRenderers) {
 
       // Append outline shaders
       var materials = renderer.sharedMaterials.ToList();

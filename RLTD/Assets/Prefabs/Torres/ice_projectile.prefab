@@ -231,6 +231,10 @@ MonoBehaviour:
   enemyLayer:
     serializedVersion: 2
     m_Bits: 64
+  currentEvo: 0
+  explodeVFX:
+  - {fileID: 7610895041781996937, guid: 477d50f25ff56364fadd7643bc78e920, type: 3}
+  - {fileID: 7610895041781996937, guid: eff9dbd6496055642a700fe22c3c03d2, type: 3}
 --- !u!135 &5703506174008155216
 SphereCollider:
   m_ObjectHideFlags: 0

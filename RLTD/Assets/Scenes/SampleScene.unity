@@ -10315,7 +10315,7 @@ MonoBehaviour:
   towerLayer:
     serializedVersion: 2
     m_Bits: 512
-  startCoins: 5000
+  startCoins: 500
   CurrentCoins: 0
   CurrentTowerCost: 0
   TowerToBuild: {fileID: 0}
@@ -10350,7 +10350,7 @@ MonoBehaviour:
   spawnButton: {fileID: 16452844}
   mainMenuUI: {fileID: 586664851}
   coinsPerWave: 75
-  Health: 10000
+  Health: 500
 --- !u!114 &1928352536
 MonoBehaviour:
   m_ObjectHideFlags: 0

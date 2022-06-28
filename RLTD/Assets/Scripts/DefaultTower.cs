@@ -67,8 +67,6 @@ public class DefaultTower : MonoBehaviour
         proj.GetComponent<DestroyDefProj>().damage = tower.damage[tower.currentEvolution - 1];
         proj.GetComponent<Rigidbody>().AddForce(targetDir.normalized * projSpeed, ForceMode.Impulse);
 
-
-        //currentTarget.GetComponent<Enemy>().LoseHealth(tower.damage[tower.currentEvolution - 1]);
         startFireRate = tower.fireRate[tower.currentEvolution - 1];
     }
 }

@@ -82,14 +82,11 @@ public class ItemManager : MonoBehaviour
 
     public void ActivateItem() //chamado no event trigger do itemHolder (UI)
     {
-        //Debug.Log(currentItem.gameObject.name);
         currentItem.GetComponent<Item>().activated = true;
 
         itemDesc.SetActive(true);
         descriptionText.text = currentItem.GetComponent<Item>().description;
         itemPrev.GetComponent<MeshFilter>().mesh = currentItem.GetComponentInChildren<MeshFilter>().sharedMesh;
         towerPrev.GetComponent<MeshFilter>().mesh = null;
-        //itemDescImage.sprite = currentItem.GetComponent<Item>().itemImage;
-        //Debug.Log("Show item desc");
     }
 }

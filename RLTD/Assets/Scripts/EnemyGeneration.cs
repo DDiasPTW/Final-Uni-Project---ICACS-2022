@@ -57,7 +57,6 @@ public class EnemyGeneration : MonoBehaviour
     private void Awake()
     {
         enemiesPerWave = enemiesPerWave * currentDifficulty;
-        //enemyVisualizer.SetActive(false);
     }
 
     void Start()
@@ -69,7 +68,7 @@ public class EnemyGeneration : MonoBehaviour
     void Update()
     {
 
-        if (Input.GetKeyDown(KeyCode.K)) //"Mata" a current wave
+        if (Input.GetKeyDown(KeyCode.K)) //"Mata" a current wave, remover na versão final
         {
             ClearWave();
         }
@@ -182,8 +181,6 @@ public class EnemyGeneration : MonoBehaviour
 
     void SpawnEnemies() //da loop por todos os spawnpoints de modo a que haja um numero igual de inimigos por spawnPoint.
     {
-        //DefineEnemy();
-
         if (spawnTime <= 0)
         {
             for (int i = 0; i < worldGen.spawnPoints.Count; i++)

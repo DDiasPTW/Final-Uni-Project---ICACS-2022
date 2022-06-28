@@ -11,7 +11,10 @@ public class DestroyIceProj : MonoBehaviour
     public float slowMulti;
     public float aoeRange;
     public LayerMask enemyLayer;
+    public int currentEvo;
 
+    private bool canExplode = true;
+    public List<GameObject> explodeVFX = new List<GameObject>();
     private void Update()
     {
         lifeTime -= Time.deltaTime;
@@ -31,7 +34,20 @@ public class DestroyIceProj : MonoBehaviour
             allTargets[i].GetComponent<Enemy>().LoseHealth(damage);
             allTargets[i].GetComponent<Enemy>().ChangeSpeed(slowMulti, slowTime);
         }
+        if (canExplode)
+        {
+            Instantiate(explodeVFX[currentEvo], transform);
+            gameObject.GetComponent<MeshRenderer>().enabled = false;
+            gameObject.GetComponent<TrailRenderer>().enabled = false;
+            canExplode = false;
+        }
 
+        StartCoroutine(DestroyGO());
+    }
+
+    IEnumerator DestroyGO()
+    {
+        yield return new WaitForSeconds(2f);
         Destroy(gameObject);
     }
 }

@@ -62,16 +62,19 @@ public class BomberTower : MonoBehaviour
         GameObject proj = Instantiate(bomberProjectile,tower.shootPositions[tower.currentEvolution - 1].transform.position, Quaternion.identity);
 
         proj.GetComponent<DestroyBombProj>().damage = tower.damage[tower.currentEvolution -1];
-        proj.GetComponent<DestroyBombProj>().aoeRange = tower.AOERange;
+        proj.GetComponent<DestroyBombProj>().aoeRange = tower.AOERange[tower.currentEvolution - 1];
         proj.GetComponent<DestroyBombProj>().enemyLayer = tower.EnemyLayer;
+        proj.GetComponent<DestroyBombProj>().currentEvo = tower.currentEvolution-1;
         proj.GetComponent<Rigidbody>().AddForce(lookPos * projSpeed, ForceMode.Impulse);
 
-
-        //Collider[] allTargets = Physics.OverlapSphere(currentTarget.transform.position, tower.AOERange, tower.EnemyLayer);
-        //for (int i = 0; i < allTargets.Length; i++)
-        //{
-        //    allTargets[i].GetComponent<Enemy>().LoseHealth(tower.damage[tower.currentEvolution - 1]);
-        //}
         startFireRate = tower.fireRate[tower.currentEvolution - 1];
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (currentTarget != null)
+        {
+            Gizmos.DrawWireSphere(currentTarget.transform.position, tower.AOERange[tower.currentEvolution - 1]);
+        }
     }
 }

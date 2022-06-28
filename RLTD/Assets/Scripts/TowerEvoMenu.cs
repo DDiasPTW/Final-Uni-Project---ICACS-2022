@@ -42,7 +42,6 @@ public class TowerEvoMenu : MonoBehaviour
 
     private void UpdateUIElements()
     {
-        //evoMenu.transform.eulerAngles = new Vector3(45f, cameraPivot.transform.localEulerAngles.y, evoMenu.transform.eulerAngles.z);
 
 
         if (currentTower.GetComponent<Tower>().currentEvolution == currentTower.GetComponent<Tower>().numberOfEvolutions)
@@ -51,11 +50,9 @@ public class TowerEvoMenu : MonoBehaviour
             evolvePrice.text = "";
             evolvePrice.gameObject.SetActive(false);
             towerEvoPreviewMesh.GetComponent<MeshFilter>().mesh = currentTower.GetComponent<Tower>().evolutionLooks[currentTower.GetComponent<Tower>().currentEvolution - 1];
-            //evoMenu.SetActive(false);
         }
         else
         {
-            //evoPriceText.text = evolvePrice[currentEvolution-1].ToString();
             evolvePrice.gameObject.SetActive(true);
             towerEvoPreviewMesh.GetComponent<MeshFilter>().mesh = currentTower.GetComponent<Tower>().evolutionLooks[currentTower.GetComponent<Tower>().currentEvolution];
             int price = (int)currentTower.GetComponent<Tower>().evolutionPrices[currentTower.GetComponent<Tower>().currentEvolution - 1].Evaluate(currentTower.GetComponent<Tower>().worldGen.CurrentWave - 1);

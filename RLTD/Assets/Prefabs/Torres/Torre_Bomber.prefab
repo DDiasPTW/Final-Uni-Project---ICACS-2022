@@ -219,14 +219,14 @@ MonoBehaviour:
   - {fileID: 5369364574068350927}
   - {fileID: 932304154616496005}
   damage:
-  - 40
-  - 60
+  - 25
+  - 50
   fireRate:
-  - 2
-  - 5
+  - 1.5
+  - 2.5
   range:
   - 35
-  - 60
+  - 50
   evolvePrice: 58020000
   sellPrice: 5e010000f4010000
   buyPrice:
@@ -286,7 +286,9 @@ MonoBehaviour:
   TowerLayer:
     serializedVersion: 2
     m_Bits: 512
-  AOERange: 3
+  AOERange:
+  - 1
+  - 2.5
   slowMultiplier: []
   slowTime: []
   poisonMultiplier: []
@@ -320,9 +322,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  outlineMode: 0
+  outlineMode: 1
   outlineColor: {r: 0.0971262, g: 0.8584906, b: 0.0040494935, a: 1}
   outlineWidth: 1.5
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+  renderers: []
+  newRenderers: []

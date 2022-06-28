@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class IceTower : MonoBehaviour
 {
-    //FAZER MOVIMENTO DE PROJETIL (PARABOLA, USANDO VETOR FRENTE E UP)
     [Header("Tower AI")]
     [SerializeField]private float startFireRate;
     [SerializeField] private GameObject currentTarget;
@@ -37,7 +36,6 @@ public class IceTower : MonoBehaviour
             if (startFireRate <= 0)
             {
                 AttackTarget();
-                //Shoot(currentTarget.transform.position);
             }
 
             //limpa o target caso saia da range
@@ -73,11 +71,20 @@ public class IceTower : MonoBehaviour
         GameObject projectile = Instantiate(iceProjectile,tower.shootPositions[tower.currentEvolution - 1].transform.position, Quaternion.identity);
 
         projectile.GetComponent<DestroyIceProj>().damage = tower.damage[tower.currentEvolution-1];
-        projectile.GetComponent<DestroyIceProj>().aoeRange = tower.AOERange;
+        projectile.GetComponent<DestroyIceProj>().aoeRange = tower.AOERange[tower.currentEvolution - 1];
         projectile.GetComponent<DestroyIceProj>().slowMulti = tower.slowMultiplier[tower.currentEvolution-1];
+        projectile.GetComponent<DestroyIceProj>().currentEvo = tower.currentEvolution-1;
         projectile.GetComponent<DestroyIceProj>().slowTime = tower.slowTime[tower.currentEvolution-1];
         projectile.GetComponent<DestroyIceProj>().enemyLayer = tower.EnemyLayer;
         
         projectile.GetComponent<Rigidbody>().AddForce(targetPos * projSpeed,ForceMode.Impulse);
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (currentTarget != null)
+        {
+            Gizmos.DrawWireSphere(currentTarget.transform.position, tower.AOERange[tower.currentEvolution - 1]);
+        }
     }
 }

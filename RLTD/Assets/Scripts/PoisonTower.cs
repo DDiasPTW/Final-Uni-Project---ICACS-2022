@@ -9,9 +9,8 @@ public class PoisonTower : MonoBehaviour
     [SerializeField] private GameObject currentTarget;
     private Tower tower;
     [Header("Visuals")]
-    public GameObject projectile;
-    public Transform projectileShootPos;
-    public float speed;
+    public BoxCollider enemyDetectColl;
+    public List<ParticleSystem> poisonVisuals = new List<ParticleSystem>();
 
     private void Awake()
     {
@@ -22,8 +21,16 @@ public class PoisonTower : MonoBehaviour
 
     private void Update()
     {
+        enemyDetectColl.size = new Vector3(1,.75f, tower.range[tower.currentEvolution - 1] / tower.worldGen.chunkSize);
+        enemyDetectColl.center = new Vector3(0,0,enemyDetectColl.size.z / 2);
+
+
         if (currentTarget == null)
         {
+            for (int i = 0; i < poisonVisuals.Count; i++)
+            {
+                poisonVisuals[i].Stop();
+            }     
             GetTarget();
         }
         else
@@ -36,7 +43,6 @@ public class PoisonTower : MonoBehaviour
             if (startFireRate <= 0)
             {
                 AttackTarget();
-                //Shoot(currentTarget.transform.position);
             }
 
             //limpa o target caso saia da range
@@ -58,26 +64,22 @@ public class PoisonTower : MonoBehaviour
     }
 
     private void AttackTarget()
-    {
-        Collider[] allTargets = Physics.OverlapSphere(currentTarget.transform.position, tower.AOERange, tower.EnemyLayer);
-        for (int i = 0; i < allTargets.Length; i++)
+    {      
+        for (int i = 0; i < enemyDetectColl.GetComponent<PoisonTargets>().enemies.Count; i++)
         {
-            allTargets[i].GetComponent<Enemy>().poisonTime = tower.poisonTime[tower.currentEvolution - 1];
-            //allTargets[i].GetComponent<Enemy>().currentColor = allTargets[i].GetComponent<Enemy>().PoisonTextColor;
-            allTargets[i].GetComponent<Enemy>().poisonMultiplier = tower.poisonMultiplier[tower.currentEvolution - 1];
-            allTargets[i].GetComponent<Enemy>().LoseHealth(tower.damage[tower.currentEvolution - 1]);
+            enemyDetectColl.GetComponent<PoisonTargets>().enemies[i].GetComponent<Enemy>().poisonTime = tower.poisonTime[tower.currentEvolution - 1];
+            enemyDetectColl.GetComponent<PoisonTargets>().enemies[i].GetComponent<Enemy>().poisonMultiplier = tower.poisonMultiplier[tower.currentEvolution - 1];
+            enemyDetectColl.GetComponent<PoisonTargets>().enemies[i].GetComponent<Enemy>().LoseHealth(tower.damage[tower.currentEvolution - 1]);
         }
-
+        poisonVisuals[tower.currentEvolution - 1].Play();
         startFireRate = tower.fireRate[tower.currentEvolution - 1];
     }
 
-    //public void Shoot(Vector3 position) //Projetil da spawn na posicao do inimigo e "explode"
-    //{
-    //    GameObject proj;
-
-    //    proj = Instantiate(projectile, position, Quaternion.identity);
-    //    //VFX
-
-    //    //Debug.Log("spawned proj");
-    //}
+    private void OnDrawGizmos()
+    {
+        if (currentTarget != null)
+        {
+            Gizmos.DrawWireSphere(currentTarget.transform.position,tower.AOERange[tower.currentEvolution-1]);
+        }
+    }
 }

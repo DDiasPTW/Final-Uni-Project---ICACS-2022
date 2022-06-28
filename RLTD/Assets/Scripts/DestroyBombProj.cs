@@ -4,26 +4,13 @@ using UnityEngine;
 
 public class DestroyBombProj : MonoBehaviour
 {
-    //public float lifeTime;
-
     public float damage;
     public float aoeRange;
     public LayerMask enemyLayer;
-
+    public int currentEvo;
     private bool canExplode = true;
 
-    public GameObject explodeVFX;
-
-    private void Update()
-    {
-        //lifeTime -= Time.deltaTime;
-
-        //if (lifeTime <= 0)
-        //{
-        //    Destroy(gameObject);
-        //}
-
-    }
+    public List<GameObject> explodeVFX = new List<GameObject>();
 
     private void OnCollisionEnter(Collision other)
     {
@@ -34,7 +21,7 @@ public class DestroyBombProj : MonoBehaviour
         }
         if (canExplode)
         {
-            Instantiate(explodeVFX, transform);
+            Instantiate(explodeVFX[currentEvo], transform);
             gameObject.GetComponent<MeshRenderer>().enabled = false;
             gameObject.GetComponent<TrailRenderer>().enabled = false;
             canExplode = false;

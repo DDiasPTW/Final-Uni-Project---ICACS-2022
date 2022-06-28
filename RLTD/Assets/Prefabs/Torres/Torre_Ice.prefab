@@ -219,8 +219,8 @@ MonoBehaviour:
   - {fileID: 481522257226956598}
   - {fileID: 6110315722540597260}
   damage:
+  - 5
   - 10
-  - 15
   fireRate:
   - 1.5
   - 2.5
@@ -286,13 +286,15 @@ MonoBehaviour:
   TowerLayer:
     serializedVersion: 2
     m_Bits: 512
-  AOERange: 3
+  AOERange:
+  - 1
+  - 2.5
   slowMultiplier:
-  - 0.3
-  - 0.6
+  - 0.2
+  - 0.5
   slowTime:
   - 1
-  - 1.5
+  - 2
   poisonMultiplier: []
   poisonTime: []
 --- !u!114 &4169626079038169499
@@ -324,9 +326,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  outlineMode: 0
+  outlineMode: 1
   outlineColor: {r: 0.09064613, g: 0.8824801, b: 0.9150943, a: 1}
   outlineWidth: 1.5
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+  renderers: []
+  newRenderers: []

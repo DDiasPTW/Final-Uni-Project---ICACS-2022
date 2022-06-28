@@ -21,8 +21,7 @@ public class Enemy : MonoBehaviour
     
 
     public GameObject damageIndicatorText;
-    //public Color NormalTextColor, PoisonTextColor, SlowTextColor;
-    //public Color currentColor;
+
     public GameObject slowIndicator, poisonIndicator;
 
     [SerializeField]private bool isPoison = false;
@@ -219,7 +218,6 @@ public class Enemy : MonoBehaviour
         text = Instantiate(damageIndicatorText, transform.position + new Vector3(0, 2f, 0), Quaternion.identity);
         text.transform.localEulerAngles = new Vector3(45f, cameraPivot.transform.localEulerAngles.y, text.transform.localEulerAngles.z);
         text.GetComponent<TextMeshPro>().text = valueToShow.ToString();   
-        //text.GetComponent<TextMeshPro>().color = currentColor;
     }
 
     public void LoseHealth(float damage)
@@ -239,8 +237,6 @@ public class Enemy : MonoBehaviour
         }
         else if(isPoison)
         {            
-            //currentColor = PoisonTextColor;
-
             Health -= damage + (damage * poisonMultiplier);            
         }
         ShowDamage(damage + (damage * poisonMultiplier));
@@ -250,8 +246,7 @@ public class Enemy : MonoBehaviour
     {
         if (!resSlow)//apenas é afetado caso não tenha resistência a esse elemento
         {
-            isSlow = true;
-            //currentColor = SlowTextColor;           
+            isSlow = true;         
             slowMulti = slowMultiplier;
             slowTimeElapsed = slowTime;
         }
@@ -260,7 +255,6 @@ public class Enemy : MonoBehaviour
     public void ItemChangeSpeed(float slowMultiplier, float slowTime)
     {
         isSlow = true;
-        //currentColor = SlowTextColor;
         slowMulti = slowMultiplier;
         slowTimeElapsed = slowTime;
     }

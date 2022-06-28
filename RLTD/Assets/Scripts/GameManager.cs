@@ -14,7 +14,6 @@ public class GameManager : MonoBehaviour
     public ShopManager shopM;
 
     public bool canSpawn = false;
-    //public GameObject nextPositionButton;
     public GameObject spawnButton;
     public GameObject mainMenuUI;
 
@@ -28,9 +27,6 @@ public class GameManager : MonoBehaviour
         enemyGen = GetComponent<EnemyGeneration>();
         bM = GetComponent<BuildManager>();
         Time.timeScale = 1;
-        //shopM = GameObject.FindGameObjectWithTag("ShopM").GetComponent<ShopManager>();
-
-        //nextPositionButton.SetActive(false);
         spawnButton.SetActive(false);
     }
 
@@ -38,25 +34,15 @@ public class GameManager : MonoBehaviour
     {
         if (enemyGen.spawnedEnemies.Count == 0 && !enemyGen.isSpawning && worldGen.CurrentWave < worldGen.MaxWave && mainMenuUI.activeSelf == false && enemyGen.enemiesToSpawn == 0)
         {
-            //nextPositionButton.SetActive(true);
             ExpandWorld();
         }
-        //else nextPositionButton.SetActive(false);
+
 
         if (enemyGen.enemiesToSpawn != 0 && !enemyGen.isSpawning && enemyGen.spawnedEnemies.Count == 0 && canSpawn /*&& !worldGen.canSpawn*/)
         {
-            spawnButton.SetActive(true);
+            //spawnButton.SetActive(true);
         }
         else spawnButton.SetActive(false);
-
-        if (enemyGen.isSpawning)
-        {
-            //waveText.gameObject.SetActive(false);
-        }
-        else if (!enemyGen.isSpawning && enemyGen.spawnedEnemies.Count == 0)
-        {
-            //waveText.gameObject.SetActive(true);
-        }
 
         if (Health <= 0)
         {
@@ -87,9 +73,6 @@ public class GameManager : MonoBehaviour
         {
             bM.CurrentCoins += coinsPerWave;
         }
-        //bM.SellTowers();
-
-        //worldGen.ShowSpawnPos();
         enemyGen.DefineEnemy();
         canSpawn = true;
     }
@@ -108,7 +91,6 @@ public class GameManager : MonoBehaviour
     public void SpawnNextWave()
     {
         enemyGen.StartWave();
-        //worldGen.ShowSpawnPos();
         canSpawn = false;
     }
 }

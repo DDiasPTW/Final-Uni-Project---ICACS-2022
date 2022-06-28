@@ -40,7 +40,7 @@ public class Tower : MonoBehaviour
     [Header("Damage Stuff")]
     public LayerMask EnemyLayer;
     public LayerMask TowerLayer;
-    public float AOERange; 
+    public List<float> AOERange = new List<float>(); 
 
     
     [Header("Slow")]
@@ -67,13 +67,6 @@ public class Tower : MonoBehaviour
         mF.mesh = evolutionLooks[currentEvolution - 1];
     }
 
-    //Arranjar um tower price manager (TowerPurchase)
-    //que altera remotamente o preço de cada uma das torres utilizando
-    //os valores definidos neste script (pela animation curve)
-    //de modo a comunicar com a Shop e com o menu de evolução / venda
-
-
-
     private void Start()
     {
         rangeVisualizer.GetComponent<SpriteRenderer>().color = rangeVisualizerColor;
@@ -82,43 +75,9 @@ public class Tower : MonoBehaviour
 
     private void Update()
     {
-        //UpdateUIElements();
-
-
         CheckRange();
         CheckEvolutionMenu();        
     }
-
-    //private void UpdateUIElements()
-    //{
-    //    //evoMenu.transform.eulerAngles = new Vector3(45f, cameraPivot.transform.localEulerAngles.y, evoMenu.transform.eulerAngles.z);
-       
-
-    //    if (currentEvolution == numberOfEvolutions)
-    //    {
-    //        evoButton.SetActive(false);
-    //        evoPriceText.text = "";
-    //        //evoMenu.SetActive(false);
-    //    }
-    //    else
-    //    {
-    //        //evoPriceText.text = evolvePrice[currentEvolution-1].ToString();
-    //        int price = (int)evolutionPrices[currentEvolution - 1].Evaluate(worldGen.CurrentWave - 1);
-    //        evoPriceText.text = price.ToString();
-    //        evoButton.SetActive(true);
-
-    //        if (bM.CurrentCoins < (int)evolutionPrices[currentEvolution - 1].Evaluate(worldGen.CurrentWave - 1))
-    //        {
-    //            evoButton.GetComponent<Button>().interactable = false;
-    //        }
-    //        else
-    //        {
-    //            evoButton.GetComponent<Button>().interactable = true;
-    //        }
-    //    }
-
-        
-    //}
 
 
     private void CheckRange()
@@ -133,7 +92,6 @@ public class Tower : MonoBehaviour
         {
             if (hit.collider.gameObject == gameObject)
             {
-                //rangeVisualizer.SetActive(true);
                 rangeVisualizer.transform.localScale = new Vector3(rangeSize,rangeSize, 1);
             } 
         }
@@ -155,14 +113,9 @@ public class Tower : MonoBehaviour
             {
                 if (hit.collider.gameObject == gameObject)
                 {
-                    //evoMenu.SetActive(true);
                     evoMenu.GetComponent<TowerEvoMenu>().currentTower = gameObject;
                 }
-                //else if (hit.collider.gameObject != gameObject && !EventSystem.current.IsPointerOverGameObject())
-                //{
-                //    //evoMenu.GetComponent<TowerEvoMenu>().currentTower = null;
-                //    //evoMenu.SetActive(false);
-                //}
+
             }
         }
 
@@ -170,7 +123,6 @@ public class Tower : MonoBehaviour
         if (Input.GetMouseButtonDown(1))
         {
             evoMenu.GetComponent<TowerEvoMenu>().currentTower = null;
-            //evoMenu.SetActive(false);
         }
     }
 
@@ -179,7 +131,6 @@ public class Tower : MonoBehaviour
     {
         if (bM.CurrentCoins >= (int)evolutionPrices[currentEvolution - 1].Evaluate(worldGen.CurrentWave - 1) && currentEvolution < numberOfEvolutions)
         {
-            //bM.CurrentCoins -= evolvePrice[currentEvolution - 1];
             bM.CurrentCoins -= (int) evolutionPrices[currentEvolution - 1].Evaluate(worldGen.CurrentWave - 1);
             currentEvolution++;
             mF.mesh = evolutionLooks[currentEvolution - 1];

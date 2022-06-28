@@ -169,8 +169,8 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 7
-      minScalar: 5
+      scalar: 4
+      minScalar: 2
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -222,8 +222,8 @@ ParticleSystem:
     startColor:
       serializedVersion: 2
       minMaxState: 2
-      minColor: {r: 0.9433962, g: 0.8562604, b: 0.11124954, a: 1}
-      maxColor: {r: 1, g: 0.48337048, b: 0.10849059, a: 1}
+      minColor: {r: 0.96996236, g: 1, b: 0, a: 1}
+      maxColor: {r: 1, g: 0.53792745, b: 0, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 0.9245283, g: 0.53488225, b: 0.082858644, a: 1}
@@ -285,8 +285,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 3
-      minScalar: 1
+      scalar: 1.5
+      minScalar: 0.8
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -977,7 +977,7 @@ ParticleSystem:
       countCurve:
         serializedVersion: 2
         minMaxState: 0
-        scalar: 30
+        scalar: 15
         minScalar: 30
         maxCurve:
           serializedVersion: 2
@@ -5865,8 +5865,8 @@ ParticleSystem:
       countCurve:
         serializedVersion: 2
         minMaxState: 3
-        scalar: 15
-        minScalar: 10
+        scalar: 5
+        minScalar: 3
         maxCurve:
           serializedVersion: 2
           m_Curve:
@@ -9981,7 +9981,7 @@ ParticleSystem:
     startColor:
       serializedVersion: 2
       minMaxState: 2
-      minColor: {r: 0.20754719, g: 0.20740251, b: 0.2046102, a: 1}
+      minColor: {r: 0.18867922, g: 0.18867922, b: 0.18867922, a: 1}
       maxColor: {r: 0.2264151, g: 0.21860938, b: 0.21253115, a: 1}
       maxGradient:
         serializedVersion: 2
@@ -10736,8 +10736,8 @@ ParticleSystem:
       countCurve:
         serializedVersion: 2
         minMaxState: 3
-        scalar: 15
-        minScalar: 10
+        scalar: 5
+        minScalar: 3
         maxCurve:
           serializedVersion: 2
           m_Curve:
@@ -14640,7 +14640,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7610895041781996942}
   m_Layer: 0
-  m_Name: ExplosionVFX_Bomber
+  m_Name: ExplosionVFX_Bomber_Small
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

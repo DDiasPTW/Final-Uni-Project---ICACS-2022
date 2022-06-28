@@ -40,7 +40,6 @@ public class Item_Trap : MonoBehaviour
         bM = GameObject.FindGameObjectWithTag("GridManager").GetComponent<BuildManager>();
         anim = GetComponent<Animator>();
         item = GetComponent<Item>();
-        //item.itemImage = thisSprite;
     }
 
 
@@ -87,12 +86,6 @@ public class Item_Trap : MonoBehaviour
         if (canAttack)
         {
             anim.Play(attackAnimation);
-            //attackDelay -= Time.deltaTime;
-
-            //if (attackDelay <= 0)
-            //{
-            //    Attack();
-            //}
         }
     }
 
@@ -207,7 +200,6 @@ public class Item_Trap : MonoBehaviour
         {
             allTargets[i].GetComponent<Enemy>().ItemChangeSpeed(multiplier,duration);
         }
-        //Destroy(gameObject);
     }
 
     private void VFX() //CHAMADO NA ANIMACAO
@@ -220,13 +212,5 @@ public class Item_Trap : MonoBehaviour
     {
         yield return new WaitForSeconds(2f);
         Destroy(gameObject);
-    }
-
-    private void OnDrawGizmos()
-    {
-        //Gizmos.color = Color.red;
-        //Gizmos.DrawWireSphere(transform.position, activationRange / 11);
-        //Gizmos.color = Color.white;
-        //Gizmos.DrawWireSphere(transform.position, range / 11);
     }
 }
