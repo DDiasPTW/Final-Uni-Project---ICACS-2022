@@ -91,6 +91,8 @@ MonoBehaviour:
   thisSprite: {fileID: 21300000, guid: 28d2c2677149d45e290e8fa042b1b80f, type: 3}
   canPlaceColor: {r: 0.45141584, g: 0.9528302, b: 0.33708617, a: 1}
   cannotPlaceColor: {r: 0.8490566, g: 0.23629406, b: 0.23629406, a: 1}
+  iceExplosionVFX: {fileID: 7610895041781996937, guid: 468ecfef74ce4f749bb35151b4ac32e3,
+    type: 3}
   enemyLayer:
     serializedVersion: 2
     m_Bits: 64

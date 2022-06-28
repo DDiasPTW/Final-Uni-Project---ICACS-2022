@@ -183,7 +183,7 @@ public class BuildManager : MonoBehaviour
 
             towerVisualizer.transform.position = new Vector3(seePos.x, .5f + (towerVisualizer.transform.localScale.y * 2), seePos.z);
             
-            rangeSprite.transform.localScale = new Vector3(TowerToBuild.GetComponent<Tower>().range[0], TowerToBuild.GetComponent<Tower>().range[0], 0);
+            rangeSprite.transform.localScale = new Vector3(TowerToBuild.GetComponent<Tower>().range[0] / worldGen.chunkSize, TowerToBuild.GetComponent<Tower>().range[0] / worldGen.chunkSize, 0);
             rangeSprite.transform.position = new Vector3(seePos.x, seePos.y + .1f, seePos.z);
         }
         else

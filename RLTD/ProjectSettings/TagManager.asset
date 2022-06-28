@@ -16,6 +16,7 @@ TagManager:
   - TowerDesc
   - TowerEvo
   - Preview
+  - Assassin
   layers:
   - Default
   - TransparentFX
@@ -29,7 +30,7 @@ TagManager:
   - Tower
   - Item
   - Prev
-  - 
+  - Projectile
   - 
   - 
   - 

@@ -8,6 +8,7 @@ public class MainMenu_Manager : MonoBehaviour
 {
     public List<GameObject> thingsToDisable = new List<GameObject>();
     public List<Button> DifficultyButtons = new List<Button>();
+    public Button playButton;
     public GameObject mainMenu;
     public GameObject mainMenuCamera;
     private EnemyGeneration enemyGen;
@@ -44,6 +45,12 @@ public class MainMenu_Manager : MonoBehaviour
 
     private void Update()
     {
+        if (worldGen.canStartGame)
+        {
+            playButton.interactable = true;
+        }else playButton.interactable = false;
+
+
         for (int i = 0; i < DifficultyButtons.Count; i++)
         {
             if (enemyGen.currentDifficulty == i + 1)

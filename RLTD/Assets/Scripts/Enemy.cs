@@ -236,15 +236,14 @@ public class Enemy : MonoBehaviour
         if (!isPoison)
         {            
             Health -= damage;
-            ShowDamage(damage);
         }
         else if(isPoison)
         {            
             //currentColor = PoisonTextColor;
 
-            Health -= damage + (damage * poisonMultiplier);
-            ShowDamage(damage + (damage * poisonMultiplier));
-        }    
+            Health -= damage + (damage * poisonMultiplier);            
+        }
+        ShowDamage(damage + (damage * poisonMultiplier));
     }
 
     public void ChangeSpeed(float slowMultiplier, float slowTime)

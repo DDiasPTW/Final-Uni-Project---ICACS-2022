@@ -12,7 +12,7 @@ public class DefaultTower : MonoBehaviour
     [Header("Visuals")]
     public GameObject projectile;
     public Transform projectileShootPos;
-    public float speed;
+    public float projSpeed;
 
 
     private void Awake()
@@ -36,12 +36,11 @@ public class DefaultTower : MonoBehaviour
             float distanceToTarget = Vector3.Distance(transform.position, currentTarget.transform.position);
 
 
-            Vector3 targetDir = currentTarget.transform.position - transform.position;
+            Vector3 targetDir = currentTarget.GetComponent<Enemy>().cabeca.transform.position - transform.position;
 
             if (startFireRate <= 0)
             {
-                AttackTarget();
-                //Shoot(targetDir);
+                AttackTarget(targetDir);
             }
 
             //limpa o target caso saia da range
@@ -62,10 +61,14 @@ public class DefaultTower : MonoBehaviour
         }
     }
 
-    private void AttackTarget()
+    private void AttackTarget(Vector3 targetDir)
     {
+        GameObject proj = Instantiate(projectile,tower.shootPositions[tower.currentEvolution-1].transform.position, Quaternion.identity);
+        proj.GetComponent<DestroyDefProj>().damage = tower.damage[tower.currentEvolution - 1];
+        proj.GetComponent<Rigidbody>().AddForce(targetDir.normalized * projSpeed, ForceMode.Impulse);
 
-        currentTarget.GetComponent<Enemy>().LoseHealth(tower.damage[tower.currentEvolution - 1]);
+
+        //currentTarget.GetComponent<Enemy>().LoseHealth(tower.damage[tower.currentEvolution - 1]);
         startFireRate = tower.fireRate[tower.currentEvolution - 1];
     }
 }

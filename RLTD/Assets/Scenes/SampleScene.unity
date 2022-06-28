@@ -1544,10 +1544,10 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.38679248, g: 0.38679248, b: 0.38679248, a: 1}
+    m_HighlightedColor: {r: 0.5188679, g: 0.5188679, b: 0.5188679, a: 1}
     m_PressedColor: {r: 0.13207549, g: 0.13207549, b: 0.13207549, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.03773582, g: 0.03773582, b: 0.03773582, a: 0.25490198}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -3900,7 +3900,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0
-  far clip plane: 1000
+  far clip plane: 100
   field of view: 60
   orthographic: 1
   orthographic size: 1
@@ -4143,7 +4143,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0
-  far clip plane: 1000
+  far clip plane: 100
   field of view: 60
   orthographic: 1
   orthographic size: 1
@@ -5698,7 +5698,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0
-  far clip plane: 1000
+  far clip plane: 100
   field of view: 60
   orthographic: 1
   orthographic size: 0.8
@@ -6135,11 +6135,13 @@ MonoBehaviour:
   - {fileID: 119529582}
   - {fileID: 67513079}
   - {fileID: 1350016930}
+  - {fileID: 1398887938}
   DifficultyButtons:
   - {fileID: 546105624}
   - {fileID: 578963110}
   - {fileID: 658423806}
   - {fileID: 2033191331}
+  playButton: {fileID: 289746616}
   mainMenu: {fileID: 586664851}
   mainMenuCamera: {fileID: 925538507}
 --- !u!1 &1300411941
@@ -6877,7 +6879,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0
-  far clip plane: 1000
+  far clip plane: 100
   field of view: 60
   orthographic: 1
   orthographic size: 1
@@ -7181,7 +7183,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1398887939
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7770,7 +7772,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0
-  far clip plane: 1000
+  far clip plane: 100
   field of view: 60
   orthographic: 1
   orthographic size: 1.3
@@ -9378,7 +9380,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0
-  far clip plane: 1000
+  far clip plane: 100
   field of view: 60
   orthographic: 1
   orthographic size: 1
@@ -10079,6 +10081,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1066f7a5bf10273458d340a9718eee1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canStartGame: 0
   TileLayer:
     serializedVersion: 2
     m_Bits: 128
@@ -10239,7 +10242,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canSpawnBoss: 0
   hasStartedSpawning: 0
-  enemiesPerWave: 40
+  enemiesPerWave: 20
   howManyEnemies: 0
   enemiesToSpawn: 0
   enemyPref: {fileID: 3410418661077730815, guid: 0dfa95852df9cf24c98d11f44998d9b5,
@@ -10312,7 +10315,7 @@ MonoBehaviour:
   towerLayer:
     serializedVersion: 2
     m_Bits: 512
-  startCoins: 500
+  startCoins: 5000
   CurrentCoins: 0
   CurrentTowerCost: 0
   TowerToBuild: {fileID: 0}
@@ -10347,7 +10350,7 @@ MonoBehaviour:
   spawnButton: {fileID: 16452844}
   mainMenuUI: {fileID: 586664851}
   coinsPerWave: 75
-  Health: 500
+  Health: 10000
 --- !u!114 &1928352536
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10372,6 +10375,8 @@ MonoBehaviour:
   descriptionText: {fileID: 379432320}
   itemPrev: {fileID: 998057432}
   towerPrev: {fileID: 304179965}
+  itemPickupVFX: {fileID: 7610895041781996937, guid: b91e9abf9fd887c4b80fbf0b0316189f,
+    type: 3}
   itemLayer:
     serializedVersion: 2
     m_Bits: 1024
@@ -10772,7 +10777,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0
-  far clip plane: 1000
+  far clip plane: 100
   field of view: 60
   orthographic: 1
   orthographic size: 1

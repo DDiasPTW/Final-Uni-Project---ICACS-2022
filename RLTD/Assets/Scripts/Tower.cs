@@ -7,10 +7,11 @@ using TMPro;
 
 public class Tower : MonoBehaviour
 {
-    public BuildManager bM;
+    
+    [HideInInspector] public BuildManager bM;
     private MeshFilter mF;
     private GameObject cameraPivot;
-    public WorldGeneration worldGen;
+    [HideInInspector] public WorldGeneration worldGen;
     private GameObject towerDesc;
 
     [Header("Evolution Stuff")]
@@ -18,12 +19,14 @@ public class Tower : MonoBehaviour
     public int numberOfEvolutions;
 
     public List<Mesh> evolutionLooks = new List<Mesh>(); 
+    public List<Transform> shootPositions = new List<Transform>();
     public List<float> damage = new List<float>();
     public List<float> fireRate = new List<float>();
     public List<float> range = new List<float>(); 
     public List<int> evolvePrice = new List<int>();
 
     public List<int> sellPrice = new List<int>();
+
 
     public AnimationCurve buyPrice;
     public List<AnimationCurve> evolutionPrices = new List<AnimationCurve>();
@@ -123,13 +126,15 @@ public class Tower : MonoBehaviour
         rangeVisualizer.transform.position = new Vector3(transform.position.x,.75f,transform.position.z);
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-               
+
+        float rangeSize = range[currentEvolution - 1] / worldGen.chunkSize;
+        
         if (Physics.Raycast(ray, out hit, Mathf.Infinity,TowerLayer))
         {
             if (hit.collider.gameObject == gameObject)
             {
                 //rangeVisualizer.SetActive(true);
-                rangeVisualizer.transform.localScale = new Vector3(range[currentEvolution-1],range[currentEvolution-1],1);
+                rangeVisualizer.transform.localScale = new Vector3(rangeSize,rangeSize, 1);
             } 
         }
         else

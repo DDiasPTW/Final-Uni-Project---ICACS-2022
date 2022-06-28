@@ -6,14 +6,12 @@ public class IceTower : MonoBehaviour
 {
     //FAZER MOVIMENTO DE PROJETIL (PARABOLA, USANDO VETOR FRENTE E UP)
     [Header("Tower AI")]
-    private float startFireRate;
+    [SerializeField]private float startFireRate;
     [SerializeField] private GameObject currentTarget;
     private Tower tower;
     [Header("Visuals")]
     public GameObject iceProjectile;
-    public Transform projExit;
-    public float multiplier;
-    public float timeOfFlight;
+    public float projSpeed;
 
 
     private void Awake()
@@ -25,6 +23,7 @@ public class IceTower : MonoBehaviour
 
     private void Update()
     {
+        startFireRate -= Time.deltaTime;
         if (currentTarget == null)
         {
             GetTarget();
@@ -33,7 +32,6 @@ public class IceTower : MonoBehaviour
         {
             transform.LookAt(new Vector3(currentTarget.transform.position.x, transform.position.y, currentTarget.transform.position.z));
 
-            startFireRate -= Time.deltaTime;
             float distanceToTarget = Vector3.Distance(transform.position, currentTarget.transform.position);
 
             if (startFireRate <= 0)
@@ -63,28 +61,23 @@ public class IceTower : MonoBehaviour
 
     private void AttackTarget()
     {
-        Collider[] allTargets = Physics.OverlapSphere(currentTarget.transform.position, tower.AOERange, tower.EnemyLayer);
-        for (int i = 0; i < allTargets.Length; i++)
-        {
-            allTargets[i].GetComponent<Enemy>().LoseHealth(tower.damage[tower.currentEvolution - 1]);
-            allTargets[i].GetComponent<Enemy>().ChangeSpeed(tower.slowMultiplier[tower.currentEvolution - 1], tower.slowTime[tower.currentEvolution - 1]);
-        }
-        //Shoot(currentTarget.transform.position);
+        Shoot((currentTarget.GetComponent<Enemy>().cabeca.transform.position - transform.position).normalized);
+
+        
         startFireRate = tower.fireRate[tower.currentEvolution - 1];
     }
 
 
-    public void Shoot(Vector3 targetPos) //Projetil e lancado para cima, deve ter SEMPRE o mesmo tempo de voo. tem uma trajetoria 'parabolica'
+    public void Shoot(Vector3 targetPos) 
     {
-        GameObject projectile = Instantiate(iceProjectile,projExit.position, Quaternion.identity);
-        Vector3 distance = targetPos - transform.position;
+        GameObject projectile = Instantiate(iceProjectile,tower.shootPositions[tower.currentEvolution - 1].transform.position, Quaternion.identity);
 
-        projectile.GetComponent<Rigidbody>().velocity = (((transform.forward + Vector3.up) * distance.magnitude) / timeOfFlight) * multiplier;
-    }
-
-    private void OnDrawGizmos()
-    {
-        //Gizmos.DrawWireSphere(transform.position, tower.range[tower.currentEvolution - 1] / 11);
-        //Gizmos.DrawWireSphere(currentTarget.transform.position, tower.AOERange);
+        projectile.GetComponent<DestroyIceProj>().damage = tower.damage[tower.currentEvolution-1];
+        projectile.GetComponent<DestroyIceProj>().aoeRange = tower.AOERange;
+        projectile.GetComponent<DestroyIceProj>().slowMulti = tower.slowMultiplier[tower.currentEvolution-1];
+        projectile.GetComponent<DestroyIceProj>().slowTime = tower.slowTime[tower.currentEvolution-1];
+        projectile.GetComponent<DestroyIceProj>().enemyLayer = tower.EnemyLayer;
+        
+        projectile.GetComponent<Rigidbody>().AddForce(targetPos * projSpeed,ForceMode.Impulse);
     }
 }

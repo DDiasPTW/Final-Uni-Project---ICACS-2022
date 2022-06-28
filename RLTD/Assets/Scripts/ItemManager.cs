@@ -19,6 +19,7 @@ public class ItemManager : MonoBehaviour
     [SerializeField] private GameObject itemPrev;
     [SerializeField] private GameObject towerPrev;
 
+    public GameObject itemPickupVFX;
     public LayerMask itemLayer;
 
     private void Awake()
@@ -71,9 +72,7 @@ public class ItemManager : MonoBehaviour
                     currentItem = hit.collider.gameObject;
                     currentItem.GetComponent<Item>().pickedUp = true;
                 }
-
-
-                //itemHolderImage.GetComponent<RawImage>().sprite = hit.collider.gameObject.GetComponent<Item>().itemImage;
+                Instantiate(itemPickupVFX,hit.collider.transform);
                 itemHolderPreview.GetComponent<MeshFilter>().mesh = hit.collider.gameObject.GetComponent<Item>().thisMesh;
                 
             }

@@ -6,6 +6,8 @@ using Unity.AI.Navigation;
 
 public class WorldGeneration : MonoBehaviour
 {
+    public bool canStartGame; //usado no mainMenu
+
     private BuildManager bM;
     private GameManager gM;
     public LayerMask TileLayer;
@@ -282,7 +284,7 @@ public class WorldGeneration : MonoBehaviour
 
             int coord = Random.Range(0, posSpawn.Count);
             int whatTile = Random.Range(0, 100); //0-99
-            Debug.Log(whatTile);
+            //Debug.Log(whatTile);
             GameObject newTile;
 
 
@@ -290,13 +292,13 @@ public class WorldGeneration : MonoBehaviour
             {
                 if (posSpawn[coord] == "placeN")
                 {
-                    if (whatTile < 5 && CurrentWave >= MaxWave / 3) //extra base tile
+                    if (whatTile < 8 && CurrentWave >= MaxWave / 4) //extra base tile
                     {
                         int w = enemyGen.currentDifficulty - 1;
                         newTile = Instantiate(baseTiles[w], spawnableTiles[pickedTile].transform.position + new Vector3(0, 0, chunkSize), Quaternion.identity);
                         spawnableTiles.Add(newTile); allTiles.Add(newTile); allTargets.Add(newTile); 
                     }
-                    else if ((whatTile >= 5 && whatTile < 45) || (whatTile < 45 && CurrentWave < MaxWave / 3)) //2 way tile
+                    else if ((whatTile >= 8 && whatTile < 45) || (whatTile < 45 && CurrentWave < MaxWave / 3)) //2 way tile
                     {
                         int w = Random.Range(0, twoWayTilesPref.Count);
                         newTile = Instantiate(twoWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(0, 0, chunkSize), Quaternion.identity);
@@ -318,13 +320,13 @@ public class WorldGeneration : MonoBehaviour
                 }
                 else if (posSpawn[coord] == "placeS")
                 {
-                    if (whatTile < 5 && CurrentWave >= MaxWave / 3) //extra base tile
+                    if (whatTile < 8 && CurrentWave >= MaxWave / 4) //extra base tile
                     {
                         int w = enemyGen.currentDifficulty - 1;
                         newTile = Instantiate(baseTiles[w], spawnableTiles[pickedTile].transform.position + new Vector3(0, 0, -chunkSize), Quaternion.identity);
                         spawnableTiles.Add(newTile); allTiles.Add(newTile); allTargets.Add(newTile); 
                     }
-                    else if ((whatTile >= 5 && whatTile < 45) || (whatTile < 45 && CurrentWave < MaxWave / 3)) //2 way tile
+                    else if ((whatTile >= 8 && whatTile < 45) || (whatTile < 45 && CurrentWave < MaxWave / 3)) //2 way tile
                     {
                         int w = Random.Range(0, twoWayTilesPref.Count);
                         newTile = Instantiate(twoWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(0, 0, -chunkSize), Quaternion.identity);
@@ -346,13 +348,13 @@ public class WorldGeneration : MonoBehaviour
                 }
                 else if (posSpawn[coord] == "placeE")
                 {
-                    if (whatTile < 5 && CurrentWave >= MaxWave / 3) //extra base tile
+                    if (whatTile < 8 && CurrentWave >= MaxWave / 4) //extra base tile
                     {
                         int w = enemyGen.currentDifficulty - 1;
                         newTile = Instantiate(baseTiles[w], spawnableTiles[pickedTile].transform.position + new Vector3(chunkSize, 0, 0), Quaternion.identity);
                         spawnableTiles.Add(newTile); allTiles.Add(newTile); allTargets.Add(newTile); 
                     }
-                    else if ((whatTile >= 5 && whatTile < 45) || (whatTile < 45 && CurrentWave < MaxWave / 3)) //2 way tile
+                    else if ((whatTile >= 8 && whatTile < 45) || (whatTile < 45 && CurrentWave < MaxWave / 3)) //2 way tile
                     {
                         int w = Random.Range(0, twoWayTilesPref.Count);
                         newTile = Instantiate(twoWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(chunkSize, 0, 0), Quaternion.identity);
@@ -374,13 +376,13 @@ public class WorldGeneration : MonoBehaviour
                 }
                 else if (posSpawn[coord] == "placeW")
                 {
-                    if (whatTile < 5 && CurrentWave >= MaxWave / 3) //extra base tile
+                    if (whatTile < 8 && CurrentWave >= MaxWave / 4) //extra base tile
                     {
                         int w = enemyGen.currentDifficulty - 1;
                         newTile = Instantiate(baseTiles[w], spawnableTiles[pickedTile].transform.position + new Vector3(-chunkSize, 0, 0), Quaternion.identity);
                         spawnableTiles.Add(newTile); allTiles.Add(newTile); allTargets.Add(newTile); 
                     }
-                    else if ((whatTile >= 5 && whatTile < 45) || (whatTile < 45 && CurrentWave < MaxWave / 3)) //2 way tile
+                    else if ((whatTile >= 8 && whatTile < 45) || (whatTile < 45 && CurrentWave < MaxWave / 3)) //2 way tile
                     {
                         int w = Random.Range(0, twoWayTilesPref.Count);
                         newTile = Instantiate(twoWayTilesPref[w], spawnableTiles[pickedTile].transform.position + new Vector3(-chunkSize, 0, 0), Quaternion.identity);

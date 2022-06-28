@@ -20,6 +20,8 @@ public class Item_Trap : MonoBehaviour
     public Color cannotPlaceColor;
     private Vector3 mousePos;
     private bool spawnedRange = false;
+    private string attackAnimation = "BombAttack_Anim";
+    public GameObject iceExplosionVFX;
     [Header("Ataque")]
     public LayerMask enemyLayer;
     public LayerMask itemLayer;
@@ -84,12 +86,13 @@ public class Item_Trap : MonoBehaviour
 
         if (canAttack)
         {
-            attackDelay -= Time.deltaTime;
+            anim.Play(attackAnimation);
+            //attackDelay -= Time.deltaTime;
 
-            if (attackDelay <= 0)
-            {
-                Attack();
-            }
+            //if (attackDelay <= 0)
+            //{
+            //    Attack();
+            //}
         }
     }
 
@@ -143,7 +146,7 @@ public class Item_Trap : MonoBehaviour
                 seePos.z = Mathf.Round(hit.point.z);
             }
 
-            Collider[] checkItens = Physics.OverlapSphere(new Vector3(seePos.x, hit.point.y, seePos.z), .1f, itemLayer);
+            Collider[] checkItens = Physics.OverlapSphere(new Vector3(seePos.x, hit.point.y, seePos.z), .3f, itemLayer);
 
             if (hit.point.y <= .05f && hit.point.y >= -.1f && checkItens.Length == 0)
             {
@@ -154,7 +157,7 @@ public class Item_Trap : MonoBehaviour
 
             transform.position = new Vector3(seePos.x, hit.point.y + (transform.localScale.y / 2), seePos.z);
 
-            rangeSprite.transform.localScale = new Vector3(range, range, 0);
+            rangeSprite.transform.localScale = new Vector3(range / worldGen.chunkSize, range / worldGen.chunkSize, 0);
             rangeSprite.transform.position = new Vector3(seePos.x, hit.point.y + .1f, seePos.z);
             //Debug.Log(hit.point.y) ;
         }
@@ -196,7 +199,7 @@ public class Item_Trap : MonoBehaviour
         }
     }
 
-    private void Attack()
+    private void Attack() //CHAMADO NA ANIMACAO
     {
         Collider[] allTargets = Physics.OverlapSphere(transform.position, range / 11, enemyLayer);
 
@@ -204,14 +207,26 @@ public class Item_Trap : MonoBehaviour
         {
             allTargets[i].GetComponent<Enemy>().ItemChangeSpeed(multiplier,duration);
         }
+        //Destroy(gameObject);
+    }
+
+    private void VFX() //CHAMADO NA ANIMACAO
+    {
+        Instantiate(iceExplosionVFX, gameObject.transform.GetChild(0).transform);
+        StartCoroutine(DestroyGO());
+    }
+
+    IEnumerator DestroyGO()
+    {
+        yield return new WaitForSeconds(2f);
         Destroy(gameObject);
     }
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, activationRange / 11);
-        Gizmos.color = Color.white;
-        Gizmos.DrawWireSphere(transform.position, range / 11);
+        //Gizmos.color = Color.red;
+        //Gizmos.DrawWireSphere(transform.position, activationRange / 11);
+        //Gizmos.color = Color.white;
+        //Gizmos.DrawWireSphere(transform.position, range / 11);
     }
 }

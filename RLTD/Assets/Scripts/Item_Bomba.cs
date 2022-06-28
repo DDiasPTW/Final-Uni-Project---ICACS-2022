@@ -21,6 +21,7 @@ public class Item_Bomba : MonoBehaviour
     private bool spawnedRange = false;
     private Animator anim;
     private string attackAnimation = "BombAttack_Anim";
+    public GameObject explosionVFX;
     [Header("Ataque")]
     public LayerMask enemyLayer;
     public LayerMask itemLayer;
@@ -79,12 +80,12 @@ public class Item_Bomba : MonoBehaviour
         if (canAttack)
         {
             anim.Play(attackAnimation);
-            attackDelay -= Time.deltaTime;
+            //attackDelay -= Time.deltaTime;
 
-            if (attackDelay <= 0)
-            {
-                Attack();
-            }
+            //if (attackDelay <= 0)
+            //{
+            //    Attack();
+            //}
         }
     }
 
@@ -138,7 +139,7 @@ public class Item_Bomba : MonoBehaviour
                 seePos.z = Mathf.Round(hit.point.z);
             }
 
-            Collider[] checkItens = Physics.OverlapSphere(new Vector3(seePos.x, hit.point.y, seePos.z), .1f, itemLayer);
+            Collider[] checkItens = Physics.OverlapSphere(new Vector3(seePos.x, hit.point.y, seePos.z), .3f, itemLayer);
 
             if (hit.point.y <= .05f && hit.point.y >= -.1f && checkItens.Length == 0)
             {
@@ -149,7 +150,7 @@ public class Item_Bomba : MonoBehaviour
 
             transform.position = new Vector3(seePos.x, hit.point.y + (transform.localScale.y / 2), seePos.z);
 
-            rangeSprite.transform.localScale = new Vector3(range, range, 0);
+            rangeSprite.transform.localScale = new Vector3(range / worldGen.chunkSize, range / worldGen.chunkSize, 0);
             rangeSprite.transform.position = new Vector3(seePos.x, hit.point.y + .1f, seePos.z);
             //Debug.Log(hit.point.y) ;
         }
@@ -191,22 +192,35 @@ public class Item_Bomba : MonoBehaviour
         }
     }
 
-    private void Attack()
-    {       
-        Collider[] allTargets = Physics.OverlapSphere(transform.position, range/11, enemyLayer);
+    private void Attack() //CHAMADO NA ANIMACAO
+    {
+        Collider[] allTargets = Physics.OverlapSphere(transform.position, range / 11, enemyLayer);
 
         for (int i = 0; i < allTargets.Length; i++)
         {
             allTargets[i].GetComponent<Enemy>().LoseHealth(damage);
+            //Debug.Log(allTargets[i].name);
         }
+
+    }
+
+    private void VFX() //CHAMADO NA ANIMACAO
+    {
+        Instantiate(explosionVFX, gameObject.transform.GetChild(0).transform);
+        StartCoroutine(DestroyGO());
+    }
+
+    IEnumerator DestroyGO()
+    {
+        yield return new WaitForSeconds(2f);
         Destroy(gameObject);
     }
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position,activationRange/11);
-        Gizmos.color = Color.white;
-        Gizmos.DrawWireSphere(transform.position,range/11);
+        //Gizmos.color = Color.red;
+        //Gizmos.DrawWireSphere(transform.position,activationRange/11);
+        //Gizmos.color = Color.white;
+        //Gizmos.DrawWireSphere(transform.position,range/11);
     }
 }

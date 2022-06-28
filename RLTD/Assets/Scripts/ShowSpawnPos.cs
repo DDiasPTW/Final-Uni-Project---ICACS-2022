@@ -5,6 +5,7 @@ using UnityEngine;
 public class ShowSpawnPos : MonoBehaviour
 {
     private WorldGeneration worldGen;
+    public GameObject tileAppearVFX;
     void Awake()
     {
         worldGen = GameObject.FindGameObjectWithTag("GridManager").GetComponent<WorldGeneration>();
@@ -13,5 +14,13 @@ public class ShowSpawnPos : MonoBehaviour
     public void Show()
     {
         worldGen.ShowSpawnPos();
+        Instantiate(tileAppearVFX,transform);
+        worldGen.canStartGame = true;
     }
+
+    private void StopPlay()
+    {
+        worldGen.canStartGame = false;
+    }
+
 }
