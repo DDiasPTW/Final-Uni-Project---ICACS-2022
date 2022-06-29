@@ -257,30 +257,29 @@ MonoBehaviour:
   - 15
   - 10
   fireRate:
-  - 1
-  - 0.7
-  - 0.35
+  - 0.8
+  - 0.5
+  - 0.25
   range:
   - 35
   - 45
   - 55
-  evolvePrice: c8000000c2010000
   sellPrice: 64000000af0000002c010000
   buyPrice:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 100
-      inSlope: 1.7823409
-      outSlope: 1.7823409
+      value: 150
+      inSlope: 16.604584
+      outSlope: 16.604584
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.15533625
+      outWeight: 0.043310877
     - serializedVersion: 3
-      time: 24
-      value: 400
+      time: 29
+      value: 500
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -296,15 +295,15 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 200
-      inSlope: 6.5541954
-      outSlope: 6.5541954
+      inSlope: 25.172976
+      outSlope: 25.172976
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.12792397
+      outWeight: 0.043310877
     - serializedVersion: 3
-      time: 24
-      value: 550
+      time: 29
+      value: 750
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -319,15 +318,15 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 450
-      inSlope: 6.078377
-      outSlope: 6.078377
+      inSlope: 22.05528
+      outSlope: 22.05528
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.12792397
+      outWeight: 0.041385945
     - serializedVersion: 3
-      time: 24
-      value: 750
+      time: 29
+      value: 1000
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -338,6 +337,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 0
   rangeVisualizer: {fileID: 8766062363759346918, guid: ff65d8a73f6ecd34d82151a51961dea3,
+    type: 3}
+  sellPriceText: {fileID: 5026368744546682038, guid: 3d007be9af24cae4d901d18d0f4bc3bd,
     type: 3}
   rangeVisualizerColor: {r: 0.8301887, g: 0.8301887, b: 0.8301887, a: 0.20392157}
   EnemyLayer:

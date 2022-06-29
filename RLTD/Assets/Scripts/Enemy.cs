@@ -7,7 +7,7 @@ using TMPro;
 public class Enemy : MonoBehaviour
 {
     private GameObject cameraPivot;
-    private NavMeshAgent navAgent;
+    public NavMeshAgent navAgent;
     private BuildManager bM;
     private EnemyGeneration enemyGen;
     private GameManager gM;
@@ -52,7 +52,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float slowMulti;
 
     [SerializeField] private float slowTimeElapsed;
-    private float poisonTimeElapsed;
+    [SerializeField] private float poisonTimeElapsed;
 
 
     private void Awake()
@@ -155,14 +155,19 @@ public class Enemy : MonoBehaviour
             enemyGen.spawnedEnemies.Remove(gameObject);
             Destroy(gameObject);
         }
-        UpdateTextColor();
+        UpdateUI();
 
         if (isPoison)
         {
-            poisonTimeElapsed -= Time.deltaTime;
             if (poisonTimeElapsed <= 0)
             {
                 isPoison = false;
+                poisonMultiplier = 0;
+                poisonTimeElapsed = 0;
+            }
+            else
+            {
+                poisonTimeElapsed -= Time.deltaTime;
             }
         }
         
@@ -172,6 +177,8 @@ public class Enemy : MonoBehaviour
             if (slowTimeElapsed <= 0)
             {
                 isSlow = false;
+                slowTimeElapsed = 0;
+                slowMulti = 0;
             }
             else
             {
@@ -182,15 +189,15 @@ public class Enemy : MonoBehaviour
         else
         {
             navAgent.speed = speed;
+            isSlow = false;
         }
 
     }
 
-    private void UpdateTextColor()
+    private void UpdateUI()
     {
         if (isPoison)
         {
-            //currentColor = PoisonTextColor;
             poisonIndicator.SetActive(true);
             poisonIndicator.transform.eulerAngles = new Vector3(45f, cameraPivot.transform.localEulerAngles.y, transform.eulerAngles.z);
         }
@@ -198,7 +205,6 @@ public class Enemy : MonoBehaviour
 
         if (isSlow)
         {
-            //currentColor = SlowTextColor;
             slowIndicator.SetActive(true);
             slowIndicator.transform.eulerAngles = new Vector3(45f, cameraPivot.transform.localEulerAngles.y, transform.eulerAngles.z);
         }
@@ -223,23 +229,7 @@ public class Enemy : MonoBehaviour
 
     public void LoseHealth(float damage)
     {     
-        if (!resPoison) //apenas é afetado caso não tenha resistência a esse elemento
-        {
-            poisonTimeElapsed = poisonTime;
-            if (poisonTimeElapsed > 0)
-            {
-                isPoison = true;
-            }
-        }
-        
-        if (!isPoison)
-        {            
-            Health -= damage;
-        }
-        else if(isPoison)
-        {            
-            Health -= damage + (damage * poisonMultiplier);            
-        }
+        Health -= damage + (damage * poisonMultiplier);
         ShowDamage(damage + (damage * poisonMultiplier));
     }
 
@@ -250,6 +240,22 @@ public class Enemy : MonoBehaviour
             isSlow = true;         
             slowMulti = slowMultiplier;
             slowTimeElapsed = slowTime;
+        }
+    }
+
+    public void SetPoison(float multiplier, float poisonTime)
+    {
+        if (!resPoison)
+        {
+            isPoison = true;
+            poisonMultiplier = multiplier;
+            poisonTimeElapsed = poisonTime;
+        }
+        else
+        {
+            isPoison = false;
+            poisonMultiplier = 0;
+            poisonTimeElapsed = 0;
         }
     }
 

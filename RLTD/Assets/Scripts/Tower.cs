@@ -23,7 +23,7 @@ public class Tower : MonoBehaviour
     public List<float> damage = new List<float>();
     public List<float> fireRate = new List<float>();
     public List<float> range = new List<float>(); 
-    public List<int> evolvePrice = new List<int>();
+    //public List<int> evolvePrice = new List<int>();
 
     public List<int> sellPrice = new List<int>();
 
@@ -32,8 +32,8 @@ public class Tower : MonoBehaviour
     public List<AnimationCurve> evolutionPrices = new List<AnimationCurve>();
 
     [Header("UI Elements")]
-    public GameObject rangeVisualizer; 
-
+    public GameObject rangeVisualizer;
+    public GameObject sellPriceText;
     private GameObject evoMenu; 
     
     public Color rangeVisualizerColor;
@@ -145,6 +145,9 @@ public class Tower : MonoBehaviour
         bM.CurrentCoins += sellPrice[currentEvolution-1];
         evoMenu.GetComponent<TowerEvoMenu>().currentTower = null;
         bM.allTowers.Remove(gameObject);
+        GameObject sellText = Instantiate(sellPriceText, transform.position + new Vector3(0, 2f, 0), Quaternion.identity);
+        sellText.transform.localEulerAngles = new Vector3(45f, cameraPivot.transform.localEulerAngles.y, sellText.transform.localEulerAngles.z);
+        sellText.GetComponent<TextMeshPro>().text = "+" + sellPrice[currentEvolution-1].ToString();
         Destroy(gameObject);
     }
 

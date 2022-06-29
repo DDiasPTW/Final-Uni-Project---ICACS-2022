@@ -376,23 +376,22 @@ MonoBehaviour:
   - 35
   - 45
   - 60
-  evolvePrice: 5e01000058020000
   sellPrice: af000000e1000000c2010000
   buyPrice:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 175
-      inSlope: 10.617536
-      outSlope: 10.617536
+      value: 150
+      inSlope: 51.974857
+      outSlope: 51.974857
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.13523391
+      outWeight: 0.040423483
     - serializedVersion: 3
-      time: 24
-      value: 800
+      time: 29
+      value: 1250
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -407,16 +406,16 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 350
-      inSlope: 4.1550317
-      outSlope: 4.1550317
+      value: 400
+      inSlope: 68.27473
+      outSlope: 68.27473
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.14437135
+      outWeight: 0.05678537
     - serializedVersion: 3
-      time: 24
-      value: 1000
+      time: 29
+      value: 1700
       inSlope: 3.5999897
       outSlope: 3.5999897
       tangentMode: 0
@@ -430,16 +429,16 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 600
-      inSlope: 6.8959107
-      outSlope: 6.8959107
+      value: 750
+      inSlope: 65.51368
+      outSlope: 65.51368
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.2229532
+      outWeight: 0.043310877
     - serializedVersion: 3
-      time: 24
-      value: 1500
+      time: 29
+      value: 1850
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -450,6 +449,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 0
   rangeVisualizer: {fileID: 8766062363759346918, guid: ff65d8a73f6ecd34d82151a51961dea3,
+    type: 3}
+  sellPriceText: {fileID: 5026368744546682038, guid: 3d007be9af24cae4d901d18d0f4bc3bd,
     type: 3}
   rangeVisualizerColor: {r: 0.8301887, g: 0.8301887, b: 0.8301887, a: 0.20392157}
   EnemyLayer:
@@ -486,7 +487,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startFireRate: 0
   currentTarget: {fileID: 0}
-  speed: 0.0001
   enemyDetectColl: {fileID: 6836275692025833025}
   poisonVisuals:
   - {fileID: 7847316030278015303}
@@ -604,21 +604,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_RootOrder
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5969124728494311078, guid: ba902c78872b3f54ab540be3de957897,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1.6666662
-      objectReference: {fileID: 0}
-    - target: {fileID: 5969124728494311078, guid: ba902c78872b3f54ab540be3de957897,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1.6666665
-      objectReference: {fileID: 0}
-    - target: {fileID: 5969124728494311078, guid: ba902c78872b3f54ab540be3de957897,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1.6666662
       objectReference: {fileID: 0}
     - target: {fileID: 5969124728494311078, guid: ba902c78872b3f54ab540be3de957897,
         type: 3}

@@ -50,10 +50,21 @@ public class BomberTower : MonoBehaviour
     private void GetTarget()
     {
         Collider[] allTargets = Physics.OverlapSphere(transform.position, tower.range[tower.currentEvolution - 1] / 11, tower.EnemyLayer);
+        float distance = 1000000;
 
         if (allTargets.Length != 0)
         {
-            currentTarget = allTargets[0].gameObject;
+            for (int i = 0; i < allTargets.Length; i++)
+            {
+                if (Vector3.Distance(transform.position, allTargets[i].transform.position) < distance)
+                {
+                    currentTarget = allTargets[i].gameObject;
+                    distance = Vector3.Distance(transform.position, allTargets[i].transform.position);
+                }
+
+            }
+            //currentTarget = allTargets[0].gameObject;
+
         }
     }
 

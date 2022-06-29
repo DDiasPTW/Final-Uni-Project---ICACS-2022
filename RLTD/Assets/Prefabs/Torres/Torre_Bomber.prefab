@@ -219,31 +219,30 @@ MonoBehaviour:
   - {fileID: 5369364574068350927}
   - {fileID: 932304154616496005}
   damage:
-  - 25
-  - 50
+  - 30
+  - 60
   fireRate:
   - 1.5
   - 2.5
   range:
   - 35
   - 50
-  evolvePrice: 58020000
   sellPrice: 5e010000f4010000
   buyPrice:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 350
-      inSlope: 14.869118
-      outSlope: 14.869118
+      value: 450
+      inSlope: 79.77462
+      outSlope: 79.77462
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.113304086
+      outWeight: 0.027911453
     - serializedVersion: 3
-      time: 24
-      value: 1000
+      time: 29
+      value: 1500
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -259,15 +258,15 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 600
-      inSlope: 16.62176
-      outSlope: 16.62176
+      inSlope: 129.55602
+      outSlope: 129.55602
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.15168127
+      outWeight: 0.02983638
     - serializedVersion: 3
-      time: 24
-      value: 1800
+      time: 29
+      value: 2750
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -278,6 +277,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 0
   rangeVisualizer: {fileID: 8766062363759346918, guid: ff65d8a73f6ecd34d82151a51961dea3,
+    type: 3}
+  sellPriceText: {fileID: 5026368744546682038, guid: 3d007be9af24cae4d901d18d0f4bc3bd,
     type: 3}
   rangeVisualizerColor: {r: 0.8301887, g: 0.8301887, b: 0.8301887, a: 0.20392157}
   EnemyLayer:

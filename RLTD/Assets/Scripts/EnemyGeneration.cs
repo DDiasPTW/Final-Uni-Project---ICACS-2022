@@ -10,8 +10,9 @@ public class EnemyGeneration : MonoBehaviour
 
     public bool canSpawnBoss;
     public bool hasStartedSpawning = false;
-    [Range(1,50)]
-    public int enemiesPerWave; //Quantos inimigos irao dar spawn por cada wave
+    //[Range(1,50)]
+    //public int enemiesPerWave; //Quantos inimigos irao dar spawn por cada wave
+    public AnimationCurve howManyChicken;
     public int howManyEnemies; //Quantos inimigos vao dar spawn nesta wave
     public int enemiesToSpawn; //Quantos inimigos faltam dar spawn
 
@@ -26,13 +27,13 @@ public class EnemyGeneration : MonoBehaviour
     public GameObject chosen_cabeca;
     public GameObject chosen_corpo;
     public GameObject chosen_pes;
-    public Sprite slowResSprite;
-    public Sprite poisonResSprite;
+    //public Sprite slowResSprite;
+    //public Sprite poisonResSprite;
 
     [Header("UI Stuff")]
     public GameObject enemyVisualizer;
     public GameObject acess_Icon;
-    public Image resUISprite;
+    //public Image resUISprite;
     public GameObject cabeca_Icon;
     public TextMeshProUGUI damageText;
     public GameObject corpo_Icon;
@@ -56,7 +57,7 @@ public class EnemyGeneration : MonoBehaviour
 
     private void Awake()
     {
-        enemiesPerWave = enemiesPerWave * currentDifficulty;
+        //enemiesPerWave = enemiesPerWave * currentDifficulty;
     }
 
     void Start()
@@ -161,18 +162,18 @@ public class EnemyGeneration : MonoBehaviour
         acess_Icon.transform.localPosition = new Vector3(0, chosen_acessorio.GetComponent<BoxCollider>().size.y / 2 + chosen_cabeca.GetComponent<BoxCollider>().size.y + chosen_corpo.GetComponent<BoxCollider>().size.y + chosen_pes.GetComponent<BoxCollider>().size.y, 0);
 
 
-        if (chosen_acessorio.GetComponent<Acessorio>().resSlow)
-        {
-            resUISprite.sprite = slowResSprite;
-        }
-        else if (chosen_acessorio.GetComponent<Acessorio>().resPoison)
-        {
-            resUISprite.sprite = poisonResSprite;
-        }
-        else
-        {
-            resUISprite.sprite = null;
-        }
+        //if (chosen_acessorio.GetComponent<Acessorio>().resSlow)
+        //{
+        //    resUISprite.sprite = slowResSprite;
+        //}
+        //else if (chosen_acessorio.GetComponent<Acessorio>().resPoison)
+        //{
+        //    resUISprite.sprite = poisonResSprite;
+        //}
+        //else
+        //{
+        //    resUISprite.sprite = null;
+        //}
         damageText.text = chosen_cabeca.GetComponent<Head>().damage.ToString();
         healthText.text = chosen_corpo.GetComponent<Corpo>().health.ToString();
         speedText.text = ((int)(chosen_pes.GetComponent<Pes>().speed * 10 )).ToString();
@@ -202,27 +203,29 @@ public class EnemyGeneration : MonoBehaviour
                     break;
                 }
             }
-            
-        }
-        if (worldGen.CurrentWave == worldGen.MaxWave && canSpawnBoss && enemiesToSpawn == 0) //Spawn de boss
-        {
-            float distance = 0;
-            int ChosenSpawnPoint = 0;
-            for (int i = 0; i < worldGen.spawnPoints.Count; i++) //Garantir que o boss da spawn sempre no spawnPoint mais longe
+
+            if (worldGen.CurrentWave == worldGen.MaxWave && canSpawnBoss && enemiesToSpawn == 0) //Spawn de boss
             {
-                if (Vector3.Distance(worldGen.spawnPoints[i].transform.position, worldGen.baseTile.transform.position) > distance)
+                float distance = 0;
+                int ChosenSpawnPoint = 0;
+                for (int i = 0; i < worldGen.spawnPoints.Count; i++) //Garantir que o boss da spawn sempre no spawnPoint mais longe
                 {
-                    distance = Vector3.Distance(worldGen.spawnPoints[i].transform.position, worldGen.baseTile.transform.position);
-                    ChosenSpawnPoint = i;
+                    if (Vector3.Distance(worldGen.spawnPoints[i].transform.position, worldGen.baseTile.transform.position) > distance)
+                    {
+                        distance = Vector3.Distance(worldGen.spawnPoints[i].transform.position, worldGen.baseTile.transform.position);
+                        ChosenSpawnPoint = i;
+                    }
+                    else continue;
                 }
-                else continue;
+
+                int randomBoss = Random.Range(0, BossList.Count);
+                GameObject boss = Instantiate(BossList[randomBoss], worldGen.spawnPoints[ChosenSpawnPoint].transform.position, Quaternion.identity);
+                spawnedEnemies.Add(boss);
+                canSpawnBoss = false;
             }
 
-            int randomBoss = Random.Range(0, BossList.Count);
-            GameObject boss = Instantiate(BossList[randomBoss], worldGen.spawnPoints[ChosenSpawnPoint].transform.position, Quaternion.identity);
-            spawnedEnemies.Add(boss);
-            canSpawnBoss = false;
         }
+        
 
     }
 }

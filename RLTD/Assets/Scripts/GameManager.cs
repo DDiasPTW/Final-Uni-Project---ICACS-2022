@@ -63,19 +63,11 @@ public class GameManager : MonoBehaviour
 
         waveText.text = "WAVE " + worldGen.CurrentWave.ToString() + "/" + worldGen.MaxWave.ToString();
 
-        //Reset
-        //if (Input.GetKeyDown(KeyCode.R))
-        //{
-        //    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        //}
-
         if (Input.GetKeyDown(KeyCode.Escape) && canPause)
         {
-            //Abrir menu de pausa
             pauseMenu.SetActive(true);
             gspeed = Time.timeScale;
             Time.timeScale = 0;
-            //time.scale = 0
         }
     }
 
@@ -84,17 +76,11 @@ public class GameManager : MonoBehaviour
         worldGen.NextWave();
         enemyGen.hasStartedSpawning = false;
 
-        if (worldGen.CurrentWave < worldGen.MaxWave / 5)
+        if (worldGen.CurrentWave < worldGen.MaxWave / 4 && worldGen.CurrentWave > 1)
         {
-            bM.CurrentCoins +=(int) ((worldGen.CurrentWave - 1) * coinsPerWave * 1.5f);
-        }else if (worldGen.CurrentWave >= (worldGen.MaxWave / 5) && worldGen.CurrentWave < (worldGen.MaxWave / 2f))
-        {
-            bM.CurrentCoins +=(worldGen.CurrentWave - 1) * coinsPerWave;
+            bM.CurrentCoins += coinsPerWave * enemyGen.currentDifficulty;
         }
-        else
-        {
-            bM.CurrentCoins += coinsPerWave;
-        }
+
         enemyGen.DefineEnemy();
         canSpawn = true;
     }
@@ -103,7 +89,6 @@ public class GameManager : MonoBehaviour
     {
         //Abrir menu de derrota
         loseMenu.SetActive(true);
-        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     private void WinGame()

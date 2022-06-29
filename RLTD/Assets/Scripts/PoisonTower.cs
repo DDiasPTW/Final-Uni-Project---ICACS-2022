@@ -56,22 +56,35 @@ public class PoisonTower : MonoBehaviour
     private void GetTarget()
     {
         Collider[] allTargets = Physics.OverlapSphere(transform.position, tower.range[tower.currentEvolution - 1] / 11, tower.EnemyLayer);
+        float distance = 1000000;
 
         if (allTargets.Length != 0)
         {
-            currentTarget = allTargets[0].gameObject;
+            for (int i = 0; i < allTargets.Length; i++)
+            {
+                if (Vector3.Distance(transform.position, allTargets[i].transform.position) < distance)
+                {
+                    currentTarget = allTargets[i].gameObject;
+                    distance = Vector3.Distance(transform.position, allTargets[i].transform.position);
+                }
+
+            }
+            //currentTarget = allTargets[0].gameObject;
+
         }
     }
 
     private void AttackTarget()
     {      
+        poisonVisuals[tower.currentEvolution - 1].Play();
         for (int i = 0; i < enemyDetectColl.GetComponent<PoisonTargets>().enemies.Count; i++)
         {
-            enemyDetectColl.GetComponent<PoisonTargets>().enemies[i].GetComponent<Enemy>().poisonTime = tower.poisonTime[tower.currentEvolution - 1];
-            enemyDetectColl.GetComponent<PoisonTargets>().enemies[i].GetComponent<Enemy>().poisonMultiplier = tower.poisonMultiplier[tower.currentEvolution - 1];
+            //enemyDetectColl.GetComponent<PoisonTargets>().enemies[i].GetComponent<Enemy>().poisonTime = tower.poisonTime[tower.currentEvolution - 1];
+            //enemyDetectColl.GetComponent<PoisonTargets>().enemies[i].GetComponent<Enemy>().poisonMultiplier = tower.poisonMultiplier[tower.currentEvolution - 1];
+            enemyDetectColl.GetComponent<PoisonTargets>().enemies[i].GetComponent<Enemy>().SetPoison(tower.poisonMultiplier[tower.currentEvolution - 1], tower.poisonTime[tower.currentEvolution - 1]);
             enemyDetectColl.GetComponent<PoisonTargets>().enemies[i].GetComponent<Enemy>().LoseHealth(tower.damage[tower.currentEvolution - 1]);
+
         }
-        poisonVisuals[tower.currentEvolution - 1].Play();
         startFireRate = tower.fireRate[tower.currentEvolution - 1];
     }
 
