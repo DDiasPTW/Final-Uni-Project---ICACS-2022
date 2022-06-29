@@ -116,6 +116,7 @@ public class Enemy : MonoBehaviour
     {
         float distance = 10000000;
         int t = 0;
+
         for (int i = 0; i < worldGen.allTargets.Count; i++)
         {
             if (Vector3.Distance(transform.position, worldGen.allTargets[i].transform.position) < distance)

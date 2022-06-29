@@ -14,6 +14,7 @@ public class MainMenu_Manager : MonoBehaviour
     private EnemyGeneration enemyGen;
     private WorldGeneration worldGen;
     private BuildManager bM;
+    private GameManager gM;
 
     private void Awake()
     {
@@ -22,6 +23,7 @@ public class MainMenu_Manager : MonoBehaviour
         enemyGen = GameObject.FindGameObjectWithTag("GridManager").GetComponent<EnemyGeneration>();
         worldGen = GameObject.FindGameObjectWithTag("GridManager").GetComponent<WorldGeneration>();
         bM = GameObject.FindGameObjectWithTag("GridManager").GetComponent<BuildManager>();
+        gM = GameObject.FindGameObjectWithTag("GridManager").GetComponent<GameManager>();
 
         enemyGen.currentDifficulty = 1;
 
@@ -74,6 +76,7 @@ public class MainMenu_Manager : MonoBehaviour
         Time.timeScale = 1;
         bM.SetStartCoins();
         mainMenuCamera.SetActive(false);
+        gM.canPause = true;
         mainMenu.SetActive(false);
     }
 

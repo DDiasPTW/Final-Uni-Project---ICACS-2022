@@ -16,8 +16,14 @@ public class GameManager : MonoBehaviour
     public bool canSpawn = false;
     public GameObject spawnButton;
     public GameObject mainMenuUI;
-
+    public GameObject pauseMenu;
+    public GameObject loseMenu;
+    public GameObject winMenu;
+    public bool canPause = false;
     public int coinsPerWave;
+
+
+    private float gspeed;
 
     public int Health = 100;
 
@@ -28,6 +34,9 @@ public class GameManager : MonoBehaviour
         bM = GetComponent<BuildManager>();
         Time.timeScale = 1;
         spawnButton.SetActive(false);
+        pauseMenu.SetActive(false);
+        loseMenu.SetActive(false);
+        winMenu.SetActive(false);
     }
 
     void Update()
@@ -35,6 +44,9 @@ public class GameManager : MonoBehaviour
         if (enemyGen.spawnedEnemies.Count == 0 && !enemyGen.isSpawning && worldGen.CurrentWave < worldGen.MaxWave && mainMenuUI.activeSelf == false && enemyGen.enemiesToSpawn == 0)
         {
             ExpandWorld();
+        }else if (enemyGen.spawnedEnemies.Count == 0 && !enemyGen.isSpawning && worldGen.CurrentWave == worldGen.MaxWave && mainMenuUI.activeSelf == false && enemyGen.enemiesToSpawn == 0)
+        {
+            WinGame();
         }
 
 
@@ -51,9 +63,19 @@ public class GameManager : MonoBehaviour
 
         waveText.text = "WAVE " + worldGen.CurrentWave.ToString() + "/" + worldGen.MaxWave.ToString();
 
-        if (Input.GetKeyDown(KeyCode.R))
+        //Reset
+        //if (Input.GetKeyDown(KeyCode.R))
+        //{
+        //    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        //}
+
+        if (Input.GetKeyDown(KeyCode.Escape) && canPause)
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            //Abrir menu de pausa
+            pauseMenu.SetActive(true);
+            gspeed = Time.timeScale;
+            Time.timeScale = 0;
+            //time.scale = 0
         }
     }
 
@@ -79,8 +101,14 @@ public class GameManager : MonoBehaviour
 
     private void LoseGame()
     {
-        //MELHORAR ISTO
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        //Abrir menu de derrota
+        loseMenu.SetActive(true);
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    private void WinGame()
+    {
+        winMenu.SetActive(true);
     }
 
     public void LoseHealth(int damage)
@@ -92,5 +120,21 @@ public class GameManager : MonoBehaviour
     {
         enemyGen.StartWave();
         canSpawn = false;
+    }
+
+    //Pause Menu Button Stuff
+
+    public void Resume()
+    {
+        Time.timeScale = gspeed;
+        pauseMenu.SetActive(false);
+    }
+    public void Retry()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+    public void Quit()
+    {
+        Application.Quit();
     }
 }

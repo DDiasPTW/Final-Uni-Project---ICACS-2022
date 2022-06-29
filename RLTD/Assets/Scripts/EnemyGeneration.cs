@@ -189,8 +189,6 @@ public class EnemyGeneration : MonoBehaviour
 
                 enemy = Instantiate(enemyPref, worldGen.spawnPoints[i].transform.position - new Vector3(0, worldGen.spawnPoints[i].transform.localScale.y / 2, 0), Quaternion.identity);
 
-
-
                 spawnedEnemies.Add(enemy);
                 enemiesToSpawn--;
 
@@ -204,9 +202,9 @@ public class EnemyGeneration : MonoBehaviour
                     break;
                 }
             }
+            
         }
-
-        if (worldGen.CurrentWave == worldGen.MaxWave && canSpawnBoss) //Spawn de boss
+        if (worldGen.CurrentWave == worldGen.MaxWave && canSpawnBoss && enemiesToSpawn == 0) //Spawn de boss
         {
             float distance = 0;
             int ChosenSpawnPoint = 0;
@@ -220,10 +218,11 @@ public class EnemyGeneration : MonoBehaviour
                 else continue;
             }
 
-            int randomBoss = Random.Range(0,BossList.Count);
-            GameObject boss = Instantiate(BossList[randomBoss], worldGen.spawnPoints[ChosenSpawnPoint].transform.position,Quaternion.identity);
+            int randomBoss = Random.Range(0, BossList.Count);
+            GameObject boss = Instantiate(BossList[randomBoss], worldGen.spawnPoints[ChosenSpawnPoint].transform.position, Quaternion.identity);
             spawnedEnemies.Add(boss);
             canSpawnBoss = false;
         }
+
     }
 }
