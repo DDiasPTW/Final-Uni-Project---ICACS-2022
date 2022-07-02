@@ -85,6 +85,7 @@ public class BomberTower : MonoBehaviour
     {
         if (currentTarget != null)
         {
+            Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(currentTarget.transform.position, tower.AOERange[tower.currentEvolution - 1]);
         }
     }

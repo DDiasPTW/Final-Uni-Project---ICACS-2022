@@ -8,7 +8,7 @@ public class Item_Money : MonoBehaviour
     private BuildManager bM;
     [SerializeField] private int value;
     [SerializeField] private float delay;
-    private float timer;
+    [SerializeField] private float timer;
     private EnemyGeneration enGen;
 
     private void Awake()
@@ -26,7 +26,7 @@ public class Item_Money : MonoBehaviour
             timer -= Time.deltaTime;
         }
 
-        if (enGen.isSpawning)
+        if (enGen.spawnedEnemies.Count > 0)
         {
             if (timer <= 0)
             {

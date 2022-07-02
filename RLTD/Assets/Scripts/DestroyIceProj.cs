@@ -28,12 +28,19 @@ public class DestroyIceProj : MonoBehaviour
     private void OnCollisionEnter(Collision other)
     {
         Collider[] allTargets = Physics.OverlapSphere(other.gameObject.transform.position, aoeRange, enemyLayer);
+        
 
-        for (int i = 0; i < allTargets.Length; i++)
+        foreach (Collider target in allTargets)
         {
-            allTargets[i].GetComponent<Enemy>().LoseHealth(damage);
-            allTargets[i].GetComponent<Enemy>().ChangeSpeed(slowMulti, slowTime);
+            
+            target.GetComponent<Enemy>().LoseHealth(damage);
+            target.GetComponent<Enemy>().ChangeSpeed(slowMulti, slowTime);
         }
+        //for (int i = 0; i < allTargets.Length; i++)
+        //{
+        //    allTargets[i].GetComponent<Enemy>().LoseHealth(damage);
+        //    allTargets[i].GetComponent<Enemy>().ChangeSpeed(slowMulti, slowTime);
+        //}
         if (canExplode)
         {
             Instantiate(explodeVFX[currentEvo], transform);
@@ -41,7 +48,7 @@ public class DestroyIceProj : MonoBehaviour
             gameObject.GetComponent<TrailRenderer>().enabled = false;
             canExplode = false;
         }
-
+        transform.GetComponent<SphereCollider>().enabled = false;
         StartCoroutine(DestroyGO());
     }
 

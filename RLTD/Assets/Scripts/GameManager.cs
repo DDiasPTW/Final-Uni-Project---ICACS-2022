@@ -49,12 +49,10 @@ public class GameManager : MonoBehaviour
             WinGame();
         }
 
-
-        if (enemyGen.enemiesToSpawn != 0 && !enemyGen.isSpawning && enemyGen.spawnedEnemies.Count == 0 && canSpawn /*&& !worldGen.canSpawn*/)
+        if (enemyGen.isSpawning)
         {
-            //spawnButton.SetActive(true);
+            spawnButton.SetActive(false);
         }
-        else spawnButton.SetActive(false);
 
         if (Health <= 0)
         {
@@ -76,7 +74,7 @@ public class GameManager : MonoBehaviour
         worldGen.NextWave();
         enemyGen.hasStartedSpawning = false;
 
-        if (worldGen.CurrentWave < worldGen.MaxWave / 4 && worldGen.CurrentWave > 1)
+        if (worldGen.CurrentWave < worldGen.MaxWave / 3 && worldGen.CurrentWave > 1)
         {
             bM.CurrentCoins += coinsPerWave * enemyGen.currentDifficulty;
         }

@@ -383,12 +383,12 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 150
-      inSlope: 51.974857
-      outSlope: 51.974857
+      inSlope: 12.717697
+      outSlope: 12.717697
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.040423483
+      outWeight: 0.055822905
     - serializedVersion: 3
       time: 29
       value: 1250
@@ -407,12 +407,12 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 400
-      inSlope: 68.27473
-      outSlope: 68.27473
+      inSlope: 17.790653
+      outSlope: 17.790653
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.05678537
+      outWeight: 0.053897977
     - serializedVersion: 3
       time: 29
       value: 1700
@@ -430,12 +430,12 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 750
-      inSlope: 65.51368
-      outSlope: 65.51368
+      inSlope: 12.940835
+      outSlope: 12.940835
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.043310877
+      outWeight: 0.05486044
     - serializedVersion: 3
       time: 29
       value: 1850
@@ -451,6 +451,8 @@ MonoBehaviour:
   rangeVisualizer: {fileID: 8766062363759346918, guid: ff65d8a73f6ecd34d82151a51961dea3,
     type: 3}
   sellPriceText: {fileID: 5026368744546682038, guid: 3d007be9af24cae4d901d18d0f4bc3bd,
+    type: 3}
+  evolveVFX: {fileID: 5878771821301069191, guid: dc90d4c24798dc244a7f7d31e9781694,
     type: 3}
   rangeVisualizerColor: {r: 0.8301887, g: 0.8301887, b: 0.8301887, a: 0.20392157}
   EnemyLayer:

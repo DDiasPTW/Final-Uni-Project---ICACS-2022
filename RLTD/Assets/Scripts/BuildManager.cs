@@ -26,7 +26,7 @@ public class BuildManager : MonoBehaviour
     public Color cannotPlaceColor;
     [SerializeField] private float checkRadius;
     [SerializeField] private int maxTowerNumber;
-
+    public GameObject towerPlaceVFX;
     [Header("UI Stuff")]
     public TextMeshProUGUI moneyText;
     public GameObject cameraPivot;
@@ -247,6 +247,7 @@ public class BuildManager : MonoBehaviour
 
                 placedTower = Instantiate(TowerToBuild, mousePos, Quaternion.Euler(new Vector3(0f,90f,0f)));
                 placedTower.transform.position = new Vector3(buildPos.x, buildPos.y + (placedTower.transform.localScale.y / 2), buildPos.z);
+                Instantiate(towerPlaceVFX, placedTower.transform);
                 CurrentCoins -= CurrentTowerCost;
                 allTowers.Add(placedTower);
 

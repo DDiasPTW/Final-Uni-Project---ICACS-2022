@@ -34,8 +34,8 @@ public class Tower : MonoBehaviour
     [Header("UI Elements")]
     public GameObject rangeVisualizer;
     public GameObject sellPriceText;
-    private GameObject evoMenu; 
-    
+    private GameObject evoMenu;
+    public GameObject evolveVFX;
     public Color rangeVisualizerColor;
     [Header("Damage Stuff")]
     public LayerMask EnemyLayer;
@@ -132,6 +132,7 @@ public class Tower : MonoBehaviour
         if (bM.CurrentCoins >= (int)evolutionPrices[currentEvolution - 1].Evaluate(worldGen.CurrentWave - 1) && currentEvolution < numberOfEvolutions)
         {
             bM.CurrentCoins -= (int) evolutionPrices[currentEvolution - 1].Evaluate(worldGen.CurrentWave - 1);
+            Instantiate(evolveVFX,transform);
             currentEvolution++;
             mF.mesh = evolutionLooks[currentEvolution - 1];
             gameObject.GetComponent<Outline>().Repeat();

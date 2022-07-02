@@ -270,13 +270,13 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 150
-      inSlope: 16.604584
-      outSlope: 16.604584
+      value: 125
+      inSlope: 11.297626
+      outSlope: 11.297626
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.043310877
+      outWeight: 0.04427334
     - serializedVersion: 3
       time: 29
       value: 500
@@ -295,8 +295,8 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 200
-      inSlope: 25.172976
-      outSlope: 25.172976
+      inSlope: 11.7083645
+      outSlope: 11.7083645
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
@@ -318,12 +318,12 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 450
-      inSlope: 22.05528
-      outSlope: 22.05528
+      inSlope: 16.035358
+      outSlope: 16.035358
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.041385945
+      outWeight: 0.04427334
     - serializedVersion: 3
       time: 29
       value: 1000
@@ -339,6 +339,8 @@ MonoBehaviour:
   rangeVisualizer: {fileID: 8766062363759346918, guid: ff65d8a73f6ecd34d82151a51961dea3,
     type: 3}
   sellPriceText: {fileID: 5026368744546682038, guid: 3d007be9af24cae4d901d18d0f4bc3bd,
+    type: 3}
+  evolveVFX: {fileID: 5878771821301069191, guid: dc90d4c24798dc244a7f7d31e9781694,
     type: 3}
   rangeVisualizerColor: {r: 0.8301887, g: 0.8301887, b: 0.8301887, a: 0.20392157}
   EnemyLayer:

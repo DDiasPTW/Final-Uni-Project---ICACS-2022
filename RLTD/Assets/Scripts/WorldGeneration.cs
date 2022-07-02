@@ -179,7 +179,8 @@ public class WorldGeneration : MonoBehaviour
     //Escolhe tipo de tile para dar spawn e mete-o na posicao correta
     private void SpawnTile()
     {
-        if (spawnableTiles.Count > 0)
+        //Debug.Log(CurrentWave%2);
+        if (spawnableTiles.Count > 0 && CurrentWave % 3 == 0)
         {
             int pickedTile;
 

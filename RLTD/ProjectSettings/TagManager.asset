@@ -17,6 +17,7 @@ TagManager:
   - TowerEvo
   - Preview
   - Assassin
+  - Menu
   layers:
   - Default
   - TransparentFX

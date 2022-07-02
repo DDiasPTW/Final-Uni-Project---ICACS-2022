@@ -15,10 +15,16 @@ public class DestroyBombProj : MonoBehaviour
     private void OnCollisionEnter(Collision other)
     {
         Collider[] allTargets = Physics.OverlapSphere(other.gameObject.transform.position, aoeRange, enemyLayer);
-        for (int i = 0; i < allTargets.Length; i++)
+
+        foreach (Collider target in allTargets)
         {
-            allTargets[i].GetComponent<Enemy>().LoseHealth(damage);
+            Debug.Log(target.name);
+            target.GetComponent<Enemy>().LoseHealth(damage);
         }
+        //for (int i = 0; i < allTargets.Length; i++)
+        //{
+        //    allTargets[i].GetComponent<Enemy>().LoseHealth(damage);
+        //}
         if (canExplode)
         {
             Instantiate(explodeVFX[currentEvo], transform);
@@ -28,6 +34,7 @@ public class DestroyBombProj : MonoBehaviour
         }
         
         StartCoroutine(DestroyGO());
+        transform.GetComponent<SphereCollider>().enabled = false;
     }
     IEnumerator DestroyGO()
     {
